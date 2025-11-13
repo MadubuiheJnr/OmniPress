@@ -1,4 +1,4 @@
-import Newsletter from "../components/common/NewsLetter/Newsletter";
+import Newsletter from "../components/NewsLetter/Newsletter";
 import ArtsSection from "../components/Home/ArtsSection";
 import HealthSection from "../components/Home/HealthSection";
 import Hero from "../components/Home/Hero/Hero";

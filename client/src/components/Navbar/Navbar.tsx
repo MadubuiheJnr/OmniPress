@@ -3,17 +3,19 @@ import Logo from "../common/Logo";
 import { Menu, X } from "lucide-react";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 import NavLinks from "./NavLinks";
-import { useNavigate } from "react-router-dom";
+import LoginButton from "../common/LoginButton";
+import { useAuth } from "../../context/AuthContext";
+import ProfileIcon from "../common/ProfileIcon";
 
 const Navbar = () => {
+  const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const isLargeScreen = useMediaQuery("(min-width: 1024px)");
-  const navigate = useNavigate();
 
   return (
     <div className="">
       <div
-        className="w-full flex justify-between items-center border-b border-zinc-600 p-3
+        className="w-full flex justify-between items-center shadow-sm border-b border-gray-50 px-3 py-4
       lg:px-30 lg:py-6"
       >
         <div className="hidden lg:inline-block">Sociials</div>
@@ -24,14 +26,13 @@ const Navbar = () => {
         />
 
         <div>
-          <button
-            onClick={() => navigate("/login")}
-            className="text-sm bg-linear-to-r from-5% from-red-800 to-zinc-950 rounded-sm text-zinc-50 py-2 px-6 font-semibold ml-15
-            lg:px-10 lg:text-base lg:rounded-none
-            "
-          >
-            Login
-          </button>
+          {user ? (
+            <ProfileIcon />
+          ) : user.role === "admin" ? (
+            "Dashboard"
+          ) : (
+            <LoginButton />
+          )}
         </div>
         <button
           onClick={() => setOpen(!open)}
@@ -45,8 +46,8 @@ const Navbar = () => {
         </button>
       </div>
       <div
-        className="pl-5 pt-2 transition-normal 
-      lg:p-6 lg:border-b border-zinc-600 p-3"
+        className="
+      lg:p-6 lg:border-b border-zinc-600 p-5"
       >
         {(open || isLargeScreen) && <NavLinks />}
       </div>

@@ -1,4 +1,4 @@
-import { ArrowRight, Clock, Moon } from "lucide-react";
+import { ArrowRight, Clock, Smile } from "lucide-react";
 import type { BlogType } from "../../types/blogTypes";
 import { useNavigate } from "react-router-dom";
 
@@ -20,7 +20,7 @@ const BlogCard = ({
       <img
         src={blog.thumbnail}
         alt={`${blog.category.name} image`}
-        className={`rounded-3xl h-90 w-80 object-cover transition-all duration-300
+        className={`rounded-3xl h-90 w-full object-cover transition-all duration-300
           ${useLg && "lg:w-60 lg:h-70"}`}
       />
 
@@ -51,7 +51,7 @@ const BlogCard = ({
               </span>
             </p>
             <p className="flex items-center gap-x-1">
-              <Moon className="text-neutral-500" size={25} />
+              <Smile className="text-neutral-500" size={25} />
               <span className="text-sm text-neutral-700 font-semibold">
                 {blog.sentiment}
               </span>
