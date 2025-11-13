@@ -27,9 +27,11 @@ const Navbar = () => {
 
         <div>
           {user ? (
-            <ProfileIcon />
-          ) : user.role === "admin" ? (
-            "Dashboard"
+            user.role === "admin" ? (
+              "Dashboard"
+            ) : (
+              <ProfileIcon />
+            )
           ) : (
             <LoginButton />
           )}
