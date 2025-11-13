@@ -19,7 +19,7 @@ server.use(express.json());
 
 const PORT = 8000;
 
-server.get("/", (req, res) => res.send("Server is up and running"));
+server.get("/", (req, res) => res.send("Hello John Doe"));
 server.use("/api/auth", authRouter);
 server.use("/api/users", userRouter);
 server.use("/api/categories", categoryRouter);
