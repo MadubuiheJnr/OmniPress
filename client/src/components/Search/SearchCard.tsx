@@ -1,16 +1,6 @@
-import {
-  BookCopy,
-  ChevronDown,
-  ChevronUp,
-  Clock,
-  Facebook,
-  Instagram,
-  Smile,
-  Twitter,
-  Youtube,
-} from "lucide-react";
+import { ChevronDown, ChevronUp, Clock, Smile } from "lucide-react";
 import type { BlogType } from "../../types/blogTypes";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 const SearchCard = ({ blog }: { blog: BlogType }) => {
