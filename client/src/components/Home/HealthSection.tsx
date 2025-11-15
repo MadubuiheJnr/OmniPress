@@ -34,7 +34,7 @@ const HealthSection = () => {
         className="mt-10 grid gap-y-10
       lg:grid-cols-4 lg:gap-x-5"
       >
-        {data ? data.blogs.map((blog) => <BlogCard blog={blog} />) : null}
+        {data ? data.map((blog) => <BlogCard blog={blog} />) : null}
       </div>
     </div>
   );

@@ -128,3 +128,30 @@ export const generateSentiment = async (req, res) => {
     handleError(res, error.message);
   }
 };
+
+export const generateSearchSummary = async (req, res) => {
+  try {
+    const { prompt } = req.body;
+    if (!prompt) {
+      return;
+    }
+    const aiSummary = await main(
+      `You are a helpful assistant that explains topics in a clear, human, friendly, and engaging way.
+
+The user searched for the following topic.  
+Write a brief overview that:
+- feels conversational and helpful,
+- is factual and easy to understand,
+- gives context around the topic,
+- mentions what people typically look for when searching this topic,
+- and stays under 120 words.
+
+If the search term is vague, unclear, or misspelled, interpret it and still give the best possible explanation.
+
+Search Term: "${prompt}`
+    );
+    res.status(200).json(aiSummary);
+  } catch (error) {
+    handleError(res, error.message);
+  }
+};

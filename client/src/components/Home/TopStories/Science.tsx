@@ -8,7 +8,7 @@ const Science = () => {
   if (isLoading) return <div>Loading...</div>;
   return (
     <div>
-      {data?.blogs.map((blog) => (
+      {data?.map((blog) => (
         <BlogCardWithBgImage blog={blog} />
       ))}
     </div>

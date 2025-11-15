@@ -10,7 +10,10 @@ const ArtsSection = () => {
 
   if (isLoading) return <p>Loading...</p>;
   return (
-    <div className="p-5 mt-10">
+    <div
+      className="p-5 mt-10
+    lg:w-[90%] lg:mx-auto"
+    >
       <div className="flex items-center gap-x-3">
         <p className="w-[3px] h-6 bg-red-700" />
         <p className="flex items-center gap-x-3">
@@ -31,7 +34,7 @@ const ArtsSection = () => {
         className="mt-10 grid gap-y-10
       lg:grid-cols-4"
       >
-        {data ? data.blogs.map((blog) => <BlogCard blog={blog} />) : null}
+        {data ? data.map((blog) => <BlogCard blog={blog} />) : null}
       </div>
     </div>
   );

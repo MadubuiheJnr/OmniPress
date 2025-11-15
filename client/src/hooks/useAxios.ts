@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Axios from "../config/axiosConfig";
-import type { BlogResponse } from "../types/blogTypes";
+import type { BlogType } from "../types/blogTypes";
 
 interface useFetchTypes {
   url: string;
@@ -18,7 +18,7 @@ interface useFetchTypes {
 }
 
 const useAxios = ({ url, options }: useFetchTypes) => {
-  const [data, setData] = useState<BlogResponse | null>(null);
+  const [data, setData] = useState<BlogType[] | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errMsg, setErrMsg] = useState<string | null>(null);
 

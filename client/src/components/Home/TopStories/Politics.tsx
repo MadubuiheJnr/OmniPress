@@ -8,7 +8,7 @@ const Politics = () => {
   if (isLoading) return <div>Loading...</div>;
   return (
     <div>
-      {data?.blogs.map((blog) => (
+      {data?.map((blog) => (
         <BlogCard blog={blog} />
       ))}
     </div>

@@ -1,6 +1,8 @@
 import RootLayout from "../layouts/RootLayout";
 import BlogDetailsPage from "../pages/BlogDetailsPage";
 import Home from "../pages/Home";
+import Search from "../pages/Search";
+import UserProfilePage from "../pages/UserProfilePage";
 import { BlogDetailsLoader } from "./loaders/BlogDetailsLoader";
 
 const UserRoutes = {
@@ -12,6 +14,14 @@ const UserRoutes = {
       path: "/blog/:id",
       element: <BlogDetailsPage />,
       loader: BlogDetailsLoader,
+    },
+    {
+      path: "/profile",
+      element: <UserProfilePage />,
+    },
+    {
+      path: "/search",
+      element: <Search />,
     },
   ],
 };

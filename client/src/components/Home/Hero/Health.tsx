@@ -10,7 +10,7 @@ const Health = () => {
 
   return (
     <>
-      {data?.blogs.map((blog) => (
+      {data?.map((blog) => (
         <HeroCardWithBgImage blog={blog} />
       ))}
     </>

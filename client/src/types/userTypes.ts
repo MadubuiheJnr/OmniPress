@@ -4,6 +4,7 @@ export type UserType = {
   email: string;
   role: "admin" | "user";
   avatar?: string;
+  bio?: string;
   createdAt: string;
   updatedAt: string;
   _v: string;

@@ -5,8 +5,8 @@ const LoginButton = () => {
   return (
     <button
       onClick={() => navigate("/login")}
-      className="text-sm bg-neutral-900 text-zinc-50 py-2 px-6 rounded-full font-semibold ml-15
-            lg:px-10 lg:text-base lg:rounded-none
+      className="text-sm bg-neutral-900 text-zinc-50 py-2 px-6 rounded-full font-semibold
+            lg:px-10
             "
     >
       Login

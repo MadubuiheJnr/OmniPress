@@ -13,12 +13,12 @@ const HeroCardWithBgImage = ({
   return (
     <div
       style={{ backgroundImage: `url(${blog.thumbnail})` }}
-      className={`w-full h-90 bg-position-[100%] bg-cover bg-no-repeat rounded-3xl
+      className={`w-full h-110 bg-position-[100%] bg-cover bg-no-repeat rounded-3xl flex
           ${useLg && "lg:block lg:h-90"}`}
     >
-      <div className="h-90 bg-white/0 backdrop-blur-xs p-3 pt-5 rounded-3xl flex">
+      <div className="self-end bg-black/20 backdrop-blur-xs p-3 pt-5 rounded-3xl flex">
         <div className="self-end flex flex-col">
-          <p className="bg-neutral-500/20 backdrop-blur-xs text-red-600 uppercase text-sm cursor-pointer self-start px-2 py-0.5">
+          <p className="bg-neutral-200/20 backdrop-blur-xs text-red-600 uppercase text-sm cursor-pointer self-start px-2 py-0.5">
             {blog.category.name}
           </p>
           <p className="text-neutral-50 text-base font-semibold mt-2 line-clamp-2">

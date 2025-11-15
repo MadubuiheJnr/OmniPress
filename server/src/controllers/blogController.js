@@ -177,7 +177,7 @@ export const getAllBlogsAdmin = async (req, res) => {
 };
 export const getAllPublishedBlogs = async (req, res) => {
   try {
-    const { search, category, skip = 0, limit = 10, isFeatured } = req.query;
+    const { search, category, skip = 0, limit = 0, isFeatured } = req.query;
 
     let query = {};
 
@@ -207,10 +207,7 @@ export const getAllPublishedBlogs = async (req, res) => {
       .populate({ path: "category", select: "name slug -_id" })
       .sort({ createdAt: -1 });
 
-    res.status(200).json({
-      total: blogs.length,
-      blogs,
-    });
+    res.status(200).json(blogs);
   } catch (error) {
     handleError(res, error);
   }

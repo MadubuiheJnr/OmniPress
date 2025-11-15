@@ -4,6 +4,7 @@ import { verifyRole } from "../middleware/verifyRole.js";
 import {
   generateContent,
   generateReadTime,
+  generateSearchSummary,
   generateSentiment,
   generateTags,
   generateTitle,
@@ -23,5 +24,6 @@ aiRouter.post(
   verifyRole("admin"),
   generateSentiment
 );
+aiRouter.post("/aisummary", generateSearchSummary);
 
 export default aiRouter;

@@ -37,7 +37,7 @@ const PoliticsSection = () => {
       lg:grid-cols-4"
       >
         {data
-          ? data.blogs.map((blog) => (
+          ? data.map((blog) => (
               <BlogCard blog={blog} showContent={true} useLg={true} />
             ))
           : null}
