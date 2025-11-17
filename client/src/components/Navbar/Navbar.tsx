@@ -7,6 +7,7 @@ import LoginButton from "../common/LoginButton";
 import { useAuth } from "../../context/AuthContext";
 import UserProfileIcon from "../common/UserProfileIcon";
 import SearchButton from "../Search/SearchButton";
+import NavSocialMedia from "./NavSocialMedia";
 
 const Navbar = () => {
   const { user } = useAuth();
@@ -19,7 +20,9 @@ const Navbar = () => {
         className="w-full flex justify-between items-center border-b border-neutral-500 px-3 py-4
       lg:px-30 lg:py-6"
       >
-        <div className="hidden lg:inline-block">Sociials</div>
+        <div className="hidden lg:inline-block">
+          <NavSocialMedia />
+        </div>
 
         <Logo
           styles=" h-full cursor-pointer w-35 text-2xl font-semibold
@@ -59,7 +62,7 @@ const Navbar = () => {
         className="
       lg:p-6 lg:border-b border-neutral-500 p-5"
       >
-        {(open || isLargeScreen) && <NavLinks />}
+        {(open || isLargeScreen) && <NavLinks setOpen={() => setOpen(false)} />}
       </div>
     </div>
   );

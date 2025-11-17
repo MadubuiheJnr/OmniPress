@@ -1,4 +1,5 @@
 import useAxios from "../../../hooks/useAxios";
+import HeroCardLoadingUI from "./HeroCardLoadingUI";
 import HeroCardWithBgImage from "./HeroCardWithBgImage";
 
 const Health = () => {
@@ -6,7 +7,7 @@ const Health = () => {
     url: "/api/blogs?category=Health&limit=1",
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <HeroCardLoadingUI />;
 
   return (
     <>

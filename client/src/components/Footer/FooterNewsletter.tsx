@@ -12,7 +12,7 @@ const FooterNewsletter = () => {
             placeholder="Enter your email"
             className="outline-none text-neutral-100 placeholder:text-sm"
           />
-          <button className="justify-self-end bg-neutral-50 text-neutral-900 px-4 py-2.5 rounded-full">
+          <button className="text-sm justify-self-end bg-neutral-50 text-neutral-900 px-4 py-2.5 rounded-full">
             Subscribe
           </button>
         </form>

@@ -1,11 +1,12 @@
 import useAxios from "../../../hooks/useAxios";
 import BlogCard from "../../common/BlogCard";
+import BlogCardLoadingUI from "../../common/BlogCardLoadingUI";
 
 const Politics = () => {
   const { data, isLoading } = useAxios({
     url: "/api/blogs?category=Politics&skip=0&limit=1&isFeatured=true",
   });
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <BlogCardLoadingUI useLg={true} />;
   return (
     <div>
       {data?.map((blog) => (

@@ -3,13 +3,20 @@ import Axios from "../../config/axiosConfig";
 import { useState, type FormEvent } from "react";
 import toast from "react-hot-toast";
 import type { AxiosError } from "axios";
+import { useAuth } from "../../context/AuthContext";
+import AuthModal from "../common/AuthModal";
+import { useNavigate } from "react-router-dom";
 
 const AddComment = ({ blogID }: { blogID: string }) => {
   const [content, setContent] = useState<string>("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const addComment = async (e: FormEvent) => {
     e.preventDefault();
     try {
+      if (!user) return setModalOpen(true);
       const res = await Axios.post("/api/comments/add", {
         blog: blogID,
         content,
@@ -51,6 +58,15 @@ const AddComment = ({ blogID }: { blogID: string }) => {
           <Send className="inline text-zinc-50" size={16} />
         </button>
       </div>
+
+      <AuthModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onLogin={() => {
+          setModalOpen(false);
+          navigate("/login");
+        }}
+      />
     </form>
   );
 };

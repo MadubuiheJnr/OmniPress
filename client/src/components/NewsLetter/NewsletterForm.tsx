@@ -26,9 +26,9 @@ const NewsletterForm = () => {
 
       <button className="w-45 pl-1 pr-3 py-2 mt-5 flex items-center justify-between gap-x-2 bg-neutral-50 rounded-full outline-none">
         <span className="w-7 h-7 bg-neutral-950 rounded-full flex items-center justify-center">
-          <ArrowRight className="text-neutral-50" size={20} />
+          <ArrowRight className="text-neutral-50" size={15} />
         </span>
-        <span className="text-neutral-950 text-base font-semibold">
+        <span className="text-neutral-900 text-base font-semibold">
           Subscribe Now
         </span>
       </button>

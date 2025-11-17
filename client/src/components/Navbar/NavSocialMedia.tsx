@@ -39,19 +39,16 @@ const SocialMediaData: SocialMediaDataTypes[] = [
     slug: "",
   },
 ];
-const SocialMedia = () => {
+const NavSocialMedia = () => {
   return (
-    <div className="flex flex-col items-center gap-3">
+    <div className="flex items-center gap-3">
       {SocialMediaData.map((item) => (
         <Link to={item.slug} className="flex items-center gap-2">
-          <item.icon className="text-neutral-50" size={20} />
-          <span className="text-neutral-50 text-sm font-light">
-            {item.name}
-          </span>
+          <item.icon className="text-neutral-950" size={20} />
         </Link>
       ))}
     </div>
   );
 };
 
-export default SocialMedia;
+export default NavSocialMedia;

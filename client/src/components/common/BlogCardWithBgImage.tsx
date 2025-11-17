@@ -18,13 +18,13 @@ const BlogCardWithBgImage = ({
           ${useLg && "lg:block lg:h-90"}`}
       >
         <div className="bg-white/15 backdrop-blur-xs p-3 pt-5 rounded-b-3xl self-end flex flex-col">
-          <p className="bg-neutral-100 text-red-600 uppercase text-sm cursor-pointer self-start px-1 py-0.5">
+          <p className="bg-neutral-100 text-red-600 uppercase text-xs cursor-pointer self-start px-1 py-0.5">
             {blog.category.name}
           </p>
-          <p className="text-neutral-50 text-base font-semibold mt-2 line-clamp-2">
+          <p className="text-neutral-50 text-sm font-semibold mt-2 line-clamp-2">
             {blog.title}
           </p>
-          <p className="inline-block text-neutral-400 font-light text-sm mt-2">
+          <p className="inline-block text-neutral-400 font-light text-xs mt-2">
             {new Date(blog.createdAt).toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
@@ -35,14 +35,14 @@ const BlogCardWithBgImage = ({
           <div className="mt-2">
             <div className="flex gap-x-3">
               <p className="flex items-center gap-x-1">
-                <Clock className="text-neutral-400" size={25} />
-                <span className="text-sm text-neutral-400 font-semibold">
+                <Clock className="text-neutral-400" size={20} />
+                <span className="text-xs text-neutral-400 font-semibold">
                   {blog.readingTime}
                 </span>
               </p>
               <p className="flex items-center gap-x-1">
-                <Smile className="text-neutral-400" size={25} />
-                <span className="text-sm text-neutral-400 font-semibold">
+                <Smile className="text-neutral-400" size={20} />
+                <span className="text-xs text-neutral-400 font-semibold">
                   {blog.sentiment}
                 </span>
               </p>
@@ -52,7 +52,7 @@ const BlogCardWithBgImage = ({
               onClick={() => navigate(`/blog/${blog._id}`)}
               className="w-50 pl-3 pr-2 py-2 mt-5 flex items-center justify-between gap-x-2 bg-neutral-50 rounded-full outline-none"
             >
-              <span className="text-neutral-950 text-base">
+              <span className="text-neutral-950 text-sm font-semibold">
                 Continue reading
               </span>
               <span className="w-7 h-7 bg-neutral-950 rounded-full flex items-center justify-center">

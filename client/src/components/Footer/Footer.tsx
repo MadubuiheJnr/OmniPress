@@ -14,8 +14,14 @@ const Footer = () => {
         </div>
 
         {/* second level footer */}
-        <div className="mt-10">
-          <div className="border-b border-neutral-700 pb-5">
+        <div
+          className="mt-10
+        lg:grid grid-cols-6"
+        >
+          <div
+            className="border-b border-neutral-700 pb-5
+          lg:col-span-3"
+          >
             <FooterNewsletter />
           </div>
           <div className="mt-10 border-b border-neutral-700 pb-5">

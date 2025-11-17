@@ -13,7 +13,7 @@ import AddComment from "./AddComment";
 
 const BlogDetails = ({ data }: { data: BlogType }) => {
   return (
-    <div className="lg:w-[80%] lg:mx-auto">
+    <div className="lg:w-[80%] lg:mx-auto relative">
       <div>
         <p className="text-xl font-bold text-zinc-900">{data.title}</p>
         <p className="mt-2 flex gap-x-2">
