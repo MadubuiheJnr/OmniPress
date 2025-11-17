@@ -20,7 +20,7 @@ const SearchRecommendedBlogs = () => {
       </p>
 
       <div className="grid grid-cols-1 gap-5">
-        {data ? data.blogs.map((blog) => <SearchCard blog={blog} />) : null}
+        {data ? data.map((blog) => <SearchCard blog={blog} />) : null}
       </div>
     </div>
   );
