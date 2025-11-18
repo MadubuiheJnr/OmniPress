@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import type { BlogType } from "../../types/blogTypes";
-import { Clock, Smile } from "lucide-react";
+import { Clock } from "lucide-react";
 
 const SuggestedBlogCard = ({ blog }: { blog: BlogType }) => {
   const navigate = useNavigate();
