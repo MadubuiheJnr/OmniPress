@@ -36,6 +36,7 @@ export interface BlogResponse {
 }
 
 export type BlogDetailResponse = {
-  message: string;
+  message?: string;
+  suggestedBlogs: BlogType[];
   blog: BlogType;
 };

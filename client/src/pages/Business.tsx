@@ -12,8 +12,7 @@ const Business = () => {
           <span>Business</span>
         </p>
         <p className="text-sm text-neutral-900 mt-1">
-          Catch up on what's happening across continents - fast, clear, and
-          meaningful.
+          Markets, ideas, and the people building tomorrow's companies.
         </p>
       </div>
       <BlogPageLayout blogs={blogs} recentBlogs={recentBlogs} />

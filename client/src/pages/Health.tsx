@@ -12,8 +12,7 @@ const Health = () => {
           <span>Health</span>
         </p>
         <p className="text-sm text-neutral-900 mt-1">
-          Catch up on what's happening across continents - fast, clear, and
-          meaningful.
+          Wellness, medical insights, and practical tips for everyday living.
         </p>
       </div>
       <BlogPageLayout blogs={blogs} recentBlogs={recentBlogs} />

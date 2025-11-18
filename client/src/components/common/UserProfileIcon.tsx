@@ -37,7 +37,7 @@ const UserProfileIcon = () => {
   return (
     <div>
       <div onClick={() => setOpen(!open)}>
-        <img src={user?.avatar || "/user_icon.svg"} alt="" className="w-8" />
+        <img src={user?.avatar || "/user_icon.svg"} alt="" className="w-7" />
       </div>
 
       {open && (

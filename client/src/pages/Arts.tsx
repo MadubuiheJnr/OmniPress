@@ -12,8 +12,7 @@ const Arts = () => {
           <span>Arts</span>
         </p>
         <p className="text-sm text-neutral-900 mt-1">
-          Catch up on what's happening across continents - fast, clear, and
-          meaningful.
+          Creative work, visual stories, and cultural conversations.
         </p>
       </div>
       <BlogPageLayout blogs={blogs} recentBlogs={recentBlogs} />

@@ -8,6 +8,7 @@ import categoryRouter from "./src/routes/categoryRoutes.js";
 import blogRouter from "./src/routes/blogRoutes.js";
 import aiRouter from "./src/routes/aiRoutes.js";
 import commentRouter from "./src/routes/commentRoutes.js";
+import likeRouter from "./src/routes/likeRoutes.js";
 
 const server = express();
 
@@ -26,6 +27,7 @@ server.use("/api/categories", categoryRouter);
 server.use("/api/blogs", blogRouter);
 server.use("/api/comments", commentRouter);
 server.use("/api/ai/generate", aiRouter);
+server.use("/api/like", likeRouter);
 
 server.listen(PORT, () =>
   console.log(`server is running on http://localhost:${PORT}`)

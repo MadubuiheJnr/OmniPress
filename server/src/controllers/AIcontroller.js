@@ -155,3 +155,32 @@ Search Term: "${prompt}`
     handleError(res, error.message);
   }
 };
+
+export const generateBlogSummary = async (req, res) => {
+  try {
+    const { prompt } = req.body;
+    if (!prompt) {
+      return;
+    }
+    const aiSummary = await main(
+      `You are a helpful assistant that summarizes blog posts in a clear, natural, and engaging human tone.
+
+Write a short summary of the blog content below by:
+- clearly explaining *what the blog is about*,
+- beginning with phrases like “This blog discusses…”, “In this post…”, or “The article explores…”,
+- keeping it under 150 words,
+- highlighting the main ideas and key takeaways,
+- keeping the flow conversational and easy to read,
+- avoiding unnecessary fluff or repetition.
+
+Do NOT add new facts, opinions, or disclaimers.  
+Return only the final summary — no labels or extra text.
+
+Blog Content:
+"${prompt}" `
+    );
+    res.status(200).json(aiSummary);
+  } catch (error) {
+    handleError(res, error.message);
+  }
+};

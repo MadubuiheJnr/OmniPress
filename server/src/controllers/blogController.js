@@ -221,7 +221,26 @@ export const getBlogById = async (req, res) => {
     if (!blog) {
       return res.status(404).json({ message: "Blog does not exist" });
     }
-    return res.status(200).json({ message: "Blog fetched successfully", blog });
+
+    // 2. Extract the blog's tags
+    const blogTags = blog.tags || [];
+
+    // 3. Find blogs with matching tags
+    const suggestedBlogs = await blogModel
+      .find({
+        _id: { $ne: id }, // exclude the current blog
+        tags: { $in: blogTags }, // match any tag from the current blog
+      })
+      .limit(3) // limit results
+      .select("title thumbnail createdAt readingTime sentiment category") // return only needed fields
+      .populate("category")
+      .lean();
+
+    // 4. Return both the blog and suggestions
+    return res.status(200).json({
+      blog,
+      suggestedBlogs,
+    });
   } catch (error) {
     handleError(res, error);
   }

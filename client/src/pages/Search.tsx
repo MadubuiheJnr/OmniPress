@@ -8,6 +8,7 @@ import SearchKeywords from "../components/Search/SearchKeywords";
 import SearchCard from "../components/Search/SearchCard";
 import AiSummary from "../components/Search/AiSummary";
 import { useNavigate } from "react-router-dom";
+import SearchPageLoadingUI from "../components/common/SearchPageLoadingUI";
 
 const Search = () => {
   const [query, setQuery] = useState<string>("");
@@ -15,6 +16,7 @@ const Search = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [filteredTags, setFilteredTags] = useState<string[]>([]);
   const [blogs, setBlogs] = useState<BlogType[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const preFetchBlogs = async () => {
@@ -57,13 +59,9 @@ const Search = () => {
 
   const getAiSummary = async (prompt: string) => {
     try {
-      console.log(prompt);
-
-      const res = await Axios.post("/api/ai/generate/aisummary", {
+      const res = await Axios.post("/api/ai/generate/search/summary", {
         prompt,
       });
-
-      setAiSummary(res.data);
 
       if (res.status === 200) return setAiSummary(res.data);
     } catch (error) {
@@ -77,6 +75,7 @@ const Search = () => {
     if (!searchTerm.trim()) return toast.error("Please enter a search term.");
 
     try {
+      setLoading(true);
       await getAiSummary(searchTerm);
       const res = await Axios(`/api/blogs?search=${searchTerm}`);
       setBlogs(res.data);
@@ -85,6 +84,8 @@ const Search = () => {
     } catch (error) {
       const err = error as AxiosError<{ message?: string }>;
       toast.error(err.response?.data?.message || "Something went wrong.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -128,30 +129,39 @@ const Search = () => {
           </div>
         </div>
 
-        {!query && (
+        {!query && !loading && (
           <p className="mt-2 text-xs text-neutral-500 font-semibold px-3">
             Tip: Use clear keywords for better search results.
           </p>
         )}
       </div>
 
-      <div className="mt-5">
-        {query.length > 0 && filteredTags.length > 0 && (
-          <SearchKeywords tags={filteredTags} handleClick={handleTagClick} />
-        )}
-      </div>
+      {loading ? (
+        <SearchPageLoadingUI />
+      ) : (
+        <>
+          <div className="mt-5">
+            {query.length > 0 && filteredTags.length > 0 && !loading && (
+              <SearchKeywords
+                tags={filteredTags}
+                handleClick={handleTagClick}
+              />
+            )}
+          </div>
 
-      <div>
-        {!query.length && aiSummary && aiSummary.length && (
-          <AiSummary summary={aiSummary} handleClose={handleClose} />
-        )}
-      </div>
+          <div>
+            {!query.length && aiSummary && aiSummary.length && (
+              <AiSummary summary={aiSummary} handleClose={handleClose} />
+            )}
+          </div>
 
-      <div className="grid grid-cols-1 gap-5 mt-10">
-        {blogs &&
-          !query.length &&
-          blogs.map((blog) => <SearchCard blog={blog} />)}
-      </div>
+          <div className="grid grid-cols-1 gap-5 mt-10">
+            {blogs &&
+              !query.length &&
+              blogs.map((blog) => <SearchCard blog={blog} />)}
+          </div>
+        </>
+      )}
     </div>
   );
 };

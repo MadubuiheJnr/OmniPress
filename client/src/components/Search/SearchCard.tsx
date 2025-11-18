@@ -25,23 +25,23 @@ const SearchCard = ({ blog }: { blog: BlogType }) => {
 
         <div className="w-full p-2 mt-5">
           <div>
-            <span className="bg-neutral-600/10 text-base text-red-600 px-3 py-0.5 backdrop-blur-xs cursor-pointer">
+            <span className="bg-neutral-600/10 text-xs text-red-600 px-3 py-0.5 backdrop-blur-xs cursor-pointer">
               {blog.category.name}
             </span>
-            <p className="truncate text-neutral-900 font-semibold py-1 mt-1">
+            <p className="truncate text-sm text-neutral-900 font-semibold py-1 mt-1">
               {blog.title}
             </p>
 
             <div className="flex gap-x-3 py-2">
               <p className="flex items-center gap-x-1">
-                <Clock className="text-neutral-500" size={20} />
-                <span className="text-sm text-neutral-600 font-semibold">
+                <Clock className="text-neutral-500" size={19} />
+                <span className="text-xs text-neutral-600 font-semibold">
                   {blog.readingTime}
                 </span>
               </p>
               <p className="flex items-center gap-x-1">
-                <Smile className="text-neutral-500" size={20} />
-                <span className="text-sm text-neutral-600 font-semibold">
+                <Smile className="text-neutral-500" size={19} />
+                <span className="text-xs text-neutral-600 font-semibold">
                   {blog.sentiment}
                 </span>
               </p>
@@ -51,7 +51,7 @@ const SearchCard = ({ blog }: { blog: BlogType }) => {
           {open && (
             <p
               dangerouslySetInnerHTML={{ __html: blog.content }}
-              className="line-clamp-8 mt-2 text-sm font-light text-"
+              className="line-clamp-8 mt-2 text-sm font-light"
             />
           )}
         </div>

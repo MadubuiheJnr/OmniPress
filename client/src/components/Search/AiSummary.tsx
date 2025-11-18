@@ -29,7 +29,7 @@ const AiSummary = ({
         </div>
         <p
           onClick={() => setExpand(!expand)}
-          className={`mt-5 text-neutral-400 cursor-pointer transition-all duration-300 ease-in-out ${
+          className={`mt-5 text-sm text-neutral-400 cursor-pointer transition-all duration-300 ease-in-out ${
             expand ? "line-clamp-none" : "line-clamp-5"
           }`}
         >

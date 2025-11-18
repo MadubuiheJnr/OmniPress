@@ -12,7 +12,8 @@ const Science = () => {
           <span>Science</span>
         </p>
         <p className="text-sm text-neutral-900 mt-1">
-          Stories and discoveries shaping the future
+          Breakthroughs, experiments, and the thinking behind today's
+          discoveries.
         </p>
       </div>
       <BlogPageLayout blogs={blogs} recentBlogs={recentBlogs} />

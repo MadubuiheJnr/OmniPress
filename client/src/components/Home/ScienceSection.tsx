@@ -2,13 +2,14 @@ import { Link } from "react-router-dom";
 import useAxios from "../../hooks/useAxios";
 import { ArrowRight } from "lucide-react";
 import BlogCard from "../common/BlogCard";
+import BlogCardLoadingUI from "../common/BlogCardLoadingUI";
 
 const ScienceSection = () => {
   const { data, isLoading } = useAxios({
     url: "/api/blogs?category=Science&limit=1",
   });
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return;
   return (
     <div
       className="p-5 mt-10
@@ -34,11 +35,13 @@ const ScienceSection = () => {
         className="mt-10 grid gap-y-10
       lg:grid-cols-4"
       >
-        {data
-          ? data.map((blog) => (
-              <BlogCard blog={blog} showContent={true} useLg={true} />
-            ))
-          : null}
+        {data ? (
+          data.map((blog) => (
+            <BlogCard blog={blog} showContent={true} useLg={true} />
+          ))
+        ) : isLoading ? (
+          <BlogCardLoadingUI showContent={true} useLg={true} />
+        ) : null}
       </div>
     </div>
   );

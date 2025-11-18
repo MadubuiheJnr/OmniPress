@@ -30,7 +30,7 @@ const Navbar = () => {
         />
 
         <div
-          className="flex items-center gap-x-2
+          className="flex items-center gap-x-4
         lg:gap-x-5"
         >
           <SearchButton />
@@ -48,12 +48,12 @@ const Navbar = () => {
 
           <button
             onClick={() => setOpen(!open)}
-            className=" border border-red-600 p-2 rounded-sm transition-all ease-in-out duration-300 cursor-pointer lg:hidden"
+            className=" border border-red-600 p-1.5 rounded-sm transition-all ease-in-out duration-300 cursor-pointer lg:hidden"
           >
             {open ? (
-              <X className="text-red-600" size={20} />
+              <X className="text-red-600" size={18} />
             ) : (
-              <Menu className="text-red-600" size={20} />
+              <Menu className="text-red-600" size={18} />
             )}
           </button>
         </div>

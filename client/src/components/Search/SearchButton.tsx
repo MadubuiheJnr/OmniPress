@@ -5,7 +5,7 @@ const SearchButton = () => {
   const navigate = useNavigate();
   return (
     <button onClick={() => navigate("/search")}>
-      <Search className="text-neutral-600" size={23} />
+      <Search className="text-neutral-500" size={25} />
     </button>
   );
 };

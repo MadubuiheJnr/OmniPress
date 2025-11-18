@@ -1,6 +1,6 @@
 import { Copyright } from "lucide-react";
 import Logo from "../common/Logo";
-import SocialMedia from "../common/SocialMedia";
+import SocialMedia from "./SocialMedia";
 import FooterBlogLinks from "./FooterBlogLinks";
 import FooterCompanyLinks from "./FooterCompanyLinks";
 import FooterNewsletter from "./FooterNewsletter";
@@ -24,13 +24,13 @@ const Footer = () => {
           >
             <FooterNewsletter />
           </div>
-          <div className="mt-10 border-b border-neutral-700 pb-5">
+          <div className="mt-5 border-b border-neutral-700 pb-5">
             <FooterBlogLinks />
           </div>
-          <div className="mt-10 border-b border-neutral-700 pb-5">
+          <div className="mt-5 border-b border-neutral-700 pb-5">
             <FooterCompanyLinks />
           </div>
-          <div className="mt-10 border-b border-neutral-700 pb-5">
+          <div className="mt-5 border-b border-neutral-700 pb-5">
             <SocialMedia />
           </div>
         </div>

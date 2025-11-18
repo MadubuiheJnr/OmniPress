@@ -12,8 +12,7 @@ const Sports = () => {
           <span>Sports</span>
         </p>
         <p className="text-sm text-neutral-900 mt-1">
-          Catch up on what's happening across continents - fast, clear, and
-          meaningful.
+          Scores, stories, and the human side of competition.
         </p>
       </div>
       <BlogPageLayout blogs={blogs} recentBlogs={recentBlogs} />

@@ -43,8 +43,11 @@ const NavSocialMedia = () => {
   return (
     <div className="flex items-center gap-3">
       {SocialMediaData.map((item) => (
-        <Link to={item.slug} className="flex items-center gap-2">
-          <item.icon className="text-neutral-950" size={20} />
+        <Link to={item.slug} className="flex items-center gap-2 ">
+          <item.icon
+            className="text-neutral-950 hover:text-red-800"
+            size={20}
+          />
         </Link>
       ))}
     </div>
