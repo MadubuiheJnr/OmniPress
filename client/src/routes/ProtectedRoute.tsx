@@ -6,8 +6,7 @@ type ProtectedRouteProps = {
 };
 
 const ProtectedRoute = ({ role }: ProtectedRouteProps) => {
-  const { user, loading } = useAuth();
-  if (loading) return <div>loading...</div>;
+  const { user } = useAuth();
 
   if (!user) return <Navigate to={"/login"} replace />;
 
