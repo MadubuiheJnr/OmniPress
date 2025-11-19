@@ -1,5 +1,5 @@
-import LoginCarousel from "../../components/Login/LoginCarousel";
-import LoginForm from "../../components/Login/LoginForm";
+import LoginCarousel from "../../components/Auth/Login/LoginCarousel";
+import LoginForm from "../../components/Auth/Login/LoginForm";
 
 const Login = () => {
   return (

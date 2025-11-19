@@ -6,6 +6,7 @@ const FooterBlogLinks = () => {
     <div className="text-neutral-50 flex flex-col items-center gap-y-2">
       {NavData.slice(0, 7).map((data) => (
         <NavLink
+          key={data.id}
           to={data.slug}
           className={({
             isActive,

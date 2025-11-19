@@ -43,7 +43,11 @@ const SocialMedia = () => {
   return (
     <div className="flex flex-col items-center gap-3">
       {SocialMediaData.map((item) => (
-        <Link to={item.slug} className="flex items-center gap-2 group">
+        <Link
+          to={item.slug}
+          key={item.id}
+          className="flex items-center gap-2 group"
+        >
           <item.icon
             className="text-neutral-50 group-hover:text-red-800 transition-all duration-300 ease-in-out"
             size={20}

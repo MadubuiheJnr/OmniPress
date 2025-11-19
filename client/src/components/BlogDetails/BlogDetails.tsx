@@ -46,7 +46,7 @@ const BlogDetails = ({ blog }: { blog: BlogType }) => {
     <div className=" relative">
       <div>
         <p className="text-xl font-bold text-zinc-900">{blog.title}</p>
-        <p className="mt-2 flex gap-x-2">
+        <div className="mt-2 flex gap-x-2">
           <span className="text-lg font-light text-zinc-700s">
             By {blog.author.name} <span>|</span>
           </span>
@@ -77,7 +77,7 @@ const BlogDetails = ({ blog }: { blog: BlogType }) => {
               ) : null}
             </span>
           </div>
-        </p>
+        </div>
 
         <p className="text-sm font-normal text-zinc-600 mt-2">
           {new Date(blog.createdAt).toLocaleDateString("en-US", {
@@ -121,8 +121,11 @@ const BlogDetails = ({ blog }: { blog: BlogType }) => {
         <img src={blog.thumbnail} alt="" className="w-full object-cover" />
 
         <div className="flex flex-wrap items-center gap-y-1 gap-x-3 mt-3 text-xs">
-          {blog.tags.map((tag) => (
-            <span className="bg-neutral-200 py-0.5 px-2 text-neutral-600 cursor-pointer font-semibold">
+          {blog.tags.map((tag, index) => (
+            <span
+              key={index}
+              className="bg-neutral-200 py-0.5 px-2 text-neutral-600 cursor-pointer font-semibold"
+            >
               {tag}
             </span>
           ))}

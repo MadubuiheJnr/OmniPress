@@ -16,6 +16,7 @@ const FooterCompanyLinks = () => {
       {NavData.slice(7, 9).map((data) => (
         <NavLink
           to={data.slug}
+          key={data.id}
           className={({
             isActive,
           }) => `text-sm font-semibold hover:text-red-800 transition-all duration-300 ease-in-out

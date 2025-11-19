@@ -88,3 +88,30 @@ export const toggleLike = async (req, res) => {
     return res.status(500).json({ message: "Something went wrong." });
   }
 };
+
+export const checkUserReaction = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { targetId } = req.params;
+    const { targetType } = req.query;
+
+    // Validate targetType
+    if (!["blog", "comment"].includes(targetType)) {
+      return res.status(400).json({ message: "Invalid target type." });
+    }
+
+    // Find user reaction
+    const reaction = await likeModel.findOne({
+      user: userId,
+      targetId,
+      targetType,
+    });
+
+    return res.status(200).json({
+      reaction: reaction ? reaction.type : null,
+    });
+  } catch (error) {
+    console.error("CHECK USER REACTION ERROR:", error);
+    return res.status(500).json({ message: "Something went wrong." });
+  }
+};

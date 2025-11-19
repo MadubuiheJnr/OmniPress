@@ -6,7 +6,7 @@ import { useAuth } from "../../context/AuthContext";
 import AuthModal from "../common/AuthModal";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { BlogType } from "../../types/blogTypes";
+import type { BlogDetailResponse } from "../../types/blogTypes";
 
 const LikeAndDislikeBtn = ({ blogID }: { blogID: string }) => {
   const { user } = useAuth();
@@ -17,41 +17,78 @@ const LikeAndDislikeBtn = ({ blogID }: { blogID: string }) => {
   const [disliked, setDisliked] = useState(false);
   const navigate = useNavigate();
 
-  const getLikesAndDislikes = async () => {
-    const res = await Axios<BlogType>(`/api/blogs/${blogID}`);
-    setLikesCount(res.data.likesCount);
-    setDislikesCount(res.data.dislikesCount);
+  const getPublicCounts = async () => {
+    try {
+      const res = await Axios<BlogDetailResponse>(`/api/blogs/${blogID}`);
+      setLikesCount(res.data.blog.likesCount);
+      setDislikesCount(res.data.blog.dislikesCount);
+    } catch (error) {
+      const err = error as AxiosError<{ message?: string }>;
+      console.log(err);
+      toast.error(
+        err.response?.data?.message || "Something went wrong. Please try again."
+      );
+    }
+  };
+
+  const getUserReaction = async () => {
+    try {
+      const res = await Axios(`/api/like/reaction/${blogID}?targetType=blog`);
+      const reaction: string | null = res.data.reaction;
+
+      setLiked(false);
+      setDisliked(false);
+
+      if (reaction === "like") setLiked(true);
+      if (reaction === "dislike") setDisliked(true);
+    } catch (error) {
+      const err = error as AxiosError<{ message?: string }>;
+      console.log(err);
+      toast.error(
+        err.response?.data?.message || "Something went wrong. Please try again."
+      );
+    }
   };
 
   useEffect(() => {
-    getLikesAndDislikes();
+    getPublicCounts();
+
+    // only logged-in users get userReaction
+    if (user) getUserReaction();
   }, []);
 
   const handleLike = async (type: string) => {
     try {
       if (!user) return setModalOpen(true);
+
+      // local optimistic update
       if (type === "like") {
         if (disliked) setDisliked(false);
-        return setLiked(!liked);
+        setLiked(!liked);
       }
+
       if (type === "dislike") {
         if (liked) setLiked(false);
-        return setDisliked(!disliked);
+        setDisliked(!disliked);
       }
+
+      // CALL API
       const res = await Axios.post("/api/like", {
         targetId: blogID,
         targetType: "blog",
         type,
       });
+
       toast.success(res.data.message);
     } catch (error) {
       const err = error as AxiosError<{ message?: string }>;
-
       toast.error(
         err.response?.data?.message || "Something went wrong. Please try again."
       );
-      if (type === "like") return setLiked(false);
-      if (type === "dislike") return setDisliked(false);
+
+      // revert optimistic change
+      if (type === "like") setLiked(!liked);
+      if (type === "dislike") setDisliked(!disliked);
     }
   };
   return (

@@ -10,7 +10,7 @@ import SearchButton from "../Search/SearchButton";
 import NavSocialMedia from "./NavSocialMedia";
 
 const Navbar = () => {
-  const { user } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [open, setOpen] = useState(false);
   const isLargeScreen = useMediaQuery("(min-width: 1024px)");
 
@@ -35,7 +35,7 @@ const Navbar = () => {
         >
           <SearchButton />
 
-          {user ? (
+          {isAuthenticated ? (
             <UserProfileIcon />
           ) : (
             // user.role === "admin" ? (

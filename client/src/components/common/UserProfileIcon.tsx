@@ -26,7 +26,7 @@ const userProfileData: UserProfileDataType[] = [
 ];
 
 const UserProfileIcon = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [open, setOpen] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -59,7 +59,10 @@ const UserProfileIcon = () => {
             </div>
 
             <div className="border-t border-neutral-50/50 mt-5 justify-self-end">
-              <button className=" flex items-center gap-x-5 py-2 px-4 ">
+              <button
+                onClick={logout}
+                className=" flex items-center gap-x-5 py-2 px-4 "
+              >
                 <LogIn className="inline text-neutral-50" />
                 <span className="text-neutral-50 text-base font-semibold">
                   Log out

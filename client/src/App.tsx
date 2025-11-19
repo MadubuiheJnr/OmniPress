@@ -5,12 +5,10 @@ import Register from "./pages/auth/Register";
 import Unauthorized from "./pages/Unauthorized";
 import PageNotFound from "./pages/PageNotFound";
 import { Toaster } from "react-hot-toast";
-import { LoginAction } from "./routes/Actions/LoginAction";
-
 const App = () => {
   const router = createBrowserRouter([
     ...Routes,
-    { path: "/login", element: <Login />, action: LoginAction },
+    { path: "/login", element: <Login /> },
     { path: "/register", element: <Register /> },
 
     { path: "/unauthorized", element: <Unauthorized /> },
