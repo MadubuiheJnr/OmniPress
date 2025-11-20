@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import Logo from "../../common/Logo";
-import ProfileIcon from "../../common/ProfileIcon";
 import NavListData from "./NavListData";
+import UserProfileIcon from "../../common/UserProfileIcon";
 
 const AdminNavbar = () => {
   return (
@@ -40,7 +40,7 @@ const AdminNavbar = () => {
       </nav>
 
       <div>
-        <ProfileIcon />
+        <UserProfileIcon />
       </div>
     </div>
   );

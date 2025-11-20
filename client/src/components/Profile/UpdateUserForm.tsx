@@ -21,8 +21,6 @@ const UpdateUserForm = ({ closeEdit }: { closeEdit: () => void }) => {
     try {
       const formData = new FormData();
 
-      if (!avatar || !userName || !bio || !email) return;
-
       if (avatar) formData.append("image", avatar); // multer field name MUST match
 
       if (userName) formData.append("userName", userName);

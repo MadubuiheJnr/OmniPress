@@ -15,9 +15,12 @@ const UserProfileCard = () => {
   return (
     <div
       style={{ backgroundImage: `url(${user?.avatar || profileIMG})` }}
-      className={`w-full h-screen bg-position-[100%] bg-cover bg-no-repeat overflow-auto`}
+      className={`w-full h-screen bg-center bg-cover bg-no-repeat overflow-auto`}
     >
-      <div className="w-full h-full flex flex-wrap">
+      <div
+        className="w-full h-full flex flex-wrap
+      lg:w-[80%] lg:mx-auto"
+      >
         <div className="cursor-pointer p-2">
           <p
             onClick={() => navigate(-1)}
@@ -27,7 +30,10 @@ const UserProfileCard = () => {
             <span className="text-neutral-50">Back</span>
           </p>
         </div>
-        <div className="self-end w-full p-5 rounded-t-4xl bg-white/5 backdrop-blur-xs border-t border-white/50 text-neutral-50">
+        <div
+          className="self-end w-full p-5 rounded-t-4xl bg-white/5 backdrop-blur-xs border-t border-white/50 text-neutral-50
+        lg:border lg:border-b-0"
+        >
           {!editProfile && !editPassword && (
             <div>
               <UserDetailsCard

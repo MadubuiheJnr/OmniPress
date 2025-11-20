@@ -45,8 +45,8 @@ const UserDetailsCard = ({
         onClick={openEditPassword}
         className="flex items-center flex-wrap gap-x-3 mt-2 cursor-pointer"
       >
-        <Fingerprint className="text-neutral-400" />
-        <span className="text-neutral-400 border-b"> Reset Password</span>
+        <Fingerprint className="text-neutral-300" />
+        <span className="text-neutral-300 border-b"> Reset Password</span>
       </p>
     </>
   );
