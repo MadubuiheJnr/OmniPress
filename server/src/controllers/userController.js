@@ -1,6 +1,8 @@
 import handleError from "../utils/handleError.js";
 import userModel from "../models/userModel.js";
 import bcrypt from "bcryptjs";
+import imageKit from "../configs/imageKit.js";
+import fs from "fs";
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -31,7 +33,8 @@ export const getUserById = async (req, res) => {
 export const updateUserById = async (req, res) => {
   try {
     const { id } = req.params;
-    const { userName, email, password, avatar, bio } = req.body;
+    const { userName, email, password, bio } = req.body;
+    const avatar = req.file;
 
     const user = await userModel.findById(id);
     if (!user) {
@@ -65,12 +68,35 @@ export const updateUserById = async (req, res) => {
         .json({ message: "Maximum character of 100 exceeded" });
     }
 
+    // upload image to imageKit
+    let optimizedImageUrl = user.avatar;
+
+    if (req.file) {
+      const response = await imageKit.files.upload({
+        file: fs.createReadStream(req.file.path),
+        fileName: req.file.originalname,
+        folder: "/OmniPress/users",
+      });
+
+      fs.unlinkSync(req.file.path);
+
+      optimizedImageUrl = imageKit.helper.buildSrc({
+        urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
+        src: response.url,
+        transformation: [
+          { quality: "auto" },
+          { format: "webp" },
+          { width: "1280" },
+        ],
+      });
+    }
+
     const updatedData = {
       userName: userName || user.userName,
       email: email || user.email,
-      password: hashedPassword || user.password,
+      password: password ? hashedPassword : user.password,
       bio: bio || user.bio,
-      avatar: avatar || user.avatar,
+      avatar: optimizedImageUrl,
     };
 
     const updatedUser = await userModel
@@ -81,6 +107,8 @@ export const updateUserById = async (req, res) => {
       .status(200)
       .json({ message: "User updated successfully", user: updatedUser });
   } catch (error) {
+    console.log(error);
+
     handleError(res, error);
   }
 };

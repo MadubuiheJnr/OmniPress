@@ -1,15 +1,21 @@
-import { BadgeQuestionMarkIcon, ChevronLeft, Mail, User2 } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import profileIMG from "/profile_bg.jpg";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import UpdateUserForm from "./UpdateUserForm";
+import UserDetailsCard from "./UserDetailsCard";
+import ForgottenPassword from "./ForgottenPassword";
 
 const UserProfileCard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [editProfile, setEditProfile] = useState(false);
+  const [editPassword, setEditPassword] = useState(false);
   return (
     <div
       style={{ backgroundImage: `url(${user?.avatar || profileIMG})` }}
-      className={`w-full h-screen bg-position-[100%] bg-cover bg-no-repeat`}
+      className={`w-full h-screen bg-position-[100%] bg-cover bg-no-repeat overflow-auto`}
     >
       <div className="w-full h-full flex flex-wrap">
         <div className="cursor-pointer p-2">
@@ -22,20 +28,29 @@ const UserProfileCard = () => {
           </p>
         </div>
         <div className="self-end w-full p-5 rounded-t-4xl bg-white/5 backdrop-blur-xs border-t border-white/50 text-neutral-50">
-          <p className="flex items-center flex-wrap gap-x-3">
-            <User2 className="inline text-neutral-50" />
-            <span className="font-semibold text-lg text-neutral-50">
-              {user?.userName}
-            </span>
-          </p>
-          <p className="flex items-center flex-wrap gap-x-3 mt-2">
-            <Mail className="inline text-neutral-50" />
-            <span className="text-neutral-50">{user?.email}</span>
-          </p>
-          <p className="mt-5 flex items-center flex-wrap gap-x-3">
-            <BadgeQuestionMarkIcon />
-            <span>{user?.bio ?? "No Bio"}</span>
-          </p>
+          {!editProfile && !editPassword && (
+            <div>
+              <UserDetailsCard
+                user={user}
+                openEdit={() => setEditProfile(true)}
+                openEditPassword={() => setEditPassword(true)}
+              />
+            </div>
+          )}
+
+          {editProfile && !editPassword && (
+            <div>
+              <UpdateUserForm closeEdit={() => setEditProfile(false)} />
+            </div>
+          )}
+
+          {editPassword && !editProfile && (
+            <div>
+              <ForgottenPassword
+                closePasswordEdit={() => setEditPassword(false)}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

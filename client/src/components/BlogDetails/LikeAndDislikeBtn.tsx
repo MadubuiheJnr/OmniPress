@@ -78,7 +78,7 @@ const LikeAndDislikeBtn = ({ blogID }: { blogID: string }) => {
         targetType: "blog",
         type,
       });
-
+      getPublicCounts();
       toast.success(res.data.message);
     } catch (error) {
       const err = error as AxiosError<{ message?: string }>;
