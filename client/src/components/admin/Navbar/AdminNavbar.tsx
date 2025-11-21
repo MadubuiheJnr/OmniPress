@@ -5,10 +5,7 @@ import UserProfileIcon from "../../common/UserProfileIcon";
 
 const AdminNavbar = () => {
   return (
-    <div
-      className="p-3 flex items-center justify-between
-    lg:p-5"
-    >
+    <div className="p-5 flex items-center justify-between bg-white/20 backdrop-blur-2xl">
       <div className="">
         <img src="/favicon.png" alt="" className="w-10 hidden" />
         <Logo styles="text-lg font-bold" />

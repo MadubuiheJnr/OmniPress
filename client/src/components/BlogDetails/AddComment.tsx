@@ -7,7 +7,13 @@ import { useAuth } from "../../context/AuthContext";
 import AuthModal from "../common/AuthModal";
 import { useNavigate } from "react-router-dom";
 
-const AddComment = ({ blogID }: { blogID: string }) => {
+const AddComment = ({
+  blogID,
+  fetchComments,
+}: {
+  blogID: string;
+  fetchComments: () => void;
+}) => {
   const [content, setContent] = useState<string>("");
   const [modalOpen, setModalOpen] = useState(false);
   const { user } = useAuth();
@@ -24,7 +30,8 @@ const AddComment = ({ blogID }: { blogID: string }) => {
 
       if (res.status === 201) {
         setContent("");
-        return toast.success(res.data.message);
+        toast.success(res.data.message);
+        fetchComments();
       }
     } catch (error) {
       const err = error as AxiosError<{ message?: string }>;

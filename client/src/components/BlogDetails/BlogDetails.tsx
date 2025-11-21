@@ -10,15 +10,21 @@ import type { BlogType } from "../../types/blogTypes";
 import AddComment from "./AddComment";
 import LikeAndDislikeBtn from "./LikeAndDislikeBtn";
 import AiSummary from "../Search/AiSummary";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Axios from "../../config/axiosConfig";
 import BtnLoadingSpinner from "../common/BtnLoadingSpinner";
 import toast from "react-hot-toast";
 import type { AxiosError } from "axios";
+import BlogComments from "./BlogComments";
+import type { CommentType } from "../../types/commentTypes";
+import CommentGuideline from "./CommentGuideline";
 
 const BlogDetails = ({ blog }: { blog: BlogType }) => {
   const [aiSummary, setAiSummary] = useState<string>("");
   const [aiSummaryLoading, setAiSummaryLoading] = useState<boolean>(false);
+  const [blogComments, setBlogComments] = useState<CommentType[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [showGuidelines, setShowGuidelines] = useState<boolean>(true);
 
   const getAiSummary = async (prompt: string) => {
     try {
@@ -42,6 +48,26 @@ const BlogDetails = ({ blog }: { blog: BlogType }) => {
   const handleClose = () => {
     setAiSummary("");
   };
+
+  const getBlogComments = async () => {
+    try {
+      setLoading(true);
+      const res = await Axios(`/api/comments/blog/${blog._id}`);
+      setBlogComments(res.data);
+      console.log(res);
+    } catch (error) {
+      const err = error as AxiosError<{ message: string }>;
+      toast.error(
+        err.response?.data.message || "Something went wrong. Please try again"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getBlogComments();
+  }, []);
   return (
     <div className=" relative">
       <div>
@@ -141,9 +167,23 @@ const BlogDetails = ({ blog }: { blog: BlogType }) => {
         <LikeAndDislikeBtn blogID={blog._id} />
       </div>
 
+      {/* Community guidelines */}
+      {showGuidelines && (
+        <div className="mt-7">
+          <CommentGuideline handleClose={() => setShowGuidelines(false)} />
+        </div>
+      )}
+
+      {/* Blog Comments */}
+      {blogComments.length > 0 && (
+        <div className={`mt-10 `}>
+          <BlogComments comments={blogComments} loading={loading} />
+        </div>
+      )}
+
       {/* Add Comment */}
-      <div className="mt-20">
-        <AddComment blogID={blog._id} />
+      <div className="mt-10">
+        <AddComment blogID={blog._id} fetchComments={getBlogComments} />
       </div>
     </div>
   );

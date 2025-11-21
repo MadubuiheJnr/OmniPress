@@ -3,6 +3,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import AddBlog from "../pages/admin/AddBlog";
 import { AddBlogAction } from "./Actions/AddBlogAction";
+import Comments from "../pages/admin/Comments";
 
 const AdminRoutes = {
   element: <ProtectedRoute role="admin" />,
@@ -13,6 +14,7 @@ const AdminRoutes = {
       children: [
         { index: true, element: <AdminDashboard /> },
         { path: "addblog", element: <AddBlog />, action: AddBlogAction },
+        { path: "comments", element: <Comments /> },
       ],
     },
   ],

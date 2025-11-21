@@ -33,11 +33,12 @@ export const getAllComment = async (req, res) => {
       .sort({ createdAt: -1 })
       .populate({
         path: "blog",
-        select: "title category createdAt",
+        select: "_id title category createdAt",
+        populate: { path: "category", select: "name slug -_id" },
       })
       .populate({
         path: "user",
-        select: "name email role",
+        select: "_id name email role avatar userName",
       });
     res.status(200).json(comments);
   } catch (error) {
@@ -87,6 +88,42 @@ export const toggleIsApproved = async (req, res) => {
 
     const status = comment.isApproved ? "approved" : "unapproved";
     res.status(200).json({ message: `Comment ${status}` });
+  } catch (error) {
+    console.log(error);
+
+    handleError(res, error);
+  }
+};
+
+export const getBlogComments = async (req, res) => {
+  try {
+    const { blogId } = req.params;
+    const comments = await commentModel
+      .find({
+        blog: blogId,
+      })
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "user",
+        select: "_id name role avatar userName",
+      });
+    res.status(200).json(comments);
+  } catch (error) {
+    handleError(res, error);
+  }
+};
+
+export const getCommentById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const comment = await commentModel
+      .findById(id)
+      .select("dislikesCount likesCount");
+
+    if (!comment) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
+    res.status(200).json(comment);
   } catch (error) {
     handleError(res, error);
   }

@@ -24,31 +24,31 @@ const NavListData: NavListDataType[] = [
   {
     id: "2",
     name: "Blog",
-    slug: "/blogs",
+    slug: "/admin/blogs",
     icon: Notebook,
   },
   {
     id: "3",
     name: "Users",
-    slug: "/users",
+    slug: "/admin/users",
     icon: Users,
   },
   {
     id: "4",
     name: "Comments",
-    slug: "/comments",
+    slug: "/admin/comments",
     icon: MessagesSquare,
   },
   {
     id: "5",
     name: "Categories",
-    slug: "/categories",
+    slug: "/admin/categories",
     icon: Blocks,
   },
   {
     id: "6",
     name: "Settings",
-    slug: "/settings",
+    slug: "/admin/settings",
     icon: Settings,
   },
 ];

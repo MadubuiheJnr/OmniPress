@@ -11,7 +11,7 @@ const AdminLayout = () => {
   );
   return (
     <div className=" h-screen relative">
-      <header className="fixed top-0 z-50 w-full bg-white">
+      <header className="fixed top-0 z-50 w-full">
         <AdminNavbar />
       </header>
       <div
