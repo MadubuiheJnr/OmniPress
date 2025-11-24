@@ -7,8 +7,8 @@ import type { UserType } from "../../types";
 import user_icon from "/user_icon.svg";
 import { BadgeInfo, Mail, PenBoxIcon, UserSquare2 } from "lucide-react";
 import BtnLoadingSpinner from "../../components/common/BtnLoadingSpinner";
-import UserDetailsLoader from "../../components/admin/Users/userDetailsLoader";
 import ConfirmationModal from "../../components/common/ConfirmationModal";
+import UserDetailsLoader from "../../components/admin/Users/UserDetailsLoader";
 
 const UserDetails = () => {
   const { id } = useParams();

@@ -6,11 +6,11 @@ import type { UserType } from "../../types";
 import UserCard from "../../components/admin/Users/UserCard";
 
 const Users = () => {
-  const [loading, setLoading] = useState(false);
+  //   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState<UserType[]>([]);
 
   const fetchAllUsers = async () => {
-    setLoading(true);
+    // setLoading(true);
     try {
       const res = await Axios("/api/users");
       setUsers(res.data);
@@ -19,9 +19,10 @@ const Users = () => {
       toast.error(
         err.response?.data.message || "Something went wrong. Please try again"
       );
-    } finally {
-      setLoading(false);
     }
+    // finally {
+    //   setLoading(false);
+    // }
   };
 
   useEffect(() => {
