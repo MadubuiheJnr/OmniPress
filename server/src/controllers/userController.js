@@ -24,7 +24,7 @@ export const getUserById = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.status(200).json({ message: "OK", user });
+    res.status(200).json(user);
   } catch (error) {
     handleError(res, error);
   }
@@ -123,6 +123,28 @@ export const deleteUserById = async (req, res) => {
     }
 
     res.status(200).json({ message: "User Deleted successfully" });
+  } catch (error) {
+    handleError(res, error);
+  }
+};
+
+export const toggleIsAdmin = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const user = await userModel.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Toggle role
+    user.role = user.role === "admin" ? "user" : "admin";
+
+    await user.save();
+
+    return res.status(200).json({
+      message: `Role updated. User is now ${user.role}.`,
+    });
   } catch (error) {
     handleError(res, error);
   }

@@ -3,6 +3,7 @@ import {
   deleteUserById,
   getAllUsers,
   getUserById,
+  toggleIsAdmin,
   updateUserById,
 } from "../controllers/userController.js";
 import { verifyToken } from "../middleware/verifyToken.js";
@@ -22,6 +23,8 @@ userRouter.put(
   verifyRole("admin", "user"),
   updateUserById
 );
+
+userRouter.put("/toggle/admin/:id", verifyRole("admin"), toggleIsAdmin);
 
 userRouter.delete("/delete/:id", verifyRole("admin"), deleteUserById);
 

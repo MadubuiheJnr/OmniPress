@@ -31,7 +31,7 @@ const UserProfileCard = () => {
           </p>
         </div>
         <div
-          className="self-end w-full p-5 rounded-t-4xl bg-white/5 backdrop-blur-xs border-t border-white/50 text-neutral-50
+          className="self-end w-full p-5 rounded-t-4xl bg-black/15 backdrop-blur-xs border-t border-white/50 text-neutral-50
         lg:border lg:border-b-0"
         >
           {!editProfile && !editPassword && (

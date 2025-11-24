@@ -7,6 +7,7 @@ import type { AxiosError } from "axios";
 import BtnLoadingSpinner from "../../common/BtnLoadingSpinner";
 import { useNavigate } from "react-router-dom";
 import { BadgeAlert, BadgeCheck } from "lucide-react";
+import ConfirmationModal from "../../common/ConfirmationModal";
 
 const CommentCard = ({
   comment,
@@ -18,6 +19,7 @@ const CommentCard = ({
   const navigate = useNavigate();
   const [viewMore, setViewMore] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const toggleApproved = async () => {
     try {
@@ -36,13 +38,29 @@ const CommentCard = ({
       setLoading(false);
     }
   };
+
+  const deleteComment = async () => {
+    try {
+      const res = await Axios.delete(`/api/comments/${comment._id}/delete`);
+      toast.success(res.data.message);
+      fetchComments();
+    } catch (error) {
+      const err = error as AxiosError<{ message: string }>;
+      toast.error(
+        err.response?.data.message || "Something went wrong. Please try again"
+      );
+    } finally {
+      setModalOpen(false);
+    }
+  };
+
   return (
     <div
       className="grid grid-cols-6 items-start
     lg:grid-cols-20"
     >
       <img
-        src={comment.user.avatar || user_icon}
+        src={comment.user?.avatar || user_icon}
         alt="user avatar"
         className="w-10 h-10 rounded-full object-cover cursor-pointer"
       />
@@ -54,7 +72,7 @@ const CommentCard = ({
             className="flex flex-wrap text-xs gap-x-2 text-neutral-800 col-span-6 cursor-pointer"
           >
             <span className="font-semibold cursor-pointer">
-              @{comment.user.userName}
+              @{comment.user?.userName}
             </span>
             <span className="cursor-pointer text-xs">commented on</span>
             <span className="line-clamp-1 cursor-pointer">
@@ -104,6 +122,7 @@ const CommentCard = ({
 
         <div className="flex items-center-safe gap-x-5 mt-3">
           <button
+            onClick={() => setModalOpen(true)}
             className={`text-xs text-neutral-900 border border-neutral-300 py-1 px-3 rounded-md font-semibold cursor-pointer
             ${loading && "opacity-50 cursor-not-allowed"}`}
           >
@@ -125,6 +144,18 @@ const CommentCard = ({
           </button>
         </div>
       </div>
+
+      {modalOpen && (
+        <ConfirmationModal
+          title="Delete Comment"
+          subText="Are you sure you want to permanently remove this comment? This action cannot be undone"
+          onAffirmText="Delete"
+          onAffirmStyles="text-red-800 bg-red-200"
+          onAffirm={deleteComment}
+          onClose={() => setModalOpen(false)}
+          open={modalOpen}
+        />
+      )}
     </div>
   );
 };
