@@ -120,11 +120,13 @@ const UserDetails = () => {
                   Creation Date:{" "}
                 </span>
                 <span className="inline-block text-neutral-400 text-xs">
-                  {new Date(user?.createdAt).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  })}
+                  {user?.createdAt
+                    ? new Date(user.createdAt).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })
+                    : "-"}
                 </span>
               </p>
               <p className="flex items-center gap-x-1 mt-0.5">
@@ -132,11 +134,13 @@ const UserDetails = () => {
                   Last Update:{" "}
                 </span>
                 <span className="inline-block text-neutral-400 text-xs">
-                  {new Date(user?.updatedAt).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  })}
+                  {user?.updatedAt
+                    ? new Date(user.updatedAt).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })
+                    : "-"}
                 </span>
               </p>
             </div>
