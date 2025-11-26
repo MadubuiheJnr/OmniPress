@@ -13,7 +13,6 @@ import Sports from "../pages/Sports";
 import UserProfilePage from "../pages/UserProfilePage";
 import World from "../pages/World";
 import { ArtsPageLoader } from "./loaders/ArtsPageLoader";
-import { BlogDetailsLoader } from "./loaders/BlogDetailsLoader";
 import { BusinessPageLoader } from "./loaders/BusinessPageLoader";
 import { HealthPageLoader } from "./loaders/HealthPageLoader";
 import { PoliticsPageLoader } from "./loaders/PoliticsPageLoader";
@@ -29,7 +28,6 @@ const UserRoutes = {
     {
       path: "/blog/:id",
       element: <BlogDetailsPage />,
-      loader: BlogDetailsLoader,
     },
     {
       path: "/profile",

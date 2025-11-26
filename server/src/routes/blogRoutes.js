@@ -27,13 +27,13 @@ blogRouter.get("/", getAllPublishedBlogs);
 blogRouter.get("/:id", getBlogById);
 blogRouter.put("/update/:id", verifyToken, verifyRole("admin"), updateBlogById);
 blogRouter.put(
-  "/toggle/published",
+  "/toggle/published/:id",
   verifyToken,
   verifyRole("admin"),
   toggleIsPublished
 );
 blogRouter.put(
-  "/toggle/featured",
+  "/toggle/featured/:id",
   verifyToken,
   verifyRole("admin"),
   toggleIsFeatured

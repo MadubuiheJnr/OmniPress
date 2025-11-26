@@ -19,7 +19,7 @@ import BlogComments from "./BlogComments";
 import type { CommentType } from "../../types/commentTypes";
 import CommentGuideline from "./CommentGuideline";
 
-const BlogDetails = ({ blog }: { blog: BlogType }) => {
+const BlogDetails = ({ blog }: { blog: BlogType | null }) => {
   const [aiSummary, setAiSummary] = useState<string>("");
   const [aiSummaryLoading, setAiSummaryLoading] = useState<boolean>(false);
   const [blogComments, setBlogComments] = useState<CommentType[]>([]);
@@ -52,7 +52,7 @@ const BlogDetails = ({ blog }: { blog: BlogType }) => {
   const getBlogComments = async () => {
     try {
       setLoading(true);
-      const res = await Axios(`/api/comments/blog/${blog._id}`);
+      const res = await Axios(`/api/comments/blog/${blog?._id}`);
       setBlogComments(res.data);
       console.log(res);
     } catch (error) {
@@ -71,34 +71,34 @@ const BlogDetails = ({ blog }: { blog: BlogType }) => {
   return (
     <div className=" relative">
       <div>
-        <p className="text-xl font-bold text-zinc-900">{blog.title}</p>
+        <p className="text-xl font-bold text-zinc-900">{blog?.title}</p>
         <div className="mt-2 flex gap-x-2">
           <span className="text-lg font-light text-zinc-700s">
-            By {blog.author.name} <span>|</span>
+            By {blog?.author.name} <span>|</span>
           </span>
           <div className="flex items-center gap-x-3">
             <span className="group">
-              {blog.author.social?.medium ? (
+              {blog?.author.social?.medium ? (
                 <SunMedium className="transition-transform duration-300 group-hover:scale-110 text-zinc-900" />
               ) : null}
             </span>
             <span className="group">
-              {blog.author.social?.x ? (
+              {blog?.author.social?.x ? (
                 <Twitter className="transition-transform duration-300 group-hover:scale-110 text-zinc-900" />
               ) : null}
             </span>
             <span className="group">
-              {!blog.author.social?.fb ? (
+              {blog?.author.social?.fb ? (
                 <Facebook className="transition-transform duration-300 group-hover:scale-110 text-zinc-900" />
               ) : null}
             </span>
             <span className="group">
-              {!blog.author.social?.ig ? (
+              {blog?.author.social?.ig ? (
                 <Instagram className="transition-transform duration-300 group-hover:scale-110 text-zinc-900" />
               ) : null}
             </span>
             <span className="group">
-              {!blog.author.social?.yt ? (
+              {blog?.author.social?.yt ? (
                 <Youtube className="transition-transform duration-300 group-hover:scale-110 text-zinc-900" />
               ) : null}
             </span>
@@ -106,14 +106,15 @@ const BlogDetails = ({ blog }: { blog: BlogType }) => {
         </div>
 
         <p className="text-sm font-normal text-zinc-600 mt-2">
-          {new Date(blog.createdAt).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
+          {blog?.createdAt &&
+            new Date(blog.createdAt).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
         </p>
 
-        {!aiSummary && (
+        {!aiSummary && blog?.content && (
           <button
             disabled={aiSummaryLoading}
             onClick={() => getAiSummary(blog.content)}
@@ -144,10 +145,10 @@ const BlogDetails = ({ blog }: { blog: BlogType }) => {
       )}
 
       <div className="mt-15">
-        <img src={blog.thumbnail} alt="" className="w-full object-cover" />
+        <img src={blog?.thumbnail} alt="" className="w-full object-cover" />
 
         <div className="flex flex-wrap items-center gap-y-1 gap-x-3 mt-3 text-xs">
-          {blog.tags.map((tag, index) => (
+          {blog?.tags.map((tag, index) => (
             <span
               key={index}
               className="bg-neutral-200 py-0.5 px-2 text-neutral-600 cursor-pointer font-semibold"
@@ -157,15 +158,19 @@ const BlogDetails = ({ blog }: { blog: BlogType }) => {
           ))}
         </div>
 
-        <p
-          dangerouslySetInnerHTML={{ __html: blog.content }}
-          className="mt-5 text-zinc-800"
-        ></p>
+        {blog?.content && (
+          <p
+            dangerouslySetInnerHTML={{ __html: blog.content }}
+            className="mt-5 text-zinc-800"
+          ></p>
+        )}
       </div>
 
-      <div className="mt-3">
-        <LikeAndDislikeBtn blogID={blog._id} />
-      </div>
+      {blog?._id && (
+        <div className="mt-3">
+          <LikeAndDislikeBtn blogID={blog._id} />
+        </div>
+      )}
 
       {/* Community guidelines */}
       {showGuidelines && (
@@ -182,9 +187,11 @@ const BlogDetails = ({ blog }: { blog: BlogType }) => {
       )}
 
       {/* Add Comment */}
-      <div className="mt-10">
-        <AddComment blogID={blog._id} fetchComments={getBlogComments} />
-      </div>
+      {blog?._id && (
+        <div className="mt-10">
+          <AddComment blogID={blog._id} fetchComments={getBlogComments} />
+        </div>
+      )}
     </div>
   );
 };

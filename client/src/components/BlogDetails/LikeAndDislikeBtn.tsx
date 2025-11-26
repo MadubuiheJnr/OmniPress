@@ -7,6 +7,8 @@ import AuthModal from "../common/AuthModal";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { BlogDetailResponse } from "../../types/blogTypes";
+import { AnimatePresence } from "motion/react";
+import * as motion from "motion/react-client";
 
 const LikeAndDislikeBtn = ({ blogID }: { blogID: string }) => {
   const { user } = useAuth();
@@ -24,7 +26,6 @@ const LikeAndDislikeBtn = ({ blogID }: { blogID: string }) => {
       setDislikesCount(res.data.blog.dislikesCount);
     } catch (error) {
       const err = error as AxiosError<{ message?: string }>;
-      console.log(err);
       toast.error(
         err.response?.data?.message || "Something went wrong. Please try again."
       );
@@ -125,14 +126,26 @@ const LikeAndDislikeBtn = ({ blogID }: { blogID: string }) => {
         </span>
       </p>
 
-      <AuthModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onLogin={() => {
-          setModalOpen(false);
-          navigate("/login");
-        }}
-      />
+      <AnimatePresence>
+        <motion.div
+          layout
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{
+            ease: "circIn",
+            layout: { duration: 5 },
+          }}
+        >
+          <AuthModal
+            open={modalOpen}
+            onClose={() => setModalOpen(false)}
+            onLogin={() => {
+              setModalOpen(false);
+              navigate("/login");
+            }}
+          />
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 };

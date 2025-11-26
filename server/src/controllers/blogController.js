@@ -380,12 +380,12 @@ export const deleteBlogById = async (req, res) => {
 
 export const toggleIsPublished = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
     const blog = await blogModel.findById(id);
     if (!blog) {
       return res.status(404).json({ message: "Blog not found" });
     }
-    blog.isApproved = !blog.isApproved;
+    blog.isPublished = !blog.isPublished;
     await blog.save();
 
     const status = blog.isPublished ? "published" : "unpublished";
@@ -397,7 +397,7 @@ export const toggleIsPublished = async (req, res) => {
 
 export const toggleIsFeatured = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
     const blog = await blogModel.findById(id);
     if (!blog) {
       return res.status(404).json({ message: "Blog not found" });

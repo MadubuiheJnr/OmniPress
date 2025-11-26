@@ -7,6 +7,7 @@ import {
 } from "react";
 import Axios from "../config/axiosConfig";
 import type { UserType } from "../types";
+import type { AxiosError } from "axios";
 
 type AuthContextType = {
   user: UserType | null;
@@ -14,19 +15,27 @@ type AuthContextType = {
   fetchUser: () => void;
   isAuthenticated: boolean;
   isAdmin: boolean;
+  loading: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserType | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const fetchUser = async () => {
     try {
       const res = await Axios.get("/api/auth/me");
       setUser(res.data.user);
     } catch (error) {
-      localStorage.removeItem("token");
+      const err = error as AxiosError<{ message: string }>;
+      if (err?.response?.status === 401) {
+        localStorage.removeItem("token");
+        setUser(null);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -34,6 +43,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const token = localStorage.getItem("token");
     if (token) {
       fetchUser();
+    } else {
+      setLoading(false);
     }
   }, []);
 
@@ -44,13 +55,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const value = {
     user,
+    loading,
     logout,
     fetchUser,
     isAuthenticated: !!user,
     isAdmin: user?.role === "admin",
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {!loading && children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = () => {

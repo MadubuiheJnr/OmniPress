@@ -24,7 +24,10 @@ const Blogs = () => {
   }, []);
   return (
     <div className="w-full p-3 h-screen overflow-y-auto pb-25">
-      <div className="w-70 flex flex-col gap-y-5">
+      <div
+        className="w-70 grid grid-cols-1 gap-y-5
+        lg:w-full lg:grid-cols-4 lg:gap-x-3"
+      >
         {blogs.length > 0
           ? blogs.map((blog) => <AdminBlogCard blog={blog} />)
           : null}

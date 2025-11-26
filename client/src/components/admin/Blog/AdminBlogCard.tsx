@@ -1,14 +1,16 @@
 import { Clock } from "lucide-react";
 import type { BlogType } from "../../../types/blogTypes";
+import { useNavigate } from "react-router-dom";
 
 const AdminBlogCard = ({ blog }: { blog: BlogType }) => {
+  const navigate = useNavigate();
   return (
     <div className="bg-neutral-50 drop-shadow-neutral-300s drop-shadow-sm p-1 rounded-2xl">
       <div className="relative">
         <img
           src={blog.thumbnail}
           alt=""
-          className="w-70 h-70 object-cover rounded-2xl"
+          className="w-full h-70 object-cover rounded-2xl"
         />
 
         <div className="absolute top-0 left-0 w-full p-3">
@@ -28,7 +30,10 @@ const AdminBlogCard = ({ blog }: { blog: BlogType }) => {
           className="line-clamp-2 text-xs text-neutral-900 mt-0.5 font-normal"
         ></p>
 
-        <button className="mt-3 px-5 py-1 text-neutral-100 bg-neutral-900 text-xs font-extrabold rounded-full">
+        <button
+          onClick={() => navigate(`/admin/blog/${blog._id}`)}
+          className="mt-3 px-5 py-1 text-neutral-100 bg-neutral-900 text-xs font-extrabold rounded-full"
+        >
           See more
         </button>
       </div>

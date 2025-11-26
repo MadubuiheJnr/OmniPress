@@ -8,6 +8,8 @@ import { useAuth } from "../../context/AuthContext";
 import UserProfileIcon from "../common/UserProfileIcon";
 import SearchButton from "../Search/SearchButton";
 import NavSocialMedia from "./NavSocialMedia";
+import * as motion from "motion/react-client";
+import { AnimatePresence } from "motion/react";
 
 const Navbar = () => {
   const { isAuthenticated } = useAuth();
@@ -46,16 +48,37 @@ const Navbar = () => {
             <LoginButton />
           )}
 
-          <button
+          <motion.button
+            whileTap={{ y: 5 }}
             onClick={() => setOpen(!open)}
-            className=" border border-red-600 p-1.5 rounded-sm transition-all ease-in-out duration-300 cursor-pointer lg:hidden"
+            className="flex items-center justify-center border border-red-600 p-1.5 rounded-sm transition-all ease-in-out duration-300 cursor-pointer lg:hidden"
           >
-            {open ? (
-              <X className="text-red-600" size={18} />
-            ) : (
-              <Menu className="text-red-600" size={18} />
-            )}
-          </button>
+            <AnimatePresence initial={false} mode="wait">
+              {open ? (
+                <motion.span
+                  key="close"
+                  initial={{ rotate: 0, opacity: 0, y: -6 }}
+                  animate={{ rotate: 360, opacity: 1, y: 0 }}
+                  exit={{ rotate: 0, opacity: 0, y: 6 }}
+                  transition={{ duration: 0.45, ease: "easeOut" }}
+                  style={{ display: "inline-block" }}
+                >
+                  <X className="text-red-600" size={18} />
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="menu"
+                  initial={{ rotate: 0, opacity: 0, y: -6 }}
+                  animate={{ rotate: 360, opacity: 1, y: 0 }}
+                  exit={{ rotate: 0, opacity: 0, y: 6 }}
+                  transition={{ duration: 0.45, ease: "easeOut" }}
+                  style={{ display: "inline-block" }}
+                >
+                  <Menu className="text-red-600" size={18} />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
         </div>
       </div>
       <div

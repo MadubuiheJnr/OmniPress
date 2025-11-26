@@ -30,6 +30,7 @@ const AdminSidebar = () => {
         {NavListData.map((nav) => (
           <NavLink
             to={`${nav.slug}`}
+            end
             className={({
               isActive,
             }) => `flex items-center gap-2 pl-1 py-1 rounded-full text-sm transition-all ease-in-out duration-300 last-of-type:mt-60 

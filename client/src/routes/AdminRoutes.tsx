@@ -7,6 +7,7 @@ import Comments from "../pages/admin/Comments";
 import Users from "../pages/admin/Users";
 import UserDetails from "../pages/admin/UserDetails";
 import Blogs from "../pages/admin/Blogs";
+import AdminBlogDetails from "../pages/admin/AdminBlogDetails";
 
 const AdminRoutes = {
   element: <ProtectedRoute role="admin" />,
@@ -21,6 +22,7 @@ const AdminRoutes = {
         { path: "users", element: <Users /> },
         { path: "user/:id", element: <UserDetails /> },
         { path: "blogs", element: <Blogs /> },
+        { path: "/admin/blog/:id", element: <AdminBlogDetails /> },
       ],
     },
   ],
