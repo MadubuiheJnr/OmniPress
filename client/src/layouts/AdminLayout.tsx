@@ -17,7 +17,7 @@ const AdminLayout = () => {
       <div
         className={`mt-20 ${
           !shouldHideSidebar &&
-          `flex items-start h-[calc(100vh-70px)] 
+          `grid grid-cols-5 items-start h-[calc(100vh-70px)] 
       lg:mt-25 lg:gap-x-10`
         }`}
       >
@@ -27,7 +27,7 @@ const AdminLayout = () => {
           </div>
         )}
 
-        <div className="lg:w-full">
+        <div className="col-span-4 lg:w-full">
           <Outlet />
         </div>
       </div>
