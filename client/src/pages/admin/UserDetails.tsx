@@ -74,7 +74,7 @@ const UserDetails = () => {
         <div className="p-3 h-screen overflow-y-auto">
           <div className="relative">
             <img
-              src={user?.avatar || user_icon}
+              src={user.avatar || user_icon}
               alt=""
               className="w-full rounded-2xl h-75 object-cover"
             />
@@ -82,7 +82,7 @@ const UserDetails = () => {
             <span
               className={`inline-block capitalize bg-black/15 backdrop-blur-xs text-neutral-100 px-3 py-1 text-sm font-semibold mt-1 absolute top-2 left-2`}
             >
-              {user?.role}
+              {user.role}
             </span>
             <span
               className={`h-8 w-8 rounded-full inline-flex items-center justify-center capitalize bg-black/20 backdrop-blur-xs text-neutral-100 text-sm font-semibold mt-1 absolute top-2 right-2 cursor-pointer`}
@@ -94,7 +94,7 @@ const UserDetails = () => {
             <p className="mt-5 flex items-center gap-x-2">
               <UserSquare2 className="text-neutral-700" size={20} />
               <span className="text-base font-semibold text-neutral-700">
-                {user?.userName}
+                {user.userName}
               </span>
             </p>
             <p className="mt-0.5 flex items-center gap-x-2">
@@ -114,30 +114,28 @@ const UserDetails = () => {
             <div className="mt-5">
               <p className="flex items-center gap-x-1">
                 <span className="text-xs font-bold text-neutral-800">
-                  Creation Date:{" "}
+                  Creation Date:
                 </span>
                 <span className="inline-block text-neutral-400 text-xs">
-                  {user?.createdAt
-                    ? new Date(user.createdAt).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })
-                    : "--"}
+                  {user.createdAt &&
+                    new Date(user.createdAt).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
                 </span>
               </p>
               <p className="flex items-center gap-x-1 mt-0.5">
                 <span className="text-xs font-bold text-neutral-800">
-                  Last Update:{" "}
+                  Last Update:
                 </span>
                 <span className="inline-block text-neutral-400 text-xs">
-                  {user?.updatedAt
-                    ? new Date(user.updatedAt).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })
-                    : "--"}
+                  {user.updatedAt &&
+                    new Date(user.updatedAt).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
                 </span>
               </p>
             </div>
