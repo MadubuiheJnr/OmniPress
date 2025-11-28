@@ -35,7 +35,7 @@ const BlogDetailsPage = () => {
     fetchBlogDetails();
   }, []);
 
-  if (loading) return <SearchPageLoadingUI />;
+  if (loading) return <SearchPageLoadingUI open={loading} />;
 
   return (
     <div className="p-5 lg:w-[80%] lg:mx-auto">

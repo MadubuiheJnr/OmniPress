@@ -9,7 +9,7 @@ type ProtectedRouteProps = {
 const ProtectedRoute = ({ role }: ProtectedRouteProps) => {
   const { user, loading } = useAuth();
 
-  if (loading) return <SearchPageLoadingUI />;
+  if (loading) return <SearchPageLoadingUI open={loading} />;
   if (!user) return <Navigate to={"/login"} replace />;
 
   if (role && user?.role !== role)

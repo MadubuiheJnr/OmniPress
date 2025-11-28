@@ -137,7 +137,7 @@ const Search = () => {
       </div>
 
       {loading ? (
-        <SearchPageLoadingUI />
+        <SearchPageLoadingUI open={loading} />
       ) : (
         <>
           <div className="mt-5">
