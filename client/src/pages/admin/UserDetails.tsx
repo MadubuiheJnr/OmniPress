@@ -111,7 +111,7 @@ const UserDetails = () => {
               </span>
             </p>
 
-            <div className="mt-5">
+            {/* <div className="mt-5">
               <p className="flex items-center gap-x-1">
                 <span className="text-xs font-bold text-neutral-800">
                   Creation Date:
@@ -138,7 +138,7 @@ const UserDetails = () => {
                     })}
                 </span>
               </p>
-            </div>
+            </div> */}
 
             <div className="flex items-center gap-x-5 transition-all duration-300 ease-in-out">
               {!loadingUpdate && (

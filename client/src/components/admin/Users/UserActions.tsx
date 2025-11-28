@@ -57,9 +57,9 @@ const UserActions = ({
       <div className="relative">
         <p
           onClick={() => setSelected(user._id)}
-          className={`text-neutral-600 px-1 transition-all duration-300 ease-in-out ${
-            selected === user._id && "border border-neutral-200 rounded-lg"
-          }`}
+          className={`text-neutral-600 px-1 transition-all duration-300 ease-in-out 
+            lg:w-7
+            ${selected === user._id && "border border-neutral-200 rounded-lg"}`}
         >
           <MoreHorizontal size={18} />
         </p>

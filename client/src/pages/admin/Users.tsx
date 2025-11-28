@@ -38,7 +38,7 @@ const Users = () => {
   }, []);
 
   return (
-    <div className="p-2">
+    <div className="p-2 lg:w-[95%]">
       <div className=" text-neutral-800">
         <p className="font-semibold text-sm">Manage Users</p>
         <p className="font-light text-xs">
@@ -64,7 +64,7 @@ const Users = () => {
       </div>
 
       <div className="w-full overflow-x-auto mt-5 border border-neutral-200 rounded-lg">
-        <table className="min-w-max">
+        <table className="min-w-max w-full">
           <thead className="text-left uppercase border-b border-neutral-200">
             <tr className="w-full text-xs text-neutral-500">
               <th scope="col" className="px-6 py-3">
