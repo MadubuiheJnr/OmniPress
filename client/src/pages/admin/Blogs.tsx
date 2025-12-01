@@ -6,12 +6,13 @@ import type { BlogType } from "../../types/blogTypes";
 import { Plus, Search } from "lucide-react";
 import SearchPageLoadingUI from "../../components/common/SearchPageLoadingUI";
 import BlogTableItems from "../../components/admin/Blog/BlogTableItems";
+import { useNavigate } from "react-router-dom";
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState<BlogType[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<string | null>(null);
-  // const [openAddBlog, setOpenAddBlog] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const handleShowActions = (currentID: string) => {
     setSelected(currentID === selected ? null : currentID);
@@ -54,7 +55,7 @@ const Blogs = () => {
           />
         </div>
         <button
-          // onClick={() => setOpenAddBlog(true)}
+          onClick={() => navigate(`/admin/addblog`)}
           className="text-sm text-neutral-800 border border-neutral-200 rounded-sm px-3 py-1 font-semibold mt-3 flex items-center gap-x-2"
         >
           <Plus className="inline text-neutral-800" size={20} /> Create Blog
@@ -72,8 +73,12 @@ const Blogs = () => {
                 Title
               </th>
               <th scope="col" className="px-3 py-3">
+                Category
+              </th>
+              <th scope="col" className="px-3 py-3">
                 Published
               </th>
+
               <th scope="col" className="px-3 py-3">
                 Featured
               </th>
@@ -98,23 +103,13 @@ const Blogs = () => {
                   selected={selected}
                   setSelected={handleShowActions}
                   closeSelected={() => setSelected(null)}
-                  refetchUsers={fetchBlogs}
+                  refetchBlogs={fetchBlogs}
                 />
               ))
             )}
           </tbody>
         </table>
       </div>
-
-      {/* {openAddUser && (
-        <div>
-          <AddUser
-            open={openAddUser}
-            handleClose={() => setOpenAddUser(false)}
-            fetchUsers={fetchAllUsers}
-          />
-        </div>
-      )} */}
     </div>
   );
 };

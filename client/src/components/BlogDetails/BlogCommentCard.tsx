@@ -1,11 +1,23 @@
-import { MoreHorizontal } from "lucide-react";
 import type { CommentType } from "../../types/commentTypes";
 import user_icon from "/user_icon.png";
 import { useAuth } from "../../context/AuthContext";
 import { useState } from "react";
 import CommentLikesAndDislikeBtn from "./CommentLikesAndDislikeBtn";
+import CommentsActions from "./CommentsActions";
 
-const BlogCommentCard = ({ comment }: { comment: CommentType }) => {
+const BlogCommentCard = ({
+  comment,
+  closeSelected,
+  selected,
+  setSelected,
+  refetchComments,
+}: {
+  comment: CommentType;
+  selected: string | null;
+  setSelected: (e: string) => void;
+  refetchComments: () => void;
+  closeSelected: () => void;
+}) => {
   const { isAuthenticated } = useAuth();
   const [showMore, setShowMore] = useState<boolean>(false);
   return (
@@ -27,9 +39,13 @@ const BlogCommentCard = ({ comment }: { comment: CommentType }) => {
             </span>
           </p>
           {isAuthenticated && (
-            <button className="">
-              <MoreHorizontal className="text-neutral-600" size={20} />
-            </button>
+            <CommentsActions
+              comment={comment}
+              closeSelected={closeSelected}
+              refetchComments={refetchComments}
+              selected={selected}
+              setSelected={setSelected}
+            />
           )}
         </div>
         <p

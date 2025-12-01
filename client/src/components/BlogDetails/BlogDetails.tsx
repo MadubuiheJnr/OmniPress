@@ -18,6 +18,7 @@ import type { AxiosError } from "axios";
 import BlogComments from "./BlogComments";
 import type { CommentType } from "../../types/commentTypes";
 import CommentGuideline from "./CommentGuideline";
+import { Link } from "react-router-dom";
 
 const BlogDetails = ({ blog }: { blog: BlogType | null }) => {
   const [aiSummary, setAiSummary] = useState<string>("");
@@ -25,6 +26,11 @@ const BlogDetails = ({ blog }: { blog: BlogType | null }) => {
   const [blogComments, setBlogComments] = useState<CommentType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [showGuidelines, setShowGuidelines] = useState<boolean>(true);
+  const [selected, setSelected] = useState<string | null>(null);
+
+  const handleShowActions = (currentID: string) => {
+    setSelected(currentID === selected ? null : currentID);
+  };
 
   const getAiSummary = async (prompt: string) => {
     try {
@@ -77,31 +83,31 @@ const BlogDetails = ({ blog }: { blog: BlogType | null }) => {
             By {blog?.author.name} <span>|</span>
           </span>
           <div className="flex items-center gap-x-3">
-            <span className="group">
+            <Link to={blog?.author.social?.medium || ""} className="group">
               {blog?.author.social?.medium ? (
                 <SunMedium className="transition-transform duration-300 group-hover:scale-110 text-zinc-900" />
               ) : null}
-            </span>
-            <span className="group">
+            </Link>
+            <Link to={blog?.author.social?.x || ""} className="group">
               {blog?.author.social?.x ? (
                 <Twitter className="transition-transform duration-300 group-hover:scale-110 text-zinc-900" />
               ) : null}
-            </span>
-            <span className="group">
+            </Link>
+            <Link to={blog?.author.social?.fb || ""} className="group">
               {blog?.author.social?.fb ? (
                 <Facebook className="transition-transform duration-300 group-hover:scale-110 text-zinc-900" />
               ) : null}
-            </span>
-            <span className="group">
+            </Link>
+            <Link to={blog?.author.social?.ig || ""} className="group">
               {blog?.author.social?.ig ? (
                 <Instagram className="transition-transform duration-300 group-hover:scale-110 text-zinc-900" />
               ) : null}
-            </span>
-            <span className="group">
+            </Link>
+            <Link to={blog?.author.social?.yt || ""} className="group">
               {blog?.author.social?.yt ? (
                 <Youtube className="transition-transform duration-300 group-hover:scale-110 text-zinc-900" />
               ) : null}
-            </span>
+            </Link>
           </div>
         </div>
 
@@ -182,7 +188,14 @@ const BlogDetails = ({ blog }: { blog: BlogType | null }) => {
       {/* Blog Comments */}
       {blogComments.length > 0 && (
         <div className={`mt-10 `}>
-          <BlogComments comments={blogComments} loading={loading} />
+          <BlogComments
+            comments={blogComments}
+            loading={loading}
+            selected={selected}
+            setSelected={handleShowActions}
+            closeSelected={() => setSelected(null)}
+            refetchComments={getBlogComments}
+          />
         </div>
       )}
 

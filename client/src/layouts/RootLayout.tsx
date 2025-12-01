@@ -8,7 +8,7 @@ const RootLayout = () => {
 
   const shouldHide = hide.some((route) => location.pathname.startsWith(route));
   return (
-    <div>
+    <div className="space-y-6">
       {!shouldHide && <Navbar />}
       <Outlet />
       {!shouldHide && <Footer />}

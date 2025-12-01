@@ -6,7 +6,7 @@ import BlogCardLoadingUI from "../common/BlogCardLoadingUI";
 
 const ArtsSection = () => {
   const { data, isLoading } = useAxios({
-    url: "/api/blogs?category=Arts&limit=3",
+    url: "/api/blogs?category=Arts&limit=4",
   });
 
   return (
@@ -32,7 +32,7 @@ const ArtsSection = () => {
 
       <div
         className="mt-10 grid gap-y-10
-      lg:grid-cols-4"
+      lg:grid-cols-4 lg:gap-x-5"
       >
         {data ? (
           data.map((blog) => <BlogCard blog={blog} />)

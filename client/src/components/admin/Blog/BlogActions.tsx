@@ -12,22 +12,22 @@ const BlogActions = ({
   closeSelected,
   selected,
   setSelected,
-  refetchUsers,
+  refetchBlogs,
 }: {
   blog: BlogType;
   selected: string | null;
   setSelected: (e: string) => void;
-  refetchUsers: () => void;
+  refetchBlogs: () => void;
   closeSelected: () => void;
 }) => {
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
 
-  const deleteUser = async () => {
+  const deleteBlog = async () => {
     try {
-      const res = await Axios.delete(`/api/users/delete/${blog._id}`);
+      const res = await Axios.delete(`/api/blogs/delete/${blog._id}`);
       toast.success(res.data.message);
-      refetchUsers();
+      refetchBlogs();
       closeSelected();
     } catch (error) {
       const err = error as AxiosError<{ message: string }>;
@@ -39,19 +39,38 @@ const BlogActions = ({
     }
   };
 
-  const toggleIsAdmin = async () => {
+  const toggleIsPublished = async () => {
     try {
-      const res = await Axios.put(`/api/users/toggle/admin/${blog._id}`);
+      const res = await Axios.put(`/api/blogs/toggle/published/${blog._id}`);
       toast.success(res.data.message);
-      refetchUsers();
+      refetchBlogs();
       closeSelected();
     } catch (error) {
       const err = error as AxiosError<{ message: string }>;
       toast.error(
         err.response?.data.message || "Something went wrong. Please try again"
       );
+    } finally {
+      setModalOpen(false);
     }
   };
+
+  const toggleIsFeatured = async () => {
+    try {
+      const res = await Axios.put(`/api/blogs/toggle/featured/${blog._id}`);
+      toast.success(res.data.message);
+      refetchBlogs();
+      closeSelected();
+    } catch (error) {
+      const err = error as AxiosError<{ message: string }>;
+      toast.error(
+        err.response?.data.message || "Something went wrong. Please try again"
+      );
+    } finally {
+      setModalOpen(false);
+    }
+  };
+
   return (
     <>
       <div className="relative">
@@ -72,13 +91,13 @@ const BlogActions = ({
                 Actions
               </p>
               <p
-                onClick={toggleIsAdmin}
+                onClick={toggleIsPublished}
                 className="p-2 rounded-sm text-xs text-neutral-900 hover:bg-neutral-100"
               >
                 {blog.isPublished ? "Move to draft" : "Publish"}
               </p>
               <p
-                onClick={toggleIsAdmin}
+                onClick={toggleIsFeatured}
                 className="p-2 rounded-sm text-xs text-neutral-900 hover:bg-neutral-100"
               >
                 {blog.isFeatured ? "Remove feature" : "Feature"}
@@ -86,6 +105,12 @@ const BlogActions = ({
             </div>
 
             <p className="p-1 border-t border-neutral-200 text-neutral-900">
+              <p
+                onClick={() => navigate(`/blog/${blog._id}`)}
+                className="p-2 rounded-sm text-xs hover:bg-neutral-100"
+              >
+                Read blog
+              </p>
               <p
                 onClick={() => navigate(`/admin/blog/${blog._id}`)}
                 className="p-2 rounded-sm text-xs hover:bg-neutral-100"
@@ -108,7 +133,7 @@ const BlogActions = ({
           subText="Deleting this account cannot be undone. Proceed with caution."
           onAffirmText="Delete"
           onAffirmStyles="text-red-800 bg-red-200"
-          onAffirm={deleteUser}
+          onAffirm={deleteBlog}
           onClose={() => setModalOpen(false)}
           open={modalOpen}
         />

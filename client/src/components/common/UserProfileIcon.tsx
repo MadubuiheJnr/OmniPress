@@ -23,7 +23,7 @@ const UserProfileIcon = () => {
       </div>
 
       {open && (
-        <div className="w-60 absolute right-3 top-20 z-10 bg-blue-700/5 backdrop-blur-sm rounded-2xl transition-all duration-300 ease-in-out">
+        <div className="w-60 absolute right-3 top-20 z-50 bg-black/50 backdrop-blur-sm rounded-2xl transition-all duration-300 ease-in-out">
           <div className="w-full bg-neutral-900/20 backdrop-blur-6xl rounded-2xl px-2 py-3 flex flex-col gap-y-1">
             <div
               onClick={() => handleClick("/profile")}

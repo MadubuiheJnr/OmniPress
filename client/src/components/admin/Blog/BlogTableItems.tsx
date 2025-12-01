@@ -8,19 +8,20 @@ const BlogTableItems = ({
   selected,
   setSelected,
   closeSelected,
-  refetchUsers,
+  refetchBlogs,
 }: {
   blog: BlogType;
   index: number;
   selected: string | null;
   setSelected: (e: string) => void;
-  refetchUsers: () => void;
+  refetchBlogs: () => void;
   closeSelected: () => void;
 }) => {
   return (
     <tr className="text-xs border-b border-neutral-200 cursor-pointer">
       <td className="px-6 py-3">{index}</td>
       <td className="px-6 py-3 truncate">{blog.title.slice(0, 45)} ...</td>
+      <td className="px-6 py-3 text-center">{blog.category.name}</td>
       <td className="px-3 py-3 text-center">
         {blog.isPublished ? (
           <Check className="inline text-emerald-600" size={15} />
@@ -45,7 +46,7 @@ const BlogTableItems = ({
       <td className="px-6 py-3 ">
         <BlogActions
           blog={blog}
-          refetchUsers={refetchUsers}
+          refetchBlogs={refetchBlogs}
           setSelected={setSelected}
           closeSelected={closeSelected}
           selected={selected}

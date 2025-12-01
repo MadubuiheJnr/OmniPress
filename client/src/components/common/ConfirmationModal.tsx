@@ -33,7 +33,10 @@ const ConfirmationModal = ({
   if (!open) return null;
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm  flex items-center justify-center z-50">
-      <div className="bg-neutral-50 px-6 py-8 text-center min-h-65 rounded-3xl w-[90%] shadow-xl">
+      <div
+        className="bg-neutral-50 px-6 py-8 text-center min-h-65 rounded-3xl w-[90%] shadow-xl 
+      lg:max-w-100"
+      >
         <p className="inline-flex items-center justify-center p-3 bg-white rounded-full drop-shadow-neutral-300 drop-shadow-xs">
           <AlertTriangle className="text-red-600" />
         </p>
