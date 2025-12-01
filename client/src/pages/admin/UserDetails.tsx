@@ -17,20 +17,20 @@ const UserDetails = () => {
   // const [user, setUser] = useState<UserType | null>(null);
   // const [modalOpen, setModalOpen] = useState(false);
 
-  // const getUser = async () => {
-  //   setLoading(false);
-  //   try {
-  //     const res = await Axios(`/api/users/${id}`);
-  //     setUser(res.data);
-  //   } catch (error) {
-  //     const err = error as AxiosError<{ message: string }>;
-  //     toast.error(
-  //       err.response?.data.message || "Something went wrong. Please try again"
-  //     );
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const getUser = async () => {
+    setLoading(false);
+    try {
+      const res = await Axios(`/api/users/${id}`);
+      setUser(res.data);
+    } catch (error) {
+      const err = error as AxiosError<{ message: string }>;
+      toast.error(
+        err.response?.data.message || "Something went wrong. Please try again"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // const toggleIsAdmin = async () => {
   //   setLoadingUpdate(true);
