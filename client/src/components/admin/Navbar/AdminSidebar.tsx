@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import NavListData from "./NavListData";
 import { useState } from "react";
-import { PanelLeft, PanelLeftClose } from "lucide-react";
+import { PanelLeft, PanelRightClose } from "lucide-react";
 
 const AdminSidebar = () => {
   const [viewNavName, setViewNavName] = useState(false);
@@ -12,11 +12,11 @@ const AdminSidebar = () => {
     >
       <button
         onClick={() => setViewNavName(!viewNavName)}
-        className=" self-start p-3 bg-gray-400/10 rounded-full transition-all ease-in-out duration-300 cursor-pointer hidden
-        lg:inline-block"
+        className="ml-22 self-start p-3 bg-gray-400/10 rounded-full transition-all ease-in-out duration-300 cursor-pointer hidden
+        lg:block"
       >
         {viewNavName ? (
-          <PanelLeftClose className="text-zinc-500" size={20} />
+          <PanelRightClose className="text-zinc-500" size={20} />
         ) : (
           <PanelLeft className="text-zinc-500" size={20} />
         )}
