@@ -9,6 +9,9 @@ import blogRouter from "./src/routes/blogRoutes.js";
 import aiRouter from "./src/routes/aiRoutes.js";
 import commentRouter from "./src/routes/commentRoutes.js";
 import likeRouter from "./src/routes/likeRoutes.js";
+import dns from "node:dns";
+
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 const server = express();
 
@@ -20,7 +23,7 @@ server.use(express.json());
 
 const PORT = 8000;
 
-server.get("/", (req, res) => res.send("Hello John Doe"));
+server.get("/", (req, res) => res.send("Something went wrong (:"));
 server.use("/api/auth", authRouter);
 server.use("/api/users", userRouter);
 server.use("/api/categories", categoryRouter);
@@ -30,7 +33,7 @@ server.use("/api/ai/generate", aiRouter);
 server.use("/api/like", likeRouter);
 
 server.listen(PORT, () =>
-  console.log(`server is running on http://localhost:${PORT}`)
+  console.log(`server is running on http://localhost:${PORT}`),
 );
 
 export default server;

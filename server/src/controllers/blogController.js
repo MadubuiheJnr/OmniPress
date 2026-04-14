@@ -38,14 +38,14 @@ export const createBlog = async (req, res) => {
     if (tags && typeof tagsArray === "string") {
       try {
         tagsArray = JSON.parse(tags);
-      } catch (err) {
+      } catch {
         return res
           .status(400)
           .json({ message: "Tags must be a valid JSON array" });
       }
     }
 
-    if (!tagsArray || tagsArray.length !== 5) {
+    if (!tagsArray?.length || tagsArray.length !== 5) {
       return res.status(400).json({ message: "Exactly 5 tags are required" });
     }
 
@@ -53,7 +53,7 @@ export const createBlog = async (req, res) => {
     if (typeof author === "string") {
       try {
         parsedAuthor = JSON.parse(author);
-      } catch (err) {
+      } catch {
         return res
           .status(400)
           .json({ message: "Author must be a valid JSON object" });
@@ -209,6 +209,8 @@ export const getAllPublishedBlogs = async (req, res) => {
 
     res.status(200).json(blogs);
   } catch (error) {
+    console.log(error);
+
     handleError(res, error);
   }
 };

@@ -1,24 +1,11 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Routes from "./routes/Routes";
-import Login from "./pages/auth/Login";
-import Register from "./pages/auth/Register";
-import Unauthorized from "./pages/Unauthorized";
-import PageNotFound from "./pages/PageNotFound";
-import { Toaster } from "react-hot-toast";
-const App = () => {
-  const router = createBrowserRouter([
-    ...Routes,
-    { path: "/login", element: <Login /> },
-    { path: "/register", element: <Register /> },
+import { RouterProvider } from "react-router-dom";
+import { router } from "@/routes";
 
-    { path: "/unauthorized", element: <Unauthorized /> },
-    { path: "*", element: <PageNotFound /> },
-  ]);
+const App = () => {
   return (
-    <>
+    <div>
       <RouterProvider router={router} />
-      <Toaster />
-    </>
+    </div>
   );
 };
 
