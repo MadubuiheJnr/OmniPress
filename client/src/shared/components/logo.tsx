@@ -1,5 +1,5 @@
 import logoIcon from "@assets/logo-icon.webp";
-import logoWordMark from "@assets/logo-wordmark.webp";
+import logoWordMark from "@assets/logo-word-mark.webp";
 
 export const LogoIcon = ({ classname }: { classname?: string }) => {
   return <img src={logoIcon} alt="Logo icon" className={classname} />;

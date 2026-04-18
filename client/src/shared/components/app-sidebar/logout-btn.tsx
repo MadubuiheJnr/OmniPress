@@ -6,7 +6,7 @@ export const LogoutButton = () => {
     <Button
       variant="ghost"
       size={"sm"}
-      className="h-5 px-0 py-0 space-x-3 hover:bg-transparent focus:bg-transparent"
+      className="h-5 px-0 py-0 space-x-3 hover:bg-transparent focus:bg-transparent text-xs font-medium"
     >
       <LogOutIcon />
       <span>Logout</span>
