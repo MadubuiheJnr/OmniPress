@@ -10,6 +10,7 @@ import {
   Bookmark,
   Search,
   Plus,
+  MessageCircle,
 } from "lucide-react";
 
 export const sidebarCTAs = [
@@ -33,7 +34,7 @@ export const mainNavItems = [
   {
     id: "1",
     label: "Feed",
-    path: "/feed",
+    path: "/",
     icon: Rss,
     description: "Discover posts from the community",
   },
@@ -46,20 +47,27 @@ export const mainNavItems = [
   },
   {
     id: "3",
+    label: "Messages",
+    path: "/messages",
+    icon: MessageCircle,
+    description: "Generate and polish articles with AI",
+  },
+  {
+    id: "4",
     label: "AI Writer",
     path: "/ai-writer",
     icon: Sparkles,
     description: "Generate and polish articles with AI",
   },
   {
-    id: "4",
+    id: "5",
     label: "Analytics",
     path: "/analytics",
     icon: BarChart2,
     description: "Views, reads, and engagement stats",
   },
   {
-    id: "5",
+    id: "6",
     label: "Bookmarks",
     path: "/bookmarks",
     icon: Bookmark,

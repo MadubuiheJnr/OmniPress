@@ -3,7 +3,7 @@ import { Badge } from "@/shared/components/ui/badge";
 
 const FeedCategoryTabs = () => {
   return (
-    <div className=" flex items-center gap-3 overflow-x-auto">
+    <div className=" flex items-center gap-3 overflow-x-auto scrollbar-none">
       {feedCategories.map(({ label, slug }) => (
         <Badge key={slug} variant={"outline"}>
           {label}
