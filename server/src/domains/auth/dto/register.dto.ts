@@ -6,8 +6,8 @@ export const registerDtoSchema = z
     lastName: z.string().min(1).max(50),
     username: z
       .string()
-      .min(3)
-      .max(30)
+      .min(6, "Username must be at least 6 characters long")
+      .max(15, "Username must be at most 15 characters long")
       .trim()
       .toLowerCase()
       .regex(

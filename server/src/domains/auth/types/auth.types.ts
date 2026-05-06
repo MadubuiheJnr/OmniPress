@@ -16,6 +16,7 @@ export interface LoginSession {
 export interface Auth {
   _id: mongoose.Types.ObjectId;
   userId: mongoose.Types.ObjectId;
+  username: string;
   email: string;
   password: string;
   isEmailVerified: boolean;
