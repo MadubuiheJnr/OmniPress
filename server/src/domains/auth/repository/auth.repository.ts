@@ -36,6 +36,24 @@ class AuthRepository {
       passwordResetTokenExpiry: { $gt: new Date() },
     });
   }
+  async clearVerifyToken(id: mongoose.Types.ObjectId) {
+    return AuthModel.findByIdAndUpdate(
+      id,
+      {
+        $unset: { emailVerifyToken: "", emailVerifyTokenExpiry: "" },
+        $set: { isEmailVerified: true },
+      },
+      { new: true },
+    );
+  }
+
+  async clearResetToken(id: mongoose.Types.ObjectId) {
+    return AuthModel.findByIdAndUpdate(
+      id,
+      { $unset: { passwordResetToken: "", passwordResetTokenExpiry: "" } },
+      { new: true },
+    );
+  }
 
   async addSession(id: mongoose.Types.ObjectId, session: LoginSession) {
     return AuthModel.findByIdAndUpdate(
