@@ -2,3 +2,4 @@
 node_modules
 .client/old-src
 .server/old-src
+demo.js

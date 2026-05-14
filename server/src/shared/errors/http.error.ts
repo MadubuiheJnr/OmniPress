@@ -78,11 +78,11 @@ export class InternalServerError extends AppError {
 
 // ─── Type Guard ───────────────────────────────────────────────────────────────
 
-interface HttpAppError extends AppError {
+export interface HttpAppError extends AppError {
   statusCode: number;
 }
 
-function isHttpError(err: AppError): err is HttpAppError {
+export function isHttpError(err: AppError): err is HttpAppError {
   return (
     "statusCode" in err &&
     typeof (err as Record<string, unknown>).statusCode === "number"

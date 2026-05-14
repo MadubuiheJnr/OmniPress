@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
-import type { UserDocument } from "../types/user.types.js";
+import type { IUserDocument } from "../types/user.types.js";
 
 const UserSchema = new mongoose.Schema(
   {
+    _id: { type: mongoose.Schema.Types.ObjectId, required: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     username: {
@@ -12,7 +13,7 @@ const UserSchema = new mongoose.Schema(
       trim: true,
       lowercase: true,
     },
-    profilePicture: { type: String, default: "" },
+    avatar: { type: String, default: "" },
     bio: { type: String, default: "" },
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
@@ -23,6 +24,6 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-const UserModel = mongoose.model<UserDocument>("User", UserSchema);
+const UserModel = mongoose.model<IUserDocument>("User", UserSchema);
 
 export default UserModel;

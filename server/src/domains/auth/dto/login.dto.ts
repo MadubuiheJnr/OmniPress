@@ -2,13 +2,9 @@ import { z } from "zod";
 
 export const loginDtoSchema = z
   .object({
-    email: z.email().trim().toLowerCase().optional(),
-    username: z.string().trim().toLowerCase().optional(),
+    identifier: z.string().trim().toLowerCase().min(3).max(100),
     password: z.string().min(8).max(100),
   })
-  .strict()
-  .refine((data) => data.email !== undefined || data.username !== undefined, {
-    message: "Either email or username is required",
-  });
+  .strict();
 
 export type LoginDto = z.infer<typeof loginDtoSchema>;

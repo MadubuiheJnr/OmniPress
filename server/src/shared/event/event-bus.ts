@@ -1,29 +1,40 @@
 import { EventEmitter } from "node:events";
+import { Types } from "mongoose";
 
 export interface DomainEvents {
   "auth.registered": {
-    userId: string;
+    userId: Types.ObjectId;
     firstName: string;
     lastName: string;
-    username: string;
     email: string;
+    emailVerifyToken: string | undefined;
+  };
+  "auth.loggedIn": {
+    userId: Types.ObjectId;
+    email: string;
+    ip: string;
+    location: string;
+    device: string;
+    browser: string;
+    userAgent: string;
+    createdAt: Date;
   };
   "auth.passwordChanged": {
-    userId: string;
+    userId: Types.ObjectId;
     email: string;
   };
   "article.published": {
-    articleId: string;
-    authorId: string;
+    articleId: Types.ObjectId;
+    authorId: Types.ObjectId;
     title: string;
   };
   "article.liked": {
-    articleId: string;
-    userId: string;
+    articleId: Types.ObjectId;
+    userId: Types.ObjectId;
   };
   "user.followed": {
-    followerId: string;
-    followedId: string;
+    followerId: Types.ObjectId;
+    followedId: Types.ObjectId;
   };
 }
 

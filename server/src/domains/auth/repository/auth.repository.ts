@@ -1,6 +1,7 @@
 import type mongoose from "mongoose";
 import AuthModel from "../model/auth.model.js";
-import type { Auth, LoginSession } from "../types/auth.types.js";
+import type { IAuth, ILoginSession } from "../types/auth.types.js";
+import type { ClientSession } from "mongoose";
 
 class AuthRepository {
   async findByEmail(email: string) {
@@ -11,14 +12,17 @@ class AuthRepository {
     return AuthModel.findById(id);
   }
 
-  async create(authData: Omit<Auth, "_id" | "createdAt" | "updatedAt">) {
+  async create(
+    authData: Omit<IAuth, "_id" | "createdAt" | "updatedAt">,
+    options?: { session?: ClientSession },
+  ) {
     const auth = new AuthModel(authData);
-    return auth.save();
+    return auth.save({ session: options?.session });
   }
 
   async updateById(
     id: mongoose.Types.ObjectId,
-    updateData: Partial<Omit<Auth, "_id" | "createdAt" | "updatedAt">>,
+    updateData: Partial<Omit<IAuth, "_id" | "createdAt" | "updatedAt">>,
   ) {
     return AuthModel.findByIdAndUpdate(id, updateData, { new: true });
   }
@@ -55,7 +59,7 @@ class AuthRepository {
     );
   }
 
-  async addSession(id: mongoose.Types.ObjectId, session: LoginSession) {
+  async addSession(id: mongoose.Types.ObjectId, session: ILoginSession) {
     return AuthModel.findByIdAndUpdate(
       id,
       {
@@ -90,6 +94,10 @@ class AuthRepository {
       { $set: { loginSessions: [] } },
       { new: true },
     );
+  }
+
+  async deleteById(id: mongoose.Types.ObjectId) {
+    return AuthModel.findByIdAndDelete(id);
   }
 }
 

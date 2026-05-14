@@ -1,108 +1,89 @@
 import { comparePassword, hashPassword } from "shared/utils/hash.util.js";
-import type { RegisterDto } from "../dto/register.dto.js";
 import authRepository from "../repository/auth.repository.js";
 import crypto from "node:crypto";
-import type { LoginDto } from "../dto/login.dto.js";
 import { v7 as uuidv7 } from "uuid";
-import type mongoose from "mongoose";
-import { ConflictError } from "shared/errors/http.error.js";
+import mongoose from "mongoose";
+import type { ClientSession, Types } from "mongoose";
+import { BadRequestError } from "shared/errors/http.error.js";
+import type { IAuth, ILoginSession } from "../types/auth.types.js";
 
 export class AuthService {
-  async register(data: RegisterDto) {
-    const { firstName, lastName, username, email, password } = data;
-
-    const emailExists = await authRepository.findByEmail(email);
-    if (emailExists) {
-      return new ConflictError("Email already in use");
-    }
-
-    const usernameExists = await userRepository.findByUsername(username);
-    if (usernameExists) {
-      return new ConflictError("Username already in use");
-    }
-
+  async createAuth(
+    authData: Pick<IAuth, "email" | "password">,
+    options?: { session?: ClientSession },
+  ): Promise<Pick<IAuth, "_id" | "email" | "emailVerifyToken">> {
+    const { email, password } = authData;
     const hashedPassword = await hashPassword(password);
-
-    const newUser = await userRepository.create({
-      firstName,
-      lastName,
-      username,
-    });
-
-    const verificationToken = await new Promise<string>((resolve, reject) => {
-      crypto.randomBytes(32, (err, buf) => {
-        if (err) {
-          reject(new Error("Failed to generate verification token"));
-          return;
-        }
-        resolve(buf.toString("hex"));
-      });
-    });
-
-    const verificationTokenExpiresAt: Date = new Date(
+    const emailVerifyToken = crypto.randomBytes(32).toString("hex");
+    const verificationTokenExpiresAt = new Date(
       Date.now() + 24 * 60 * 60 * 1000,
-    ); // 24 hours
+    );
 
-    await authRepository.create({
-      userId: newUser._id,
-      email,
-      emailVerifyToken: verificationToken,
-      emailVerifyTokenExpiry: verificationTokenExpiresAt,
-      password: hashedPassword,
-      isEmailVerified: false,
-      loginSessions: [],
-    });
+    const newAuth = await authRepository.create(
+      {
+        email,
+        password: hashedPassword,
+        isEmailVerified: false,
+        emailVerifyToken,
+        emailVerifyTokenExpiry: verificationTokenExpiresAt,
+        loginSessions: [],
+      },
+      { session: options?.session as ClientSession },
+    );
+
+    return {
+      _id: newAuth._id,
+      email: newAuth.email,
+      emailVerifyToken,
+    };
   }
 
-  async login(data: LoginDto) {
-    const { email, password, loginSession } = data;
-
-    if (!email || !password) {
-      throw new Error("Email and password are required");
-    }
-
+  async getUserIdByEmail(email: string): Promise<Types.ObjectId | null> {
     const auth = await authRepository.findByEmail(email);
+    return auth ? auth._id : null;
+  }
+
+  async login(
+    id: Types.ObjectId,
+    password: string,
+    loginSession?: Omit<
+      ILoginSession,
+      "sessionId" | "isCurrent" | "lastActiveAt" | "createdAt"
+    >,
+  ) {
+    const auth = await authRepository.findById(id);
 
     if (!auth) {
-      throw new Error("Invalid email or password");
+      throw new BadRequestError("Invalid credentials");
     }
-
     const passwordMatch = await comparePassword(password, auth.password);
     if (!passwordMatch) {
-      throw new Error("Invalid email or password");
+      throw new BadRequestError("Invalid credentials");
     }
 
     const emailVerified = auth.isEmailVerified;
     if (!emailVerified) {
-      throw new Error("Email not verified");
+      throw new BadRequestError("Email not verified");
     }
 
-    const emailVerifyTokenExists = auth.emailVerifyToken;
-    if (emailVerifyTokenExists) {
-      throw new Error("Email verification pending");
-    }
+    // const loginAt = new Date();
 
-    authRepository.addSession(auth._id, {
+    await authRepository.addSession(auth._id, {
       sessionId: uuidv7(),
-      ip: loginSession?.ip || "",
-      location: loginSession?.location || "",
-      device: loginSession?.device || "",
-      browser: loginSession?.browser || "",
-      userAgent: loginSession?.userAgent || "",
+      ip: loginSession?.ip ?? "unknown",
+      location: loginSession?.location ?? "unknown",
+      device: loginSession?.device ?? "unknown",
+      browser: loginSession?.browser ?? "unknown",
+      userAgent: loginSession?.userAgent ?? "unknown",
       isCurrent: true,
       lastActiveAt: new Date(),
       createdAt: new Date(),
     });
 
     return {
-      user: {
-        _id: auth.userId,
-        firstName: auth.userId.firstName,
-        lastName: auth.userId.lastName,
-        username: auth.userId.username,
-        email: auth.email,
-        avatar: auth.userId.avatar,
-      },
+      _id: auth._id,
+      email: auth.email,
+      createdAt: auth.createdAt,
     };
   }
 
@@ -148,6 +129,7 @@ export class AuthService {
 
     return true;
   }
+
   async resetPassword(token: string, newPassword: string) {
     const auth = await authRepository.findByResetToken(token);
 

@@ -1,6 +1,6 @@
-import type { Types } from "mongoose";
+import type { Types, ClientSession } from "mongoose";
 import UserModel from "../model/user.model.js";
-import type { User } from "../types/user.types.js";
+import type { IUser } from "../types/user.types.js";
 
 class UserRepository {
   async findById(id: Types.ObjectId) {
@@ -15,14 +15,17 @@ class UserRepository {
     return UserModel.findOne({ username });
   }
 
-  async create(userData: Omit<User, "_id" | "createdAt" | "updatedAt">) {
+  async create(
+    userData: Omit<IUser, "createdAt" | "updatedAt">,
+    options?: { session?: ClientSession },
+  ) {
     const user = new UserModel(userData);
-    return user.save();
+    return user.save({ session: options?.session as ClientSession });
   }
 
   async updateById(
     id: Types.ObjectId,
-    updateData: Partial<Omit<User, "_id" | "createdAt" | "updatedAt">>,
+    updateData: Partial<Omit<IUser, "_id" | "createdAt" | "updatedAt">>,
   ) {
     return UserModel.findByIdAndUpdate(id, updateData, { new: true });
   }

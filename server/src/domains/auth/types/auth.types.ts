@@ -1,7 +1,7 @@
 import type { Document } from "mongoose";
 import type mongoose from "mongoose";
 
-export interface LoginSession {
+export interface ILoginSession {
   sessionId: string;
   ip: string;
   location: string;
@@ -13,9 +13,8 @@ export interface LoginSession {
   createdAt: Date;
 }
 
-export interface Auth {
+export interface IAuth {
   _id: mongoose.Types.ObjectId;
-  userId: mongoose.Types.ObjectId;
   email: string;
   password: string;
   isEmailVerified: boolean;
@@ -24,17 +23,17 @@ export interface Auth {
   passwordChangedAt?: Date;
   passwordResetToken?: string;
   passwordResetTokenExpiry?: Date;
-  loginSessions: LoginSession[];
+  loginSessions: ILoginSession[];
   createdAt: Date;
   updatedAt: Date;
 }
 
-export interface AuthTokens {
+export interface IAuthTokens {
   accessToken: string;
   refreshToken: string;
 }
 
-export interface AuthUser {
+export interface IAuthUser {
   _id: mongoose.Types.ObjectId;
   firstName: string;
   lastName: string;
@@ -43,9 +42,29 @@ export interface AuthUser {
   avatar: string;
 }
 
-export interface AuthResponse {
-  user: AuthUser;
-  tokens: AuthTokens;
+export interface IAuthResponse {
+  user: IAuthUser;
+  tokens: IAuthTokens;
 }
 
-export interface AuthDocument extends Omit<Auth, "_id">, Document {}
+export interface IAuthDocument extends Omit<IAuth, "_id">, Document {}
+
+export interface IAuthService {
+  createAuth(
+    authData: Pick<IAuth, "email" | "password">,
+    options?: { session?: mongoose.ClientSession },
+  ): Promise<Pick<IAuth, "_id" | "email" | "emailVerifyToken">>;
+  getUserIdByEmail(email: string): Promise<mongoose.Types.ObjectId | null>;
+  login(
+    id: mongoose.Types.ObjectId,
+    password: string,
+    loginSession?: Omit<
+      ILoginSession,
+      "sessionId" | "isCurrent" | "lastActiveAt" | "createdAt"
+    >,
+  ): Promise<{
+    _id: mongoose.Types.ObjectId;
+    email: string;
+    createdAt: Date;
+  }>;
+}
