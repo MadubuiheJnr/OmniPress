@@ -11,25 +11,26 @@ export const validateBody =
           return "Please check your input data and try again";
         }
         if (issues.code === "invalid_element") {
-          return "invalid_element";
+          return "One or more fields contain invalid values";
         }
         if (issues.code === "invalid_key") {
-          return "invalid_key";
+          return "Please check your input data and try again";
         }
+
         if (issues.code === "invalid_type") {
           return "Please check your input data and try again";
         }
         if (issues.code === "invalid_union") {
-          return "invalid_union";
+          return "Please check your input data and try again";
         }
         if (issues.code === "invalid_value") {
-          return "invalid_value";
+          return "One or more fields contain invalid values";
         }
         if (issues.code === "not_multiple_of") {
-          return "not_multiple_of";
+          return "One or more fields contain invalid values";
         }
         if (issues.code === "unrecognized_keys") {
-          return "unrecognized_keys";
+          return "Request contains unexpected fields";
         }
       },
     });
