@@ -1,17 +1,11 @@
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbPage,
-} from "../ui/breadcrumb";
 import { Separator } from "../ui/separator";
 import { SidebarTrigger } from "../ui/sidebar";
+import { AppBreadcrumb } from "./app-breadcrumb";
 
 interface AppHeaderProps {
-  breadcrumb: string;
   actions?: React.ReactNode;
 }
-const AppHeader = ({ breadcrumb, actions }: AppHeaderProps) => {
+const AppHeader = ({ actions }: AppHeaderProps) => {
   return (
     <div className="w-full flex justify-between items-center">
       <div className="flex items-center">
@@ -20,15 +14,7 @@ const AppHeader = ({ breadcrumb, actions }: AppHeaderProps) => {
           orientation="vertical"
           className="ml-1 mr-2 data-[orientation=vertical]:h-4"
         />
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbPage>
-                {breadcrumb === "/" ? "Feed" : breadcrumb}
-              </BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <AppBreadcrumb />
       </div>
 
       {actions && <div className="">{actions}</div>}

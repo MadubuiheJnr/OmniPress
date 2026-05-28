@@ -1,17 +1,20 @@
 export class AppError extends Error {
   public readonly isOperational: boolean;
+  public readonly detail: string;
   public readonly context?: Record<string, unknown>;
 
   constructor(
     message: string,
-    isOperational: boolean = true,
+    detail: string,
     context?: Record<string, unknown>,
+    isOperational: boolean = true,
   ) {
     super(message);
 
     Object.setPrototypeOf(this, new.target.prototype);
 
     this.name = this.constructor.name;
+    this.detail = detail;
     this.isOperational = isOperational;
 
     if (context !== undefined) {

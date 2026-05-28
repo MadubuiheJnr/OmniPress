@@ -3,12 +3,13 @@ export {};
 declare global {
   namespace Express {
     interface Request {
-      user?: AuthUser;
+      user?: IAuthUser;
     }
   }
 }
 
-interface AuthUser {
-  userId: string;
+interface IAuthUser {
+  _id: string;
   email: string;
+  sessionId: string;
 }

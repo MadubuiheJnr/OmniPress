@@ -3,7 +3,7 @@ import AuthModel from "../model/auth.model.js";
 import type { IAuth, ILoginSession } from "../types/auth.types.js";
 import type { ClientSession } from "mongoose";
 
-class AuthRepository {
+export class AuthRepository {
   async findByEmail(email: string) {
     return AuthModel.findOne({ email });
   }
@@ -17,7 +17,7 @@ class AuthRepository {
     options?: { session?: ClientSession },
   ) {
     const auth = new AuthModel(authData);
-    return auth.save({ session: options?.session });
+    return auth.save({ session: options?.session as ClientSession });
   }
 
   async updateById(
@@ -100,5 +100,3 @@ class AuthRepository {
     return AuthModel.findByIdAndDelete(id);
   }
 }
-
-export default new AuthRepository();

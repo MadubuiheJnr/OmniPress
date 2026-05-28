@@ -12,7 +12,6 @@ export interface DomainEvents {
   "auth.loggedIn": {
     userId: Types.ObjectId;
     email: string;
-    ip: string;
     location: string;
     device: string;
     browser: string;

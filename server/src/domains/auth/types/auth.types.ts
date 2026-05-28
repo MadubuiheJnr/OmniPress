@@ -3,6 +3,7 @@ import type mongoose from "mongoose";
 
 export interface ILoginSession {
   sessionId: string;
+  tokenHash: string;
   ip: string;
   location: string;
   device: string;
@@ -60,11 +61,18 @@ export interface IAuthService {
     password: string,
     loginSession?: Omit<
       ILoginSession,
-      "sessionId" | "isCurrent" | "lastActiveAt" | "createdAt"
+      | "sessionId"
+      | "isCurrent"
+      | "lastActiveAt"
+      | "createdAt"
+      | "location"
+      | "tokenHash"
     >,
   ): Promise<{
     _id: mongoose.Types.ObjectId;
     email: string;
     createdAt: Date;
+    accessToken: string;
+    refreshToken: string;
   }>;
 }

@@ -8,7 +8,17 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <AppLayout />,
-    children: [{ index: true, element: <Home /> }],
+    children: [
+      { index: true, element: <Home /> },
+      {
+        path: "articles",
+        element: <div>Articles</div>,
+      },
+      {
+        path: "articles/abc/def/ghi",
+        element: <div>Articles</div>,
+      },
+    ],
   },
   ...AuthRoutes,
   { path: "*", element: <PageNotFound /> },

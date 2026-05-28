@@ -2,6 +2,8 @@ import { AppError } from "./app.error.js";
 
 export enum HttpCode {
   OK = 200,
+  CREATED = 201,
+  NO_CONTENT = 204,
   BAD_REQUEST = 400,
   UNAUTHORIZED = 401,
   FORBIDDEN = 403,
@@ -13,24 +15,36 @@ export enum HttpCode {
 
 export class BadRequestError extends AppError {
   public readonly statusCode = HttpCode.BAD_REQUEST;
-  constructor(message = "Bad Request", context?: Record<string, unknown>) {
-    super(message, true, context);
+  constructor(
+    message = "Bad Request",
+    detail = "Something went wrong with the request",
+    context?: Record<string, unknown>,
+  ) {
+    super(message, detail, context, true);
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }
 
 export class UnauthorizedError extends AppError {
   public readonly statusCode = HttpCode.UNAUTHORIZED;
-  constructor(message = "Unauthorized", context?: Record<string, unknown>) {
-    super(message, true, context);
+  constructor(
+    message = "Unauthorized",
+    detail = "You are not authorized to access this resource",
+    context?: Record<string, unknown>,
+  ) {
+    super(message, detail, context, true);
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }
 
 export class ForbiddenError extends AppError {
   public readonly statusCode = HttpCode.FORBIDDEN;
-  constructor(message = "Forbidden", context?: Record<string, unknown>) {
-    super(message, true, context);
+  constructor(
+    message = "Forbidden",
+    detail = "You are not authorized to access this resource",
+    context?: Record<string, unknown>,
+  ) {
+    super(message, detail, context, true);
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }
@@ -39,17 +53,22 @@ export class NotFoundError extends AppError {
   public readonly statusCode = HttpCode.NOT_FOUND;
   constructor(
     message = "Resource not found",
+    detail = "The requested resource was not found",
     context?: Record<string, unknown>,
   ) {
-    super(message, true, context);
+    super(message, detail, context, true);
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }
 
 export class ConflictError extends AppError {
   public readonly statusCode = HttpCode.CONFLICT;
-  constructor(message = "Conflict", context?: Record<string, unknown>) {
-    super(message, true, context);
+  constructor(
+    message = "Conflict",
+    detail = "A conflict occurred while processing the request",
+    context?: Record<string, unknown>,
+  ) {
+    super(message, detail, context, true);
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }
@@ -58,9 +77,10 @@ export class UnprocessableEntityError extends AppError {
   public readonly statusCode = HttpCode.UNPROCESSABLE_ENTITY;
   constructor(
     message = "Unprocessable Entity",
+    detail = "The request was unable to be followed",
     context?: Record<string, unknown>,
   ) {
-    super(message, true, context);
+    super(message, detail, context, true);
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }
@@ -69,9 +89,10 @@ export class InternalServerError extends AppError {
   public readonly statusCode = HttpCode.INTERNAL_SERVER_ERROR;
   constructor(
     message = "Internal Server Error",
+    detail = "An internal server error occurred",
     context?: Record<string, unknown>,
   ) {
-    super(message, false, context);
+    super(message, detail, context, false);
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }

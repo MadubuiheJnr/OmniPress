@@ -4,7 +4,8 @@ import { UnauthorizedError } from "shared/errors/http.error.js";
 import { v4 as uuidv4 } from "uuid";
 
 export interface TokenPayload {
-  userId: string;
+  _id: string;
+  sessionId: string;
   email: string;
 }
 
@@ -17,7 +18,7 @@ export const signAccessToken = (payload: TokenPayload): string => {
     expiresIn: env.ACCESS_TOKEN_EXPIRY,
     algorithm: "HS256",
     issuer: "omnipress",
-    subject: payload.userId,
+    subject: payload._id,
   };
 
   return jwt.sign(payload, env.ACCESS_TOKEN_SECRET, options);
@@ -29,7 +30,7 @@ export const signRefreshToken = (payload: TokenPayload): string => {
     algorithm: "HS256",
     jwtid: uuidv4(),
     issuer: "omnipress",
-    subject: payload.userId,
+    subject: payload._id,
   };
 
   return jwt.sign(payload, env.REFRESH_TOKEN_SECRET, options);

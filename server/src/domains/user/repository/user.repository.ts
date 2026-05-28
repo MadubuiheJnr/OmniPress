@@ -2,7 +2,7 @@ import type { Types, ClientSession } from "mongoose";
 import UserModel from "../model/user.model.js";
 import type { IUser } from "../types/user.types.js";
 
-class UserRepository {
+export class UserRepository {
   async findById(id: Types.ObjectId) {
     return UserModel.findById(id);
   }
@@ -58,5 +58,3 @@ class UserRepository {
     );
   }
 }
-
-export default new UserRepository();

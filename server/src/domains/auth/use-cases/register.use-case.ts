@@ -19,10 +19,18 @@ export class RegisterUseCase {
     const { firstName, lastName, username, email, password } = data;
 
     const emailExists = await this.authService.getUserIdByEmail(email);
-    if (emailExists) throw new ConflictError("Email already in use");
+    if (emailExists)
+      throw new ConflictError(
+        "Email already in use",
+        "Please use a different email address",
+      );
 
     const usernameExists = await this.userService.getUserIdByUsername(username);
-    if (usernameExists) throw new ConflictError("Username already in use");
+    if (usernameExists)
+      throw new ConflictError(
+        "Username already in use",
+        "Please use a different username",
+      );
 
     const session = await mongoose.startSession();
 

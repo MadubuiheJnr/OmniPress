@@ -1,13 +1,14 @@
 import { comparePassword, hashPassword } from "shared/utils/hash.util.js";
-import authRepository from "../repository/auth.repository.js";
-import crypto from "node:crypto";
+import crypto, { createHash } from "node:crypto";
 import { v7 as uuidv7 } from "uuid";
-import mongoose from "mongoose";
 import type { ClientSession, Types } from "mongoose";
 import { BadRequestError } from "shared/errors/http.error.js";
 import type { IAuth, ILoginSession } from "../types/auth.types.js";
+import { signAccessToken, signRefreshToken } from "shared/utils/jwt.utils.js";
+import type { AuthRepository as IAuthRepository } from "../repository/auth.repository.js";
 
 export class AuthService {
+  constructor(private readonly authRepository: IAuthRepository) {}
   async createAuth(
     authData: Pick<IAuth, "email" | "password">,
     options?: { session?: ClientSession },
@@ -19,7 +20,7 @@ export class AuthService {
       Date.now() + 24 * 60 * 60 * 1000,
     );
 
-    const newAuth = await authRepository.create(
+    const newAuth = await this.authRepository.create(
       {
         email,
         password: hashedPassword,
@@ -39,42 +40,71 @@ export class AuthService {
   }
 
   async getUserIdByEmail(email: string): Promise<Types.ObjectId | null> {
-    const auth = await authRepository.findByEmail(email);
+    const auth = await this.authRepository.findByEmail(email);
     return auth ? auth._id : null;
   }
 
   async login(
     id: Types.ObjectId,
     password: string,
-    loginSession?: Omit<
+    sessionInfo?: Omit<
       ILoginSession,
-      "sessionId" | "isCurrent" | "lastActiveAt" | "createdAt"
+      | "sessionId"
+      | "isCurrent"
+      | "lastActiveAt"
+      | "createdAt"
+      | "location"
+      | "tokenHash"
     >,
   ) {
-    const auth = await authRepository.findById(id);
+    const auth = await this.authRepository.findById(id);
 
     if (!auth) {
-      throw new BadRequestError("Invalid credentials");
+      throw new BadRequestError(
+        "Invalid credentials",
+        "Please check your credentials and try again",
+      );
     }
     const passwordMatch = await comparePassword(password, auth.password);
     if (!passwordMatch) {
-      throw new BadRequestError("Invalid credentials");
+      throw new BadRequestError(
+        "Invalid credentials",
+        "Please check your credentials and try again",
+      );
     }
 
     const emailVerified = auth.isEmailVerified;
     if (!emailVerified) {
-      throw new BadRequestError("Email not verified");
+      throw new BadRequestError(
+        "Email is not verified",
+        "Please verify your email address and login again",
+      );
     }
 
-    // const loginAt = new Date();
+    const sessionId = uuidv7();
 
-    await authRepository.addSession(auth._id, {
-      sessionId: uuidv7(),
-      ip: loginSession?.ip ?? "unknown",
-      location: loginSession?.location ?? "unknown",
-      device: loginSession?.device ?? "unknown",
-      browser: loginSession?.browser ?? "unknown",
-      userAgent: loginSession?.userAgent ?? "unknown",
+    const accessToken = signAccessToken({
+      _id: auth._id.toString(),
+      sessionId,
+      email: auth.email,
+    });
+
+    const refreshToken = signRefreshToken({
+      _id: auth._id.toString(),
+      sessionId,
+      email: auth.email,
+    });
+
+    const tokenHash = createHash("sha256").update(refreshToken).digest("hex");
+
+    await this.authRepository.addSession(auth._id, {
+      sessionId,
+      tokenHash,
+      ip: sessionInfo?.ip ?? "unknown",
+      location: "unknown",
+      device: sessionInfo?.device ?? "unknown",
+      browser: sessionInfo?.browser ?? "unknown",
+      userAgent: sessionInfo?.userAgent ?? "unknown",
       isCurrent: true,
       lastActiveAt: new Date(),
       createdAt: new Date(),
@@ -84,111 +114,113 @@ export class AuthService {
       _id: auth._id,
       email: auth.email,
       createdAt: auth.createdAt,
+      accessToken,
+      refreshToken,
     };
   }
 
-  async verifyEmail(token: string) {
-    const auth = await authRepository.findByVerifyToken(token);
+  // async verifyEmail(token: string) {
+  //   const auth = await authRepository.findByVerifyToken(token);
 
-    if (
-      !auth ||
-      !auth?.emailVerifyToken ||
-      !auth.emailVerifyTokenExpiry ||
-      auth.emailVerifyTokenExpiry < new Date()
-    ) {
-      throw new Error(
-        "Something went wrong, please try again or request a new verification email",
-      );
-    }
+  //   if (
+  //     !auth ||
+  //     !auth?.emailVerifyToken ||
+  //     !auth.emailVerifyTokenExpiry ||
+  //     auth.emailVerifyTokenExpiry < new Date()
+  //   ) {
+  //     throw new Error(
+  //       "Something went wrong, please try again or request a new verification email",
+  //     );
+  //   }
 
-    await authRepository.updateById(auth._id, {
-      isEmailVerified: true,
-      emailVerifyToken: "",
-      emailVerifyTokenExpiry: new Date(0),
-    });
+  //   await authRepository.updateById(auth._id, {
+  //     isEmailVerified: true,
+  //     emailVerifyToken: "",
+  //     emailVerifyTokenExpiry: new Date(0),
+  //   });
 
-    return true;
-  }
+  //   return true;
+  // }
 
-  async forgotPassword(email: string) {
-    const auth = await authRepository.findByEmail(email);
+  // async forgotPassword(email: string) {
+  //   const auth = await authRepository.findByEmail(email);
 
-    if (!auth) {
-      throw new Error(
-        "If an account with that email exists, a password reset link will be sent",
-      );
-    }
+  //   if (!auth) {
+  //     throw new Error(
+  //       "If an account with that email exists, a password reset link will be sent",
+  //     );
+  //   }
 
-    const resetToken = crypto.randomBytes(32).toString("hex");
-    const resetTokenExpiresAt: Date = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+  //   const resetToken = crypto.randomBytes(32).toString("hex");
+  //   const resetTokenExpiresAt: Date = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
-    await authRepository.updateById(auth._id, {
-      passwordResetToken: resetToken,
-      passwordResetTokenExpiry: resetTokenExpiresAt,
-    });
+  //   await authRepository.updateById(auth._id, {
+  //     passwordResetToken: resetToken,
+  //     passwordResetTokenExpiry: resetTokenExpiresAt,
+  //   });
 
-    return true;
-  }
+  //   return true;
+  // }
 
-  async resetPassword(token: string, newPassword: string) {
-    const auth = await authRepository.findByResetToken(token);
+  // async resetPassword(token: string, newPassword: string) {
+  //   const auth = await authRepository.findByResetToken(token);
 
-    if (
-      !auth ||
-      !auth.passwordResetToken ||
-      !auth.passwordResetTokenExpiry ||
-      auth.passwordResetTokenExpiry < new Date()
-    ) {
-      throw new Error(
-        "Something went wrong, please try again or request a new password reset link",
-      );
-    }
+  //   if (
+  //     !auth ||
+  //     !auth.passwordResetToken ||
+  //     !auth.passwordResetTokenExpiry ||
+  //     auth.passwordResetTokenExpiry < new Date()
+  //   ) {
+  //     throw new Error(
+  //       "Something went wrong, please try again or request a new password reset link",
+  //     );
+  //   }
 
-    const hashedPassword = await hashPassword(newPassword);
+  //   const hashedPassword = await hashPassword(newPassword);
 
-    await authRepository.updateById(auth._id, {
-      password: hashedPassword,
-      passwordResetToken: "",
-      passwordResetTokenExpiry: new Date(0),
-    });
+  //   await authRepository.updateById(auth._id, {
+  //     password: hashedPassword,
+  //     passwordResetToken: "",
+  //     passwordResetTokenExpiry: new Date(0),
+  //   });
 
-    return true;
-  }
+  //   return true;
+  // }
 
-  async changePassword(
-    userId: mongoose.Types.ObjectId,
-    currentPassword: string,
-    newPassword: string,
-  ) {
-    const auth = await authRepository.findById(userId);
-    if (!auth) {
-      throw new Error("User not found");
-    }
+  // async changePassword(
+  //   userId: mongoose.Types.ObjectId,
+  //   currentPassword: string,
+  //   newPassword: string,
+  // ) {
+  //   const auth = await authRepository.findById(userId);
+  //   if (!auth) {
+  //     throw new Error("User not found");
+  //   }
 
-    const passwordMatch = await comparePassword(currentPassword, auth.password);
-    if (!passwordMatch) {
-      throw new Error("Current password is incorrect");
-    }
+  //   const passwordMatch = await comparePassword(currentPassword, auth.password);
+  //   if (!passwordMatch) {
+  //     throw new Error("Current password is incorrect");
+  //   }
 
-    const hashedPassword = await hashPassword(newPassword);
-    await authRepository.updateById(auth._id, {
-      password: hashedPassword,
-    });
+  //   const hashedPassword = await hashPassword(newPassword);
+  //   await authRepository.updateById(auth._id, {
+  //     password: hashedPassword,
+  //   });
 
-    return true;
-  }
+  //   return true;
+  // }
 
-  async logout(userId: mongoose.Types.ObjectId, sessionId: string) {
-    await authRepository.removeSession(userId, sessionId);
-    return true;
-  }
+  // async logout(userId: mongoose.Types.ObjectId, sessionId: string) {
+  //   await authRepository.removeSession(userId, sessionId);
+  //   return true;
+  // }
 
-  async getSessions(userId: mongoose.Types.ObjectId) {
-    return authRepository.getSessions(userId);
-  }
+  // async getSessions(userId: mongoose.Types.ObjectId) {
+  //   return authRepository.getSessions(userId);
+  // }
 
-  async revokeSession(userId: mongoose.Types.ObjectId, sessionId: string) {
-    await authRepository.removeSession(userId, sessionId);
-    return true;
-  }
+  // async revokeSession(userId: mongoose.Types.ObjectId, sessionId: string) {
+  //   await authRepository.removeSession(userId, sessionId);
+  //   return true;
+  // }
 }

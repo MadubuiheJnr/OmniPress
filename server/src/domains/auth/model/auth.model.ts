@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
-import type { AuthDocument } from "../types/auth.types.js";
+import type { IAuthDocument } from "../types/auth.types.js";
 
 const LoginSessionSchema = new mongoose.Schema(
   {
     sessionId: { type: String, required: true },
+    tokenHash: { type: String, required: true },
     ip: { type: String, required: true },
     location: { type: String, required: true },
     device: { type: String, required: true },
@@ -17,12 +18,6 @@ const LoginSessionSchema = new mongoose.Schema(
 
 const AuthSchema = new mongoose.Schema(
   {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-      unique: true,
-    },
     email: {
       type: String,
       required: true,
@@ -64,6 +59,6 @@ const AuthSchema = new mongoose.Schema(
 AuthSchema.index({ emailVerifyToken: 1 }, { sparse: true });
 AuthSchema.index({ passwordResetToken: 1 }, { sparse: true });
 
-const AuthModel = mongoose.model<AuthDocument>("Auth", AuthSchema);
+const AuthModel = mongoose.model<IAuthDocument>("Auth", AuthSchema);
 
 export default AuthModel;
