@@ -11,7 +11,7 @@ import mongoose from "mongoose";
 
 export class RegisterUseCase {
   constructor(
-    private readonly authService: IAuthService,
+    private readonly authService: Omit<IAuthService, "verifyEmail">,
     private readonly userService: IUserService,
   ) {}
 
@@ -28,7 +28,7 @@ export class RegisterUseCase {
     const usernameExists = await this.userService.getUserIdByUsername(username);
     if (usernameExists)
       throw new ConflictError(
-        "Username already in use",
+        "Username is not available",
         "Please use a different username",
       );
 
@@ -70,7 +70,6 @@ export class RegisterUseCase {
       eventBus.emit("auth.registered", {
         userId: auth._id,
         firstName: auth.firstName,
-        lastName: auth.lastName,
         email: auth.email,
         emailVerifyToken: auth.emailVerifyToken,
       });

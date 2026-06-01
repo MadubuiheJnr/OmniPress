@@ -7,7 +7,9 @@ import { createAuthRouter } from "./domains/auth/routes/auth.routes.js";
 import { errorMiddleware } from "./middlewares/error.middleware.js";
 
 const app = express();
-const { authController } = bootstrapContainer();
+const { authController, registerNotificationSubscribers } =
+  bootstrapContainer();
+registerNotificationSubscribers();
 
 app.use(helmet());
 app.disable("x-powered-by");

@@ -12,7 +12,7 @@ import type { IUserService } from "domains/user/types/user.types.js";
 export class LoginUseCase {
   constructor(
     private readonly userService: IUserService,
-    private readonly authService: IAuthService,
+    private readonly authService: Omit<IAuthService, "verifyEmail">,
   ) {}
 
   async execute(
@@ -46,7 +46,7 @@ export class LoginUseCase {
     if (!userId)
       throw new NotFoundError(
         "Invalid credentials",
-        "No user found with the provided email or username",
+        "Either one of the credentials is incorrect. Please check your credentials and try again",
       );
 
     const authResult = await this.authService.login(

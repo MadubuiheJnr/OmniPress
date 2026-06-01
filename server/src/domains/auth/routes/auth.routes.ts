@@ -1,8 +1,12 @@
 import { Router } from "express";
 import type { AuthController as IAuthController } from "../controller/auth.controller.js";
-import { validateBody } from "middlewares/validate.middleware.js";
+import {
+  validateBody,
+  validateQuery,
+} from "middlewares/validate.middleware.js";
 import { registerDtoSchema } from "../dto/register.dto.js";
 import { loginDtoSchema } from "../dto/login.dto.js";
+import { verifyEmailDtoSchema } from "../dto/verify-email.dto.js";
 
 export function createAuthRouter(authController: IAuthController): Router {
   const router = Router();
@@ -13,6 +17,11 @@ export function createAuthRouter(authController: IAuthController): Router {
 
   router.post("/login", validateBody(loginDtoSchema), (req, res, next) =>
     authController.login(req, res, next),
+  );
+  router.get(
+    "/verify-email",
+    validateQuery(verifyEmailDtoSchema),
+    (req, res, next) => authController.verifyEmail(req, res, next),
   );
 
   return router;

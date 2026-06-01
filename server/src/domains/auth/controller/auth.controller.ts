@@ -6,11 +6,15 @@ import type { Request, Response } from "express";
 import { asyncHandler } from "shared/utils/async-handler.util.js";
 import { buildSuccess } from "shared/utils/response.util.js";
 import { UAParser } from "ua-parser-js";
+import type { AuthService as IAuthService } from "../service/auth.service.js";
+import type { VerifyEmailDto } from "../dto/verify-email.dto.js";
+import { env } from "config/env.js";
 
 export class AuthController {
   constructor(
     private readonly loginUseCase: ILoginUseCase,
     private readonly registerUseCase: IRegisterUseCase,
+    private readonly authService: IAuthService,
   ) {}
 
   register = asyncHandler(async (req: Request, res: Response) => {
@@ -55,5 +59,16 @@ export class AuthController {
     const result = await this.loginUseCase.execute(req.body, sessionInfo);
 
     res.status(HttpCode.OK).json(buildSuccess(result, "Login successful."));
+  });
+
+  verifyEmail = asyncHandler(async (req: Request, res: Response) => {
+    const { token } = req.validatedQuery as VerifyEmailDto;
+
+    await this.authService.verifyEmail({ token });
+    const callbackUrl = `${env.CLIENT_URL}/auth/login`;
+
+    res
+      .status(HttpCode.OK)
+      .json(buildSuccess({ callbackUrl }, "Email verified successfully."));
   });
 }

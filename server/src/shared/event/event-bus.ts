@@ -5,7 +5,6 @@ export interface DomainEvents {
   "auth.registered": {
     userId: Types.ObjectId;
     firstName: string;
-    lastName: string;
     email: string;
     emailVerifyToken: string | undefined;
   };

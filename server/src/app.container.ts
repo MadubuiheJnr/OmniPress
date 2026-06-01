@@ -1,13 +1,17 @@
+import { mailerTransporter } from "config/mailer.js";
 import { AuthController } from "domains/auth/controller/auth.controller.js";
 import { AuthRepository } from "domains/auth/repository/auth.repository.js";
 import { AuthService } from "domains/auth/service/auth.service.js";
 import { LoginUseCase } from "domains/auth/use-cases/login.use-case.js";
 import { RegisterUseCase } from "domains/auth/use-cases/register.use-case.js";
+import { NotificationService } from "domains/notification/services/notification.service.js";
+import { authRegisteredSubscriber } from "domains/notification/subscribers/auth.registered.subscriber.js";
 import { UserRepository } from "domains/user/index.js";
 import { UserService } from "domains/user/service/user.service.js";
 
 export interface AppContainer {
   authController: AuthController;
+  registerNotificationSubscribers: () => void;
   // add other controllers here as your app grows
 }
 
@@ -19,13 +23,23 @@ export function bootstrapContainer(): AppContainer {
   // 2. Services
   const authService = new AuthService(authRepository);
   const userService = new UserService(userRepository);
+  const notificationService = new NotificationService(mailerTransporter);
 
   // 3. Use Cases
   const loginUseCase = new LoginUseCase(userService, authService);
   const registerUseCase = new RegisterUseCase(authService, userService);
 
   // 4. Controller
-  const authController = new AuthController(loginUseCase, registerUseCase);
+  const authController = new AuthController(
+    loginUseCase,
+    registerUseCase,
+    authService,
+  );
 
-  return { authController };
+  // 5. Subscribers
+  function registerNotificationSubscribers() {
+    authRegisteredSubscriber(notificationService);
+  }
+
+  return { authController, registerNotificationSubscribers };
 }

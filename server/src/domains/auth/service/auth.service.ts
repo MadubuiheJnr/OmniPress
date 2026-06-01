@@ -1,11 +1,15 @@
-import { comparePassword, hashPassword } from "shared/utils/hash.util.js";
+import { hashPassword, comparePassword } from "shared/utils/hash.util.js";
 import crypto, { createHash } from "node:crypto";
 import { v7 as uuidv7 } from "uuid";
 import type { ClientSession, Types } from "mongoose";
-import { BadRequestError } from "shared/errors/http.error.js";
+import {
+  BadRequestError,
+  UnprocessableEntityError,
+} from "shared/errors/http.error.js";
 import type { IAuth, ILoginSession } from "../types/auth.types.js";
 import { signAccessToken, signRefreshToken } from "shared/utils/jwt.utils.js";
 import type { AuthRepository as IAuthRepository } from "../repository/auth.repository.js";
+import type { VerifyEmailDto } from "../dto/verify-email.dto.js";
 
 export class AuthService {
   constructor(private readonly authRepository: IAuthRepository) {}
@@ -15,7 +19,11 @@ export class AuthService {
   ): Promise<Pick<IAuth, "_id" | "email" | "emailVerifyToken">> {
     const { email, password } = authData;
     const hashedPassword = await hashPassword(password);
-    const emailVerifyToken = crypto.randomBytes(32).toString("hex");
+    const verifyToken = crypto.randomBytes(32).toString("hex");
+    const hashedEmailVerifyToken = crypto
+      .createHash("sha256")
+      .update(verifyToken)
+      .digest("hex");
     const verificationTokenExpiresAt = new Date(
       Date.now() + 24 * 60 * 60 * 1000,
     );
@@ -25,7 +33,7 @@ export class AuthService {
         email,
         password: hashedPassword,
         isEmailVerified: false,
-        emailVerifyToken,
+        emailVerifyToken: hashedEmailVerifyToken,
         emailVerifyTokenExpiry: verificationTokenExpiresAt,
         loginSessions: [],
       },
@@ -35,7 +43,7 @@ export class AuthService {
     return {
       _id: newAuth._id,
       email: newAuth.email,
-      emailVerifyToken,
+      emailVerifyToken: verifyToken,
     };
   }
 
@@ -119,28 +127,24 @@ export class AuthService {
     };
   }
 
-  // async verifyEmail(token: string) {
-  //   const auth = await authRepository.findByVerifyToken(token);
+  async verifyEmail(query: VerifyEmailDto): Promise<boolean> {
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(query.token)
+      .digest("hex");
+    const auth = await this.authRepository.findByVerifyToken(hashedToken);
 
-  //   if (
-  //     !auth ||
-  //     !auth?.emailVerifyToken ||
-  //     !auth.emailVerifyTokenExpiry ||
-  //     auth.emailVerifyTokenExpiry < new Date()
-  //   ) {
-  //     throw new Error(
-  //       "Something went wrong, please try again or request a new verification email",
-  //     );
-  //   }
+    if (!auth) {
+      throw new UnprocessableEntityError(
+        "Unable to verify email",
+        "Please try again later or request a new verification email",
+      );
+    }
 
-  //   await authRepository.updateById(auth._id, {
-  //     isEmailVerified: true,
-  //     emailVerifyToken: "",
-  //     emailVerifyTokenExpiry: new Date(0),
-  //   });
+    await this.authRepository.clearVerifyToken(auth._id);
 
-  //   return true;
-  // }
+    return true;
+  }
 
   // async forgotPassword(email: string) {
   //   const auth = await authRepository.findByEmail(email);
