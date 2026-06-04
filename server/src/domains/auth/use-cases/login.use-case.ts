@@ -1,18 +1,15 @@
 import { BadRequestError, NotFoundError } from "shared/errors/http.error.js";
 import type { LoginDto } from "../dto/login.dto.js";
-import type {
-  IAuthResponse,
-  IAuthService,
-  ILoginSession,
-} from "../types/auth.types.js";
+import type { IAuthResponse, ILoginSession } from "../types/auth.types.js";
 import type { Types } from "mongoose";
 import eventBus from "shared/event/event-bus.js";
 import type { IUserService } from "domains/user/types/user.types.js";
+import type { AuthService as IAuthService } from "../service/auth.service.js";
 
 export class LoginUseCase {
   constructor(
     private readonly userService: IUserService,
-    private readonly authService: Omit<IAuthService, "verifyEmail">,
+    private readonly authService: IAuthService,
   ) {}
 
   async execute(
@@ -20,7 +17,7 @@ export class LoginUseCase {
     sessionInfo?: Omit<
       ILoginSession,
       | "sessionId"
-      | "isCurrent"
+      | "expiresAt"
       | "lastActiveAt"
       | "createdAt"
       | "location"
@@ -79,8 +76,8 @@ export class LoginUseCase {
       },
       tokens: {
         accessToken: authResult.accessToken,
-        refreshToken: authResult.refreshToken,
       },
+      refreshToken: authResult.refreshToken,
     };
   }
 }

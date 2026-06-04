@@ -37,7 +37,7 @@ export class AuthController {
     const sessionInfo: Omit<
       ILoginSession,
       | "sessionId"
-      | "isCurrent"
+      | "expiresAt"
       | "lastActiveAt"
       | "createdAt"
       | "location"
@@ -56,7 +56,25 @@ export class AuthController {
       userAgent: req.headers["user-agent"] ?? "unknown",
     };
 
-    const result = await this.loginUseCase.execute(req.body, sessionInfo);
+    const loginResult = await this.loginUseCase.execute(req.body, sessionInfo);
+
+    const { accessToken } = loginResult.tokens;
+    const { refreshToken } = loginResult;
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
+      path: "/api/auth/refresh",
+    });
+
+    const result = {
+      user: loginResult.user,
+      tokens: {
+        accessToken,
+      },
+    };
 
     res.status(HttpCode.OK).json(buildSuccess(result, "Login successful."));
   });

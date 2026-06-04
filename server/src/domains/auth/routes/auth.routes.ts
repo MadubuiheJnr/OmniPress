@@ -7,8 +7,12 @@ import {
 import { registerDtoSchema } from "../dto/register.dto.js";
 import { loginDtoSchema } from "../dto/login.dto.js";
 import { verifyEmailDtoSchema } from "../dto/verify-email.dto.js";
+import type { AuthMiddleware as IAuthMiddleware } from "middlewares/auth.middleware.js";
 
-export function createAuthRouter(authController: IAuthController): Router {
+export function createAuthRouter(
+  authController: IAuthController,
+  authMiddleware: IAuthMiddleware,
+): Router {
   const router = Router();
 
   router.post("/register", validateBody(registerDtoSchema), (req, res, next) =>

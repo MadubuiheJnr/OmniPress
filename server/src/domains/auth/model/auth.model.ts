@@ -5,12 +5,12 @@ const LoginSessionSchema = new mongoose.Schema(
   {
     sessionId: { type: String, required: true },
     tokenHash: { type: String, required: true },
+    expiresAt: { type: Date, required: true },
     ip: { type: String, required: true },
     location: { type: String, required: true },
     device: { type: String, required: true },
     browser: { type: String, required: true },
     userAgent: { type: String, required: true },
-    isCurrent: { type: Boolean, default: false },
     lastActiveAt: { type: Date, default: Date.now },
   },
   { _id: false, timestamps: { createdAt: true, updatedAt: false } },

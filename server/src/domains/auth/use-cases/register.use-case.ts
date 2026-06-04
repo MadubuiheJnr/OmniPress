@@ -1,5 +1,6 @@
 import type { IUserService } from "domains/user/types/user.types.js";
-import type { IAuthService, IAuthUser } from "../types/auth.types.js";
+import type { AuthService as IAuthService } from "../service/auth.service.js";
+import type { IAuthUser } from "../types/auth.types.js";
 import type { RegisterDto } from "../dto/register.dto.js";
 import {
   ConflictError,
@@ -11,7 +12,7 @@ import mongoose from "mongoose";
 
 export class RegisterUseCase {
   constructor(
-    private readonly authService: Omit<IAuthService, "verifyEmail">,
+    private readonly authService: IAuthService,
     private readonly userService: IUserService,
   ) {}
 

@@ -1,5 +1,5 @@
 import { hashPassword, comparePassword } from "shared/utils/hash.util.js";
-import crypto, { createHash } from "node:crypto";
+import crypto from "node:crypto";
 import { v7 as uuidv7 } from "uuid";
 import type { ClientSession, Types } from "mongoose";
 import {
@@ -7,12 +7,15 @@ import {
   UnprocessableEntityError,
 } from "shared/errors/http.error.js";
 import type { IAuth, ILoginSession } from "../types/auth.types.js";
-import { signAccessToken, signRefreshToken } from "shared/utils/jwt.utils.js";
 import type { AuthRepository as IAuthRepository } from "../repository/auth.repository.js";
 import type { VerifyEmailDto } from "../dto/verify-email.dto.js";
+import type { TokenService as ITokenService } from "./token.service.js";
 
 export class AuthService {
-  constructor(private readonly authRepository: IAuthRepository) {}
+  constructor(
+    private readonly authRepository: IAuthRepository,
+    private readonly tokenService: ITokenService,
+  ) {}
   async createAuth(
     authData: Pick<IAuth, "email" | "password">,
     options?: { session?: ClientSession },
@@ -58,7 +61,7 @@ export class AuthService {
     sessionInfo?: Omit<
       ILoginSession,
       | "sessionId"
-      | "isCurrent"
+      | "expiresAt"
       | "lastActiveAt"
       | "createdAt"
       | "location"
@@ -91,31 +94,24 @@ export class AuthService {
 
     const sessionId = uuidv7();
 
-    const accessToken = signAccessToken({
-      _id: auth._id.toString(),
-      sessionId,
-      email: auth.email,
-    });
-
-    const refreshToken = signRefreshToken({
-      _id: auth._id.toString(),
-      sessionId,
-      email: auth.email,
-    });
-
-    const tokenHash = createHash("sha256").update(refreshToken).digest("hex");
+    const { accessToken, refreshToken, hashedRefreshToken } =
+      await this.tokenService.issueTokens({
+        userId: auth._id.toString(),
+        sessionId,
+        email: auth.email,
+      });
 
     await this.authRepository.addSession(auth._id, {
       sessionId,
-      tokenHash,
+      tokenHash: hashedRefreshToken,
       ip: sessionInfo?.ip ?? "unknown",
       location: "unknown",
       device: sessionInfo?.device ?? "unknown",
       browser: sessionInfo?.browser ?? "unknown",
       userAgent: sessionInfo?.userAgent ?? "unknown",
-      isCurrent: true,
       lastActiveAt: new Date(),
       createdAt: new Date(),
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
     });
 
     return {

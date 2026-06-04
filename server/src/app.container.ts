@@ -1,18 +1,22 @@
 import { mailerTransporter } from "config/mailer.js";
 import { AuthController } from "domains/auth/controller/auth.controller.js";
 import { AuthRepository } from "domains/auth/repository/auth.repository.js";
+import { createAuthRouter } from "domains/auth/routes/auth.routes.js";
 import { AuthService } from "domains/auth/service/auth.service.js";
+import { TokenService } from "domains/auth/service/token.service.js";
 import { LoginUseCase } from "domains/auth/use-cases/login.use-case.js";
 import { RegisterUseCase } from "domains/auth/use-cases/register.use-case.js";
 import { NotificationService } from "domains/notification/services/notification.service.js";
 import { authRegisteredSubscriber } from "domains/notification/subscribers/auth.registered.subscriber.js";
 import { UserRepository } from "domains/user/index.js";
 import { UserService } from "domains/user/service/user.service.js";
+import type { Router } from "express";
+import jwt from "jsonwebtoken";
+import { AuthMiddleware } from "middlewares/auth.middleware.js";
 
 export interface AppContainer {
-  authController: AuthController;
-  registerNotificationSubscribers: () => void;
-  // add other controllers here as your app grows
+  authRouter: Router;
+  // add other routes here as your app grows
 }
 
 export function bootstrapContainer(): AppContainer {
@@ -21,7 +25,8 @@ export function bootstrapContainer(): AppContainer {
   const userRepository = new UserRepository();
 
   // 2. Services
-  const authService = new AuthService(authRepository);
+  const tokenService = new TokenService(authRepository, jwt);
+  const authService = new AuthService(authRepository, tokenService);
   const userService = new UserService(userRepository);
   const notificationService = new NotificationService(mailerTransporter);
 
@@ -36,10 +41,15 @@ export function bootstrapContainer(): AppContainer {
     authService,
   );
 
-  // 5. Subscribers
-  function registerNotificationSubscribers() {
-    authRegisteredSubscriber(notificationService);
-  }
+  // 5. Middleware
+  const authMiddleware = new AuthMiddleware(tokenService);
 
-  return { authController, registerNotificationSubscribers };
+  // 6. Routers
+  const authRouter = createAuthRouter(authController, authMiddleware);
+
+  // 7. Subscribers
+
+  authRegisteredSubscriber(notificationService);
+
+  return { authRouter };
 }

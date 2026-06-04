@@ -1,37 +1,33 @@
+import type { TokenService as ITokenService } from "domains/auth/service/token.service.js";
 import type { Request, Response, NextFunction } from "express";
 import { UnauthorizedError } from "shared/errors/http.error.js";
-import { verifyAccessToken } from "shared/utils/jwt.utils.js";
 
-export const authMiddleware = (
-  req: Request,
-  _res: Response,
-  next: NextFunction,
-) => {
-  const authHeader = req.headers.authorization;
+export class AuthMiddleware {
+  constructor(private readonly tokenService: ITokenService) {}
 
-  if (!authHeader?.startsWith("Bearer ")) {
-    throw new UnauthorizedError(
-      "Unauthorized",
-      "You don't have permission to access this resource",
-    );
-  }
+  authenticate = (req: Request, _res: Response, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
 
-  const accessToken = authHeader.split(" ")[1];
+    const token = authHeader?.startsWith("Bearer ")
+      ? authHeader.split(" ")[1]
+      : null;
 
-  if (!accessToken) {
-    throw new UnauthorizedError(
-      "Unauthorized",
-      "You don't have permission to access this resource",
-    );
-  }
+    if (!token) {
+      return next(
+        new UnauthorizedError(
+          "Unauthorized",
+          "You don't have permission to access this resource",
+        ),
+      );
+    }
+    const decoded = this.tokenService.verifyAccessToken(token);
 
-  const decoded = verifyAccessToken(accessToken);
+    req.user = {
+      _id: decoded.userId,
+      email: decoded.email,
+      sessionId: decoded.sessionId,
+    };
 
-  req.user = {
-    _id: decoded._id,
-    email: decoded.email,
-    sessionId: decoded.sessionId,
+    next();
   };
-
-  next();
-};
+}

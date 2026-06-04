@@ -3,13 +3,10 @@ import cors from "cors";
 import helmet from "helmet";
 import { env } from "./config/env.js";
 import { bootstrapContainer } from "./app.container.js";
-import { createAuthRouter } from "./domains/auth/routes/auth.routes.js";
 import { errorMiddleware } from "./middlewares/error.middleware.js";
 
 const app = express();
-const { authController, registerNotificationSubscribers } =
-  bootstrapContainer();
-registerNotificationSubscribers();
+const { authRouter } = bootstrapContainer();
 
 app.use(helmet());
 app.disable("x-powered-by");
@@ -29,7 +26,7 @@ app.get("/", (_req: Request, res: Response) => {
   res.json({ status: "ok", message: "OmniPress API is running" });
 });
 
-app.use("/api/auth", createAuthRouter(authController));
+app.use("/api/auth", authRouter);
 app.use(errorMiddleware);
 
 export { app };

@@ -5,12 +5,12 @@ import type { VerifyEmailDto } from "../dto/verify-email.dto.js";
 export interface ILoginSession {
   sessionId: string;
   tokenHash: string;
+  expiresAt: Date;
   ip: string;
   location: string;
   device: string;
   browser: string;
   userAgent: string;
-  isCurrent: boolean;
   lastActiveAt: Date;
   createdAt: Date;
 }
@@ -32,7 +32,6 @@ export interface IAuth {
 
 export interface IAuthTokens {
   accessToken: string;
-  refreshToken: string;
 }
 
 export interface IAuthUser {
@@ -47,34 +46,41 @@ export interface IAuthUser {
 export interface IAuthResponse {
   user: IAuthUser;
   tokens: IAuthTokens;
+  refreshToken: string;
+}
+
+export interface IAccessTokenPayload {
+  userId: string;
+  sessionId: string;
+  email: string;
 }
 
 export interface IAuthDocument extends Omit<IAuth, "_id">, Document {}
 
-export interface IAuthService {
-  createAuth(
-    authData: Pick<IAuth, "email" | "password">,
-    options?: { session?: mongoose.ClientSession },
-  ): Promise<Pick<IAuth, "_id" | "email" | "emailVerifyToken">>;
-  getUserIdByEmail(email: string): Promise<mongoose.Types.ObjectId | null>;
-  login(
-    id: mongoose.Types.ObjectId,
-    password: string,
-    loginSession?: Omit<
-      ILoginSession,
-      | "sessionId"
-      | "isCurrent"
-      | "lastActiveAt"
-      | "createdAt"
-      | "location"
-      | "tokenHash"
-    >,
-  ): Promise<{
-    _id: mongoose.Types.ObjectId;
-    email: string;
-    createdAt: Date;
-    accessToken: string;
-    refreshToken: string;
-  }>;
-  verifyEmail(query: VerifyEmailDto): Promise<void>;
-}
+// export interface IAuthService {
+//   createAuth(
+//     authData: Pick<IAuth, "email" | "password">,
+//     options?: { session?: mongoose.ClientSession },
+//   ): Promise<Pick<IAuth, "_id" | "email" | "emailVerifyToken">>;
+//   getUserIdByEmail(email: string): Promise<mongoose.Types.ObjectId | null>;
+//   login(
+//     id: mongoose.Types.ObjectId,
+//     password: string,
+//     loginSession?: Omit<
+//       ILoginSession,
+//       | "sessionId"
+//       | "isCurrent"
+//       | "lastActiveAt"
+//       | "createdAt"
+//       | "location"
+//       | "tokenHash"
+//     >,
+//   ): Promise<{
+//     _id: mongoose.Types.ObjectId;
+//     email: string;
+//     createdAt: Date;
+//     accessToken: string;
+//     refreshToken: string;
+//   }>;
+//   verifyEmail(query: VerifyEmailDto): Promise<void>;
+// }
