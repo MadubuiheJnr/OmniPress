@@ -74,9 +74,7 @@ export class LoginUseCase {
         email: authResult.email,
         avatar: userProfile.avatar,
       },
-      tokens: {
-        accessToken: authResult.accessToken,
-      },
+      accessToken: authResult.accessToken,
       refreshToken: authResult.refreshToken,
     };
   }

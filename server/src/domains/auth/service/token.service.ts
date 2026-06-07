@@ -1,7 +1,10 @@
 import { env } from "config/env.js";
 import type { AuthRepository as IAuthRepository } from "../repository/auth.repository.js";
 import type jwt from "jsonwebtoken";
-import type { IAccessTokenPayload } from "../types/auth.types.js";
+import type {
+  IAccessTokenPayload,
+  ILoginSession,
+} from "../types/auth.types.js";
 import crypto from "node:crypto";
 import { UnauthorizedError } from "shared/errors/http.error.js";
 
@@ -22,7 +25,7 @@ export class TokenService {
       expiresIn: env.ACCESS_TOKEN_EXPIRY,
       algorithm: "HS256",
       issuer: "omnipress",
-      subject: payload.userId,
+      subject: payload.authId,
     };
 
     return this.tokenProvider.sign(payload, env.ACCESS_TOKEN_SECRET, options);
@@ -40,7 +43,7 @@ export class TokenService {
   }
 
   async issueTokens({
-    userId,
+    authId,
     sessionId,
     email,
   }: IAccessTokenPayload): Promise<{
@@ -48,8 +51,9 @@ export class TokenService {
     refreshToken: string;
     hashedRefreshToken: string;
   }> {
-    const accessToken = this.signAccessToken({ userId, sessionId, email });
-    const refreshToken = this.createRefreshToken();
+    const accessToken = this.signAccessToken({ authId, sessionId, email });
+    const randomRefreshToken = this.createRefreshToken();
+    const refreshToken = `${sessionId}.${randomRefreshToken}`;
     const hashedRefreshToken = this.hashRefreshToken(refreshToken);
 
     return { accessToken, refreshToken, hashedRefreshToken };

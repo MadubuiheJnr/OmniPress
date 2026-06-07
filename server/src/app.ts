@@ -4,11 +4,13 @@ import helmet from "helmet";
 import { env } from "./config/env.js";
 import { bootstrapContainer } from "./app.container.js";
 import { errorMiddleware } from "./middlewares/error.middleware.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 const { authRouter } = bootstrapContainer();
 
 app.use(helmet());
+app.use(cookieParser());
 app.disable("x-powered-by");
 
 app.use(

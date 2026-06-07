@@ -27,6 +27,9 @@ export function createAuthRouter(
     validateQuery(verifyEmailDtoSchema),
     (req, res, next) => authController.verifyEmail(req, res, next),
   );
+  router.post("/refresh", (req, res, next) =>
+    authController.refresh(req, res, next),
+  );
 
   return router;
 }

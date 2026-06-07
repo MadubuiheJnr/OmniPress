@@ -1,4 +1,4 @@
-import { HttpCode } from "shared/errors/http.error.js";
+import { HttpCode, UnauthorizedError } from "shared/errors/http.error.js";
 import type { ILoginSession } from "../types/auth.types.js";
 import type { LoginUseCase as ILoginUseCase } from "../use-cases/login.use-case.js";
 import type { RegisterUseCase as IRegisterUseCase } from "../use-cases/register.use-case.js";
@@ -31,6 +31,17 @@ export class AuthController {
       );
   });
 
+  verifyEmail = asyncHandler(async (req: Request, res: Response) => {
+    const { token } = req.validatedQuery as VerifyEmailDto;
+
+    await this.authService.verifyEmail({ token });
+    const callbackUrl = `${env.CLIENT_URL}/auth/login`;
+
+    res
+      .status(HttpCode.OK)
+      .json(buildSuccess({ callbackUrl }, "Email verified successfully."));
+  });
+
   login = asyncHandler(async (req: Request, res: Response) => {
     const parser = new UAParser(req.headers["user-agent"]);
 
@@ -58,8 +69,7 @@ export class AuthController {
 
     const loginResult = await this.loginUseCase.execute(req.body, sessionInfo);
 
-    const { accessToken } = loginResult.tokens;
-    const { refreshToken } = loginResult;
+    const { accessToken, refreshToken } = loginResult;
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
@@ -71,22 +81,33 @@ export class AuthController {
 
     const result = {
       user: loginResult.user,
-      tokens: {
-        accessToken,
-      },
+      token: accessToken,
     };
 
     res.status(HttpCode.OK).json(buildSuccess(result, "Login successful."));
   });
 
-  verifyEmail = asyncHandler(async (req: Request, res: Response) => {
-    const { token } = req.validatedQuery as VerifyEmailDto;
+  refresh = asyncHandler(async (req: Request, res: Response) => {
+    const incomingRefreshToken = req.cookies.refreshToken;
 
-    await this.authService.verifyEmail({ token });
-    const callbackUrl = `${env.CLIENT_URL}/auth/login`;
+    if (!incomingRefreshToken) {
+      throw new UnauthorizedError(
+        "You're not logged in",
+        "Your request cannot be processed. Please login again to continue.",
+      );
+    }
 
-    res
-      .status(HttpCode.OK)
-      .json(buildSuccess({ callbackUrl }, "Email verified successfully."));
+    const { accessToken, refreshToken } =
+      await this.authService.refresh(incomingRefreshToken);
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
+      path: "/api/auth/refresh",
+    });
+
+    res.status(HttpCode.OK).json(buildSuccess({ token: accessToken }, "OK"));
   });
 }

@@ -30,10 +30,6 @@ export interface IAuth {
   updatedAt: Date;
 }
 
-export interface IAuthTokens {
-  accessToken: string;
-}
-
 export interface IAuthUser {
   _id: mongoose.Types.ObjectId;
   firstName: string;
@@ -45,12 +41,12 @@ export interface IAuthUser {
 
 export interface IAuthResponse {
   user: IAuthUser;
-  tokens: IAuthTokens;
+  accessToken: string;
   refreshToken: string;
 }
 
 export interface IAccessTokenPayload {
-  userId: string;
+  authId: string;
   sessionId: string;
   email: string;
 }

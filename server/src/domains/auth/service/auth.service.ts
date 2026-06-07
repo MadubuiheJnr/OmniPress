@@ -4,6 +4,7 @@ import { v7 as uuidv7 } from "uuid";
 import type { ClientSession, Types } from "mongoose";
 import {
   BadRequestError,
+  UnauthorizedError,
   UnprocessableEntityError,
 } from "shared/errors/http.error.js";
 import type { IAuth, ILoginSession } from "../types/auth.types.js";
@@ -96,7 +97,7 @@ export class AuthService {
 
     const { accessToken, refreshToken, hashedRefreshToken } =
       await this.tokenService.issueTokens({
-        userId: auth._id.toString(),
+        authId: auth._id.toString(),
         sessionId,
         email: auth.email,
       });
@@ -140,6 +141,74 @@ export class AuthService {
     await this.authRepository.clearVerifyToken(auth._id);
 
     return true;
+  }
+
+  async refresh(incomingToken: string): Promise<{
+    accessToken: string;
+    refreshToken: string;
+  }> {
+    const dotIndex = incomingToken.indexOf(".");
+    const sessionId = incomingToken.substring(0, dotIndex);
+    const token = incomingToken.substring(dotIndex + 1);
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(incomingToken)
+      .digest("hex");
+
+    if (!sessionId || !token) {
+      throw new UnauthorizedError(
+        "You're not logged in",
+        "Your request cannot be processed. Please login again to continue.",
+      );
+    }
+
+    const session = await this.authRepository.findSessionBySessionId(sessionId);
+
+    if (!session) {
+      throw new UnauthorizedError(
+        "Session expired",
+        "Your request cannot be processed. Please login again to continue.",
+      );
+    }
+
+    const sessionData = session.loginSessions[0];
+
+    if (sessionData) {
+      if (new Date() > sessionData?.expiresAt) {
+        await this.authRepository.removeSession(session._id, sessionId);
+        throw new UnauthorizedError(
+          "Session expired",
+          "Your request cannot be processed. Please login again to continue.",
+        );
+      }
+    }
+
+    if (sessionData?.tokenHash !== hashedToken) {
+      await this.authRepository.removeSession(session._id, sessionId);
+      throw new UnauthorizedError(
+        "Your session has been terminated for security reasons",
+        "Login again to continue. If this happens repeatedly, please contact support",
+      );
+    }
+
+    const { accessToken, refreshToken, hashedRefreshToken } =
+      await this.tokenService.issueTokens({
+        authId: session._id.toString(),
+        sessionId,
+        email: session.email,
+      });
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+    const lastActiveAt = new Date();
+
+    await this.authRepository.updateSessionToken(
+      session._id,
+      sessionId,
+      hashedRefreshToken,
+      expiresAt,
+      lastActiveAt,
+    );
+
+    return { accessToken, refreshToken };
   }
 
   // async forgotPassword(email: string) {

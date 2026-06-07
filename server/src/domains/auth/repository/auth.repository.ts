@@ -75,11 +75,37 @@ export class AuthRepository {
     );
   }
 
+  async findSessionBySessionId(sessionId: string) {
+    return AuthModel.findOne(
+      { "loginSessions.sessionId": sessionId },
+      { "loginSessions.$": 1, email: 1 },
+    );
+  }
+
   async getSessions(id: mongoose.Types.ObjectId) {
     const auth = await AuthModel.findById(id).select("loginSessions");
     return auth?.loginSessions ?? [];
   }
 
+  async updateSessionToken(
+    id: mongoose.Types.ObjectId,
+    sessionId: string,
+    tokenHash: string,
+    expiresAt: Date,
+    lastActiveAt: Date,
+  ) {
+    return AuthModel.findOneAndUpdate(
+      { _id: id, "loginSessions.sessionId": sessionId },
+      {
+        $set: {
+          "loginSessions.$.tokenHash": tokenHash,
+          "loginSessions.$.expiresAt": expiresAt,
+          "loginSessions.$.lastActiveAt": lastActiveAt,
+        },
+      },
+      { new: true },
+    );
+  }
   async removeSession(id: mongoose.Types.ObjectId, sessionId: string) {
     return AuthModel.findByIdAndUpdate(
       id,
