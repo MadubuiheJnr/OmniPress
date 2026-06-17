@@ -14,6 +14,7 @@ export interface IBaseArticle {
   sharesCount: number;
   isPublished: boolean;
   isFeatured: boolean;
+  isArchived: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

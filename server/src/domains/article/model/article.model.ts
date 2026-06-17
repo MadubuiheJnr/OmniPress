@@ -19,6 +19,7 @@ const ArticleSchema = new Schema<IArticleDocument>(
     sharesCount: { type: Number, default: 0 },
     isPublished: { type: Boolean, default: false },
     isFeatured: { type: Boolean, default: false },
+    isArchived: { type: Boolean, default: false },
   },
   {
     timestamps: true,
