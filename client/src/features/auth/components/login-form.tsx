@@ -11,7 +11,7 @@ import {
 } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 
-const LoginForm = () => {
+export const LoginForm = () => {
   return (
     <div className="w-full max-w-md h-screen">
       <div>
@@ -57,5 +57,3 @@ const LoginForm = () => {
     </div>
   );
 };
-
-export default LoginForm;

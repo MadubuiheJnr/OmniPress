@@ -1,6 +1,5 @@
 import type { Document } from "mongoose";
 import type mongoose from "mongoose";
-import type { VerifyEmailDto } from "../dto/verify-email.dto.js";
 
 export interface ILoginSession {
   sessionId: string;

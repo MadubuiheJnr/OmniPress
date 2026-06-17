@@ -1,10 +1,7 @@
 import { env } from "config/env.js";
 import type { AuthRepository as IAuthRepository } from "../repository/auth.repository.js";
 import type jwt from "jsonwebtoken";
-import type {
-  IAccessTokenPayload,
-  ILoginSession,
-} from "../types/auth.types.js";
+import type { IAccessTokenPayload } from "../types/auth.types.js";
 import crypto from "node:crypto";
 import { UnauthorizedError } from "shared/errors/http.error.js";
 

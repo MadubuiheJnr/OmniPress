@@ -1,3 +1,4 @@
+import { useAuthStore } from "@/features/auth";
 import AppHeader from "@/shared/components/app-header/app-header";
 import AppSidebar from "@/shared/components/app-sidebar/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/shared/components/ui/sidebar";
@@ -7,13 +8,14 @@ import { Outlet } from "react-router-dom";
 
 const AppLayout = () => {
   const [headerActions, setHeaderActions] = useState<React.ReactNode>(null);
+  const { isAuthenticated } = useAuthStore();
 
   return (
     <div>
       <TooltipProvider>
         <SidebarProvider>
           <aside>
-            <AppSidebar />
+            <AppSidebar isAuthenticated={isAuthenticated} />
           </aside>
           <SidebarInset className="min-w-0 overflow-hidden">
             <header className="px-3 flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 ">

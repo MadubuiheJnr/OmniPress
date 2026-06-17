@@ -1,6 +1,7 @@
 import { type RouteObject } from "react-router-dom";
 import AuthLayout from "@/layouts/auth-layout";
 import Login from "@/pages/auth/login";
+import Register from "@/pages/auth/register";
 
 const AuthRoutes: RouteObject[] = [
   {
@@ -8,7 +9,7 @@ const AuthRoutes: RouteObject[] = [
     element: <AuthLayout />,
     children: [
       { path: "login", element: <Login /> },
-      { path: "register", element: <div>Register Page</div> },
+      { path: "register", element: <Register /> },
     ],
   },
 ];

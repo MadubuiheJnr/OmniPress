@@ -11,7 +11,7 @@ import { AppSidebarCTA } from "./sidebar-cta";
 import { AppSidebarMainItem } from "./sidebar-main-items";
 import AppSidebarFooter from "./sidebar-footer";
 
-const AppSidebar = () => {
+const AppSidebar = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
   const { open, state } = useSidebar();
 
   return (
@@ -25,7 +25,10 @@ const AppSidebar = () => {
       </SidebarContent>
       <Separator />
       <SidebarFooter>
-        <AppSidebarFooter sidebarState={state} />
+        <AppSidebarFooter
+          sidebarState={state}
+          isAuthenticated={isAuthenticated}
+        />
       </SidebarFooter>
     </Sidebar>
   );
