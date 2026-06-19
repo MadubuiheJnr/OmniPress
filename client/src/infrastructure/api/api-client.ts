@@ -1,10 +1,27 @@
-import apiClient from "@/config/api-client";
-import { useAuthStore } from "../store/auth.store";
-import type { InternalAxiosRequestConfig } from "axios";
+import { env } from "@/config";
+import axios, {
+  type AxiosInstance,
+  type InternalAxiosRequestConfig,
+} from "axios";
+
+const apiClient: AxiosInstance = axios.create({
+  baseURL: `${env?.VITE_API_BASE_URL}`,
+  timeout: 10000,
+});
+
+let token: string | null;
+let setToken: (t: string) => void;
+
+export const injectAuthBinding = (
+  storeToken: string | null,
+  setStoreToken: (t: string) => void,
+) => {
+  token = storeToken;
+  setToken = setStoreToken;
+};
 
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const { token } = useAuthStore();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -52,14 +69,14 @@ apiClient.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const { token } = await axios.post("/auth/refresh", {
-          refreshToken: localStorage.getItem("refresh_token"),
-        });
+        const { data } = await axios.post("/auth/refresh");
+        const { newToken } = data.token;
 
-        localStorage.setItem("access_token", token);
-        apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        setToken(newToken);
+        apiClient.defaults.headers.common["Authorization"] =
+          `Bearer ${newToken}`;
 
-        processQueue(null, token);
+        processQueue(null, newToken);
         return apiClient(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
@@ -75,3 +92,5 @@ apiClient.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+
+export default apiClient;

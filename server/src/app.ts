@@ -28,7 +28,7 @@ app.get("/", (_req: Request, res: Response) => {
   res.json({ status: "ok", message: "OmniPress API is running" });
 });
 
-app.use("/api/auth", authRouter);
+app.use("/v1/auth", authRouter);
 app.use(errorMiddleware);
 
 export { app };

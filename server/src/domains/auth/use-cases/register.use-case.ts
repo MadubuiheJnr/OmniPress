@@ -79,6 +79,7 @@ export class RegisterUseCase {
         email: auth.email,
       };
     } catch (error: unknown) {
+      console.log(error);
       if (error instanceof AppError) throw error;
       throw new InternalServerError("Registration failed. Please try again.");
     } finally {

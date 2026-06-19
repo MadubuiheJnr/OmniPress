@@ -1,5 +1,14 @@
+import { injectAuthBinding } from "@/infrastructure";
 import { create } from "zustand";
-import type { AuthUser } from "../types";
+
+interface AuthUser {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  avatar: string;
+}
 
 interface AuthStore {
   user: AuthUser | null;
@@ -16,3 +25,7 @@ export const useAuthStore = create<AuthStore>()((set) => ({
   setAuth: (user, token) => set({ user, token, isAuthenticated: true }),
   clearAuth: () => set({ user: null, token: null, isAuthenticated: false }),
 }));
+
+injectAuthBinding(useAuthStore.getState().token, (newToken) =>
+  useAuthStore.setState({ token: newToken }),
+);

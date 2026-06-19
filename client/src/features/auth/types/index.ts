@@ -6,3 +6,10 @@ export interface AuthUser {
   email: string;
   avatar: string;
 }
+
+export interface RegisterSuccessResponse {
+  success: true;
+  statusCode: number;
+  message: string;
+  data: { email: string };
+}

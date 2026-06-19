@@ -1,5 +1,5 @@
 import { Controller, FormProvider, useForm } from "react-hook-form";
-import { registerDtoSchema, type RegisterDto } from "../../schemas";
+import { registerDtoSchema, type RegisterDto } from "../schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Field,
@@ -9,6 +9,9 @@ import {
 } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
+import { useRegisterMutation } from "../hooks/use-register";
+import { Spinner } from "@/shared/components/ui/spinner";
+import { cn } from "@/shared/lib/utils";
 
 export const RegisterForm = () => {
   const form = useForm<RegisterDto>({
@@ -22,8 +25,13 @@ export const RegisterForm = () => {
     },
   });
 
+  const { mutate, isPending } = useRegisterMutation();
   const onSubmit = (data: RegisterDto) => {
-    console.log(data);
+    mutate(data, {
+      onSuccess: () => {
+        form.reset();
+      },
+    });
   };
 
   return (
@@ -37,7 +45,12 @@ export const RegisterForm = () => {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid} className="gap-1">
                   <FieldLabel htmlFor={field.name}>First Name</FieldLabel>
-                  <Input id={field.name} {...field} placeholder="John" />
+                  <Input
+                    id={field.name}
+                    {...field}
+                    placeholder="John"
+                    disabled={isPending}
+                  />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
@@ -50,7 +63,12 @@ export const RegisterForm = () => {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid} className="gap-1">
                   <FieldLabel htmlFor={field.name}>Last Name</FieldLabel>
-                  <Input id={field.name} {...field} placeholder="Doe" />
+                  <Input
+                    id={field.name}
+                    {...field}
+                    placeholder="Doe"
+                    disabled={isPending}
+                  />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
@@ -63,7 +81,12 @@ export const RegisterForm = () => {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid} className="gap-1">
                   <FieldLabel htmlFor={field.name}>Username</FieldLabel>
-                  <Input id={field.name} {...field} placeholder="johndoe" />
+                  <Input
+                    id={field.name}
+                    {...field}
+                    placeholder="johndoe"
+                    disabled={isPending}
+                  />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
@@ -80,7 +103,8 @@ export const RegisterForm = () => {
                     id={field.name}
                     type="email"
                     {...field}
-                    placeholder="Doe"
+                    placeholder="johndoe@gmail.com"
+                    disabled={isPending}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -99,6 +123,7 @@ export const RegisterForm = () => {
                     type="password"
                     {...field}
                     placeholder="*** *** **"
+                    disabled={isPending}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -109,8 +134,20 @@ export const RegisterForm = () => {
           </FieldGroup>
 
           <FieldGroup className="mt-5">
-            <Button type="submit" size="lg">
-              Sign up
+            <Button
+              type="submit"
+              size="lg"
+              disabled={isPending}
+              className={cn(isPending && "cursor-not-allowed bg-primary/20")}
+            >
+              {isPending ? (
+                <>
+                  <Spinner />
+                  Registering...
+                </>
+              ) : (
+                "Register"
+              )}
             </Button>
           </FieldGroup>
         </form>
