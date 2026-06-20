@@ -34,12 +34,6 @@ export class AuthRepository {
     });
   }
 
-  async findByResetToken(token: string) {
-    return AuthModel.findOne({
-      passwordResetToken: token,
-      passwordResetTokenExpiry: { $gt: new Date() },
-    });
-  }
   async clearVerifyToken(id: mongoose.Types.ObjectId) {
     return AuthModel.findByIdAndUpdate(
       id,
@@ -49,6 +43,13 @@ export class AuthRepository {
       },
       { new: true },
     );
+  }
+
+  async findByResetToken(token: string) {
+    return AuthModel.findOne({
+      passwordResetToken: token,
+      passwordResetTokenExpiry: { $gt: new Date() },
+    });
   }
 
   async clearResetToken(id: mongoose.Types.ObjectId) {

@@ -1,2 +1,2 @@
 export { RegisterForm } from "./components/register-form";
-export { GetStartedCard } from "./components/register/step-card.register";
+export { useVerifyEmailQuery } from "./hooks/use-verify-email";

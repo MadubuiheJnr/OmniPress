@@ -10,3 +10,8 @@ export interface ApiErrorResponse {
     context?: Record<string, unknown>;
   };
 }
+export interface ApiSuccessResponse {
+  success: true;
+  statusCode: number;
+  message: string;
+}

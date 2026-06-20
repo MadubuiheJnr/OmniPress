@@ -35,7 +35,7 @@ export class AuthController {
     const { token } = req.validatedQuery as VerifyEmailDto;
 
     await this.authService.verifyEmail({ token });
-    const callbackUrl = `${env.CLIENT_URL}/auth/login`;
+    const callbackUrl = `/auth/login`;
 
     res
       .status(HttpCode.OK)

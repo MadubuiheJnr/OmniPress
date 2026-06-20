@@ -5,7 +5,6 @@ import type { ClientSession, Types } from "mongoose";
 import {
   BadRequestError,
   UnauthorizedError,
-  UnprocessableEntityError,
 } from "shared/errors/http.error.js";
 import type { IAuth, ILoginSession } from "../types/auth.types.js";
 import type { AuthRepository as IAuthRepository } from "../repository/auth.repository.js";
@@ -132,9 +131,9 @@ export class AuthService {
     const auth = await this.authRepository.findByVerifyToken(hashedToken);
 
     if (!auth) {
-      throw new UnprocessableEntityError(
+      throw new BadRequestError(
         "Unable to verify email",
-        "Please try again later or request a new verification email",
+        "This link may be invalid or has expired. Please request a new one or try again.",
       );
     }
 

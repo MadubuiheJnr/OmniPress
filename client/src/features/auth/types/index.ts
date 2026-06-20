@@ -1,3 +1,5 @@
+import type { ApiSuccessResponse } from "@/shared/types/api.types";
+
 export interface AuthUser {
   _id: string;
   firstName: string;
@@ -7,9 +9,9 @@ export interface AuthUser {
   avatar: string;
 }
 
-export interface RegisterSuccessResponse {
-  success: true;
-  statusCode: number;
-  message: string;
+export interface RegisterSuccessResponse extends ApiSuccessResponse {
   data: { email: string };
+}
+export interface VerifyEmailSuccessResponse extends ApiSuccessResponse {
+  data: { callbackUrl: string };
 }
