@@ -23,7 +23,7 @@ export class AuthMiddleware {
     const decoded = this.tokenService.verifyAccessToken(token);
 
     req.user = {
-      _id: decoded.userId,
+      _id: decoded.authId,
       email: decoded.email,
       sessionId: decoded.sessionId,
     };

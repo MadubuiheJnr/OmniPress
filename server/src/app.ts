@@ -7,7 +7,7 @@ import { errorMiddleware } from "./middlewares/error.middleware.js";
 import cookieParser from "cookie-parser";
 
 const app = express();
-const { authRouter } = bootstrapContainer();
+const { authRouter, uploadRouter } = bootstrapContainer();
 
 app.use(helmet());
 app.use(cookieParser());
@@ -29,6 +29,7 @@ app.get("/", (_req: Request, res: Response) => {
 });
 
 app.use("/v1/auth", authRouter);
+app.use("/v1/upload", uploadRouter);
 app.use(errorMiddleware);
 
 export { app };

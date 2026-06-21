@@ -1,10 +1,12 @@
-import uploadClient from "./upload.client.js";
-import crypto from "node:crypto";
+import type { ImageKit } from "@imagekit/nodejs";
 
-const uploadAuthParams = () => {
-  const token = crypto.randomBytes(32).toString("hex");
-
-  return console.log(uploadClient.helper.getAuthenticationParameters());
-};
-
-export default uploadAuthParams;
+export class UploadService {
+  constructor(private readonly uploadClient: ImageKit) {}
+  getUploadAuth() {
+    const expireInSeconds = 5 * 60; // 5 minutes
+    return this.uploadClient.helper.getAuthenticationParameters(
+      undefined,
+      expireInSeconds,
+    );
+  }
+}

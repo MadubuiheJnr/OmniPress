@@ -11,11 +11,16 @@ import { authRegisteredSubscriber } from "domains/notification/subscribers/auth.
 import { UserRepository } from "domains/user/index.js";
 import { UserService } from "domains/user/service/user.service.js";
 import type { Router } from "express";
+import uploadClient from "infrastructure/upload/upload.client.js";
+import { UploadController } from "infrastructure/upload/upload.controller.js";
+import { createUploadRouter } from "infrastructure/upload/upload.routes.js";
+import { UploadService } from "infrastructure/upload/upload.service.js";
 import jwt from "jsonwebtoken";
 import { AuthMiddleware } from "middlewares/auth.middleware.js";
 
 export interface AppContainer {
   authRouter: Router;
+  uploadRouter: Router;
   // add other routes here as your app grows
 }
 
@@ -29,6 +34,7 @@ export function bootstrapContainer(): AppContainer {
   const authService = new AuthService(authRepository, tokenService);
   const userService = new UserService(userRepository);
   const notificationService = new NotificationService(mailerTransporter);
+  const uploadService = new UploadService(uploadClient);
 
   // 3. Use Cases
   const loginUseCase = new LoginUseCase(userService, authService);
@@ -40,16 +46,18 @@ export function bootstrapContainer(): AppContainer {
     registerUseCase,
     authService,
   );
+  const uploadController = new UploadController(uploadService);
 
   // 5. Middleware
   const authMiddleware = new AuthMiddleware(tokenService);
 
   // 6. Routers
   const authRouter = createAuthRouter(authController, authMiddleware);
+  const uploadRouter = createUploadRouter(uploadController, authMiddleware);
 
   // 7. Subscribers
 
   authRegisteredSubscriber(notificationService);
 
-  return { authRouter };
+  return { authRouter, uploadRouter };
 }
