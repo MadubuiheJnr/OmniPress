@@ -14,7 +14,7 @@ export const authService = {
     );
     return res.data;
   },
-  verifyEmail: async (token: string | null) => {
+  verifyEmail: async (token: string) => {
     const res = await apiClient.get<VerifyEmailSuccessResponse>(
       API_ENDPOINTS.verifyEmail(token),
     );
