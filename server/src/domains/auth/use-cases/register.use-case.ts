@@ -69,7 +69,7 @@ export class RegisterUseCase {
       }
 
       eventBus.emit("auth.registered", {
-        userId: auth._id,
+        authId: auth._id,
         firstName: auth.firstName,
         email: auth.email,
         emailVerifyToken: auth.emailVerifyToken,

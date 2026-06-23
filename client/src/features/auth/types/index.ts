@@ -15,3 +15,12 @@ export interface RegisterSuccessResponse extends ApiSuccessResponse {
 export interface VerifyEmailSuccessResponse extends ApiSuccessResponse {
   data: { callbackUrl: string };
 }
+export interface LoginSuccessResponse extends ApiSuccessResponse {
+  data: { user: AuthUser; token: string };
+}
+export interface RefreshSuccessResponse extends ApiSuccessResponse {
+  data: {
+    user: AuthUser;
+    token: string;
+  };
+}

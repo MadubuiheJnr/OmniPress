@@ -145,6 +145,8 @@ export class AuthService {
   async refresh(incomingToken: string): Promise<{
     accessToken: string;
     refreshToken: string;
+    authId: Types.ObjectId;
+    email: string;
   }> {
     const dotIndex = incomingToken.indexOf(".");
     const sessionId = incomingToken.substring(0, dotIndex);
@@ -172,17 +174,22 @@ export class AuthService {
 
     const sessionData = session.loginSessions[0];
 
-    if (sessionData) {
-      if (new Date() > sessionData?.expiresAt) {
-        await this.authRepository.removeSession(session._id, sessionId);
-        throw new UnauthorizedError(
-          "Session expired",
-          "Your request cannot be processed. Please login again to continue.",
-        );
-      }
+    if (!sessionData) {
+      throw new UnauthorizedError(
+        "Session expired",
+        "Your request cannot be processed. Please login again to continue.",
+      );
     }
 
-    if (sessionData?.tokenHash !== hashedToken) {
+    if (new Date() > sessionData.expiresAt) {
+      await this.authRepository.removeSession(session._id, sessionId);
+      throw new UnauthorizedError(
+        "Session expired",
+        "Your request cannot be processed. Please login again to continue.",
+      );
+    }
+
+    if (sessionData.tokenHash !== hashedToken) {
       await this.authRepository.removeSession(session._id, sessionId);
       throw new UnauthorizedError(
         "Your session has been terminated for security reasons",
@@ -207,7 +214,12 @@ export class AuthService {
       lastActiveAt,
     );
 
-    return { accessToken, refreshToken };
+    return {
+      accessToken,
+      refreshToken,
+      authId: session._id,
+      email: session.email,
+    };
   }
 
   // async forgotPassword(email: string) {

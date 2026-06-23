@@ -17,7 +17,7 @@ const loaderWrapper = cva(
 );
 
 interface FullScreenLoaderProps extends VariantProps<typeof loaderWrapper> {
-  title: string;
+  title?: string;
   description?: string;
   className?: string;
 }

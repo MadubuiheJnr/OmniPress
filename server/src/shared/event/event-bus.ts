@@ -3,13 +3,13 @@ import { Types } from "mongoose";
 
 export interface DomainEvents {
   "auth.registered": {
-    userId: Types.ObjectId;
+    authId: Types.ObjectId;
     firstName: string;
     email: string;
     emailVerifyToken: string | undefined;
   };
   "auth.loggedIn": {
-    userId: Types.ObjectId;
+    authId: Types.ObjectId;
     email: string;
     location: string;
     device: string;
@@ -18,7 +18,7 @@ export interface DomainEvents {
     createdAt: Date;
   };
   "auth.passwordChanged": {
-    userId: Types.ObjectId;
+    authId: Types.ObjectId;
     email: string;
   };
   "article.published": {

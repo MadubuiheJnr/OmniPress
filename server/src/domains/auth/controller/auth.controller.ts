@@ -9,12 +9,14 @@ import { UAParser } from "ua-parser-js";
 import type { AuthService as IAuthService } from "../service/auth.service.js";
 import type { VerifyEmailDto } from "../dto/verify-email.dto.js";
 import { env } from "config/env.js";
+import type { RefreshTokenUseCase as IRefreshTokenUseCase } from "../use-cases/refresh-token.use-case.js";
 
 export class AuthController {
   constructor(
     private readonly loginUseCase: ILoginUseCase,
     private readonly registerUseCase: IRegisterUseCase,
     private readonly authService: IAuthService,
+    private readonly refreshTokenUseCase: IRefreshTokenUseCase,
   ) {}
 
   register = asyncHandler(async (req: Request, res: Response) => {
@@ -76,7 +78,7 @@ export class AuthController {
       secure: env.NODE_ENV === "production",
       sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
-      path: "/api/auth/refresh",
+      path: "/v1/auth/refresh",
     });
 
     const result = {
@@ -97,17 +99,22 @@ export class AuthController {
       );
     }
 
-    const { accessToken, refreshToken } =
-      await this.authService.refresh(incomingRefreshToken);
+    const { accessToken, refreshToken, user } =
+      await this.refreshTokenUseCase.execute(incomingRefreshToken);
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: env.NODE_ENV === "production",
       sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
-      path: "/api/auth/refresh",
+      path: "/v1/auth/refresh",
     });
 
-    res.status(HttpCode.OK).json(buildSuccess({ token: accessToken }, "OK"));
+    const result = {
+      user,
+      token: accessToken,
+    };
+
+    res.status(HttpCode.OK).json(buildSuccess(result, "OK"));
   });
 }

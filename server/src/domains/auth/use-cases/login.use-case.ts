@@ -25,7 +25,7 @@ export class LoginUseCase {
     >,
   ): Promise<IAuthResponse> {
     const { identifier, password } = data;
-    let userId: Types.ObjectId | null = null;
+    let authId: Types.ObjectId | null = null;
 
     if (!identifier || !password) {
       throw new BadRequestError(
@@ -35,28 +35,28 @@ export class LoginUseCase {
     }
 
     if (identifier.includes("@")) {
-      userId = await this.authService.getUserIdByEmail(identifier);
+      authId = await this.authService.getUserIdByEmail(identifier);
     } else {
-      userId = await this.userService.getUserIdByUsername(identifier);
+      authId = await this.userService.getUserIdByUsername(identifier);
     }
 
-    if (!userId)
+    if (!authId)
       throw new NotFoundError(
         "Invalid credentials",
         "Either one of the credentials is incorrect. Please check your credentials and try again",
       );
 
     const authResult = await this.authService.login(
-      userId,
+      authId,
       password,
       sessionInfo,
     );
 
-    const userProfile = await this.userService.getUserProfileById(userId);
+    const userProfile = await this.userService.getUserProfileById(authId);
     if (!userProfile) throw new NotFoundError("User profile not found");
 
     eventBus.emit("auth.loggedIn", {
-      userId: authResult._id,
+      authId: authResult._id,
       email: authResult.email,
       location: "",
       device: sessionInfo?.device || "",

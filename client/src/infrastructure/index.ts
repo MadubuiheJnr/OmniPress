@@ -1,1 +1,1 @@
-export { injectAuthBinding } from "./api/api-client";
+export { apiClient } from "./api/api-client";

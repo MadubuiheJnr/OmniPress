@@ -54,10 +54,10 @@ const Register = () => {
             </Button>
           </div>
 
-          <p className="text-center">
-            Already have an account?{" "}
+          <p className="text-center text-sm flex items-center justify-center">
+            <span>Already have an account?</span>
             <Link to="/auth/login" className="font-semibold">
-              Sign in
+              <Button variant="link">Sign in</Button>
             </Link>
           </p>
         </CardContent>

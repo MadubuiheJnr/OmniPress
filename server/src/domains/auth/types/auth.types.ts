@@ -1,4 +1,4 @@
-import type { Document } from "mongoose";
+import type { Document, Types } from "mongoose";
 import type mongoose from "mongoose";
 
 export interface ILoginSession {

@@ -5,6 +5,7 @@ import { createAuthRouter } from "domains/auth/routes/auth.routes.js";
 import { AuthService } from "domains/auth/service/auth.service.js";
 import { TokenService } from "domains/auth/service/token.service.js";
 import { LoginUseCase } from "domains/auth/use-cases/login.use-case.js";
+import { RefreshTokenUseCase } from "domains/auth/use-cases/refresh-token.use-case.js";
 import { RegisterUseCase } from "domains/auth/use-cases/register.use-case.js";
 import { NotificationService } from "domains/notification/services/notification.service.js";
 import { authRegisteredSubscriber } from "domains/notification/subscribers/auth.registered.subscriber.js";
@@ -39,12 +40,14 @@ export function bootstrapContainer(): AppContainer {
   // 3. Use Cases
   const loginUseCase = new LoginUseCase(userService, authService);
   const registerUseCase = new RegisterUseCase(authService, userService);
+  const refreshTokenUseCase = new RefreshTokenUseCase(userService, authService);
 
   // 4. Controller
   const authController = new AuthController(
     loginUseCase,
     registerUseCase,
     authService,
+    refreshTokenUseCase,
   );
   const uploadController = new UploadController(uploadService);
 

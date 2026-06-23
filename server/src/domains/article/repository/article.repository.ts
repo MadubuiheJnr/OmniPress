@@ -1,5 +1,9 @@
 import type { Types } from "mongoose";
-import { ArticleModel } from "../model/article.model.js";
+import {
+  ArticleModel,
+  ArticlePostModel,
+  ArticleReelModel,
+} from "../model/article.model.js";
 import type { IArticle } from "../types/article.types.js";
 
 type CounterField =
@@ -11,8 +15,14 @@ type CounterField =
   | "sharesCount";
 
 export class ArticleRepository {
-  async create(articleData: Omit<IArticle, "_id" | "createdAt" | "updatedAt">) {
-    const article = new ArticleModel(articleData);
+  async create(
+    articleData: Omit<IArticle, "_id" | "createdAt" | "updatedAt">,
+    type: "POST" | "REEL",
+  ) {
+    const article =
+      type === "POST"
+        ? new ArticlePostModel(articleData)
+        : new ArticleReelModel(articleData);
     return article.save();
   }
 

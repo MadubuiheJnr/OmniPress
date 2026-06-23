@@ -1,47 +1,35 @@
+import axios, { type InternalAxiosRequestConfig } from "axios";
 import { env } from "@/config";
-import axios, {
-  type AxiosInstance,
-  type InternalAxiosRequestConfig,
-} from "axios";
+import { useAuthStore } from "@/shared/store/global.auth.store";
 
-const apiClient: AxiosInstance = axios.create({
-  baseURL: `${env?.VITE_API_BASE_URL}`,
+export const apiClient = axios.create({
+  baseURL: env?.VITE_API_BASE_URL,
   timeout: 10000,
+  withCredentials: true, // send cookies on every request
 });
 
-let token: string | null;
-let setToken: (t: string) => void;
+apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  const token = useAuthStore.getState().token;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
-export const injectAuthBinding = (
-  storeToken: string | null,
-  setStoreToken: (t: string) => void,
-) => {
-  token = storeToken;
-  setToken = setStoreToken;
-};
-
-apiClient.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-
-    return config;
-  },
-  (error) => Promise.reject(error),
-);
+interface QueueItem {
+  resolve: (token: string) => void;
+  reject: (error: unknown) => void;
+}
 
 let isRefreshing = false;
-let failedQueue: Array<
-  [(resolve: PromiseResolve, reject: PromiseReject) => void]
-> = [];
+let failedQueue: QueueItem[] = [];
 
-const processQueue = (error, token = null) => {
-  failedQueue.forEach((prom) => {
+const processQueue = (error: unknown, token: string | null = null) => {
+  failedQueue.forEach((item) => {
     if (error) {
-      prom.reject(error);
+      item.reject(error);
     } else {
-      prom.resolve(token);
+      item.resolve(token!);
     }
   });
   failedQueue = [];
@@ -54,12 +42,11 @@ apiClient.interceptors.response.use(
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
-        // Queue the request until the refresh completes
-        return new Promise((resolve, reject) => {
+        return new Promise<string>((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         })
           .then((token) => {
-            originalRequest.headers["Authorization"] = `Bearer ${token}`;
+            originalRequest.headers.Authorization = `Bearer ${token}`;
             return apiClient(originalRequest);
           })
           .catch((err) => Promise.reject(err));
@@ -69,20 +56,23 @@ apiClient.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const { data } = await axios.post("/auth/refresh");
-        const { newToken } = data.token;
+        const res = await axios.post(
+          `${env?.VITE_API_BASE_URL}/v1/auth/refresh`,
+          null,
+          { withCredentials: true },
+        );
 
-        setToken(newToken);
-        apiClient.defaults.headers.common["Authorization"] =
-          `Bearer ${newToken}`;
+        const newToken: string = res.data.data.token;
 
+        useAuthStore.setState({ token: newToken });
         processQueue(null, newToken);
+
+        originalRequest.headers.Authorization = `Bearer ${newToken}`;
         return apiClient(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
-        // Redirect to login or emit an event
-        localStorage.removeItem("access_token");
-        window.location.href = "/login";
+        useAuthStore.getState().clearAuth();
+        window.location.href = "/auth/login";
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
@@ -92,5 +82,3 @@ apiClient.interceptors.response.use(
     return Promise.reject(error);
   },
 );
-
-export default apiClient;
