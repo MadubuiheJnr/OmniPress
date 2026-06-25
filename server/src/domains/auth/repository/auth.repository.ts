@@ -67,7 +67,7 @@ export class AuthRepository {
         $push: {
           loginSessions: {
             $each: [session],
-            $slice: -5, // keep only the 5 most recent sessions
+            $slice: 5, // keep only the 5 most recent sessions (positive keeps first N when inserting at position 0)
             $position: 0, // add to the front of the array
           },
         },

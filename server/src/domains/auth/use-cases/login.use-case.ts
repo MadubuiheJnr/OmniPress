@@ -43,7 +43,7 @@ export class LoginUseCase {
     if (!authId)
       throw new NotFoundError(
         "Invalid credentials",
-        "Either one of the credentials is incorrect. Please check your credentials and try again",
+        "Please check your credentials and try again",
       );
 
     const authResult = await this.authService.login(
