@@ -8,14 +8,14 @@ import { Outlet } from "react-router-dom";
 
 const AppLayout = () => {
   const [headerActions, setHeaderActions] = useState<React.ReactNode>(null);
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
 
   return (
     <div>
       <TooltipProvider>
         <SidebarProvider>
           <aside>
-            <AppSidebar isAuthenticated={isAuthenticated} />
+            <AppSidebar isAuthenticated={isAuthenticated} user={user} />
           </aside>
           <SidebarInset className="min-w-0 overflow-hidden">
             <header className="px-3 flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 ">

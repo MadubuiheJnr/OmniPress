@@ -9,20 +9,27 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { ChevronsUpDown, LogInIcon } from "lucide-react";
+import { ChevronsUpDown, LogInIcon, UserIcon } from "lucide-react";
 import { footerNavItems } from "./constants";
 import { LogoutButton } from "./logout-btn";
 import { cn } from "@/shared/lib/utils";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
 
+interface AppSidebarFooterProps {
+  sidebarState: "expanded" | "collapsed";
+  isAuthenticated: boolean;
+  avatar?: string;
+  firstName?: string;
+  lastName?: string;
+}
 const AppSidebarFooter = ({
   sidebarState,
   isAuthenticated,
-}: {
-  sidebarState: "expanded" | "collapsed";
-  isAuthenticated: boolean;
-}) => {
+  avatar,
+  firstName,
+  lastName,
+}: AppSidebarFooterProps) => {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -34,11 +41,21 @@ const AppSidebarFooter = ({
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               >
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage />
-                  <AvatarFallback className="rounded-lg">JD</AvatarFallback>
+                  <AvatarImage src={avatar} />
+                  <AvatarFallback className="rounded-lg">
+                    {firstName && lastName ? (
+                      `${firstName.charAt(0).toLocaleUpperCase()}${lastName.charAt(0).toLocaleUpperCase()}`
+                    ) : (
+                      <UserIcon className="h-4 w-4" />
+                    )}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">John Doe</span>
+                  <span className="truncate font-medium">
+                    {firstName && lastName
+                      ? `${firstName} ${lastName}`
+                      : "John Doe"}
+                  </span>
                   <span className="truncate text-xs">Free Plan</span>
                 </div>
                 <ChevronsUpDown className="ml-auto size-4" />
@@ -56,15 +73,23 @@ const AppSidebarFooter = ({
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage />
-                    <AvatarFallback className="rounded-lg">JD</AvatarFallback>
+                    <AvatarImage src={avatar} />
+                    <AvatarFallback className="rounded-lg">
+                      {firstName && lastName ? (
+                        `${firstName.charAt(0).toLocaleUpperCase()}${lastName.charAt(0).toLocaleUpperCase()}`
+                      ) : (
+                        <UserIcon className="h-4 w-4" />
+                      )}
+                    </AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-medium text-xs">
-                      John Doe
+                      {firstName && lastName
+                        ? `${firstName} ${lastName}`
+                        : "John Doe"}
                     </span>
                     <span className="truncate text-xs">
-                      johndoe@example.com
+                      {avatar ? "johndoe@example.com" : undefined}
                     </span>
                   </div>
                 </div>

@@ -10,8 +10,13 @@ import { AppSidebarHeader } from "./sidebar-header";
 import { AppSidebarCTA } from "./sidebar-cta";
 import { AppSidebarMainItem } from "./sidebar-main-items";
 import AppSidebarFooter from "./sidebar-footer";
+import type { AuthUser } from "@/shared/types/user.types";
 
-const AppSidebar = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
+interface AppSidebarProps {
+  isAuthenticated: boolean;
+  user: AuthUser | null;
+}
+const AppSidebar = ({ isAuthenticated, user }: AppSidebarProps) => {
   const { open, state } = useSidebar();
 
   return (
@@ -28,6 +33,9 @@ const AppSidebar = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
         <AppSidebarFooter
           sidebarState={state}
           isAuthenticated={isAuthenticated}
+          firstName={user?.firstName}
+          lastName={user?.lastName}
+          avatar={user?.avatar}
         />
       </SidebarFooter>
     </Sidebar>
