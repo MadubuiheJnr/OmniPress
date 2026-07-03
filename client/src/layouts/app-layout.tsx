@@ -1,4 +1,4 @@
-import AppHeader from "@/shared/components/app-header/app-header";
+import AppHeader from "@/shared/components/app-header";
 import AppSidebar from "@/shared/components/app-sidebar/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/shared/components/ui/sidebar";
 import { TooltipProvider } from "@/shared/components/ui/tooltip";

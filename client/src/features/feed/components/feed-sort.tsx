@@ -17,7 +17,7 @@ import { feedCategories } from "../constants/feed-categories";
 
 export function FeedSortSelect() {
   return (
-    <SidebarMenu>
+    <SidebarMenu className="w-fit">
       <SidebarMenuItem>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
