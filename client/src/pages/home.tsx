@@ -1,4 +1,4 @@
-import { FeedSortSelect } from "@/features/feed";
+import { FeedCategorySelect, FeedModeSelect } from "@/features/feed";
 import FeedHero from "@/features/feed/components/feed-hero";
 import FeedTrending from "@/features/feed/components/feed-trending";
 import FeedWatchNow from "@/features/feed/components/feed-watch-now";
@@ -11,7 +11,12 @@ const Home = () => {
   }>();
 
   useEffect(() => {
-    setHeaderActions(<FeedSortSelect />);
+    setHeaderActions(
+      <div className="flex items-center gap-2">
+        <FeedModeSelect />
+        <FeedCategorySelect />
+      </div>,
+    );
     return () => setHeaderActions(null); // cleanup on unmount
   }, []);
   return (
