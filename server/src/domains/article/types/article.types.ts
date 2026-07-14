@@ -1,9 +1,23 @@
 import type { Document, Types } from "mongoose";
 
+export interface TipTapNode {
+  type: string;
+  content?: TipTapNode[];
+  text?: string;
+  marks?: { type: string; attrs?: Record<string, unknown> }[];
+  attrs?: Record<string, unknown>;
+}
+
+export interface TipTapDocument {
+  type: "doc";
+  content: TipTapNode[];
+}
+
 export interface IBaseArticle {
   _id: Types.ObjectId;
   title: string;
   slug: string;
+  excerpt: string;
   category: Types.ObjectId;
   author: Types.ObjectId;
   likesCount: number;
@@ -19,20 +33,19 @@ export interface IBaseArticle {
   updatedAt: Date;
 }
 
+export interface IArticlePost extends IBaseArticle {
+  thumbnail: string;
+  contentJson: TipTapDocument; // for edit operations and mobile
+  contentHtml: string; // for web read operations
+  readingTime: string;
+  contentType: "POST";
+}
+
 export interface IArticleReel extends IBaseArticle {
   videoUrl: string;
   duration: number;
   playsCount: number;
-  description: string;
   contentType: "REEL";
-}
-
-export interface IArticlePost extends IBaseArticle {
-  thumbnail: string;
-  content: string;
-  excerpt: string;
-  readingTime: string;
-  contentType: "POST";
 }
 
 export type IArticle = IArticleReel | IArticlePost;
