@@ -14,6 +14,7 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@types/node": "^25.6.0",
     "@google/genai": "^1.29.0",
     "@imagekit/nodejs": "^7.8.0",
     "@tiptap/core": "^3.27.4",
@@ -41,7 +42,6 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^25.6.0",
     "@types/nodemailer": "^8.0.0",
     "@types/sanitize-html": "^2.16.1",
     "@types/swagger-jsdoc": "^6.0.4",

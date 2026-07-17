@@ -2,8 +2,7 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "baseUrl": "./src",
-    "ignoreDeprecations": "6.0",
+    "paths": { "*": ["./src/*"] },
 
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
