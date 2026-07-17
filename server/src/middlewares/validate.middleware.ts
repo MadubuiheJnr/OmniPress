@@ -16,7 +16,6 @@ export const validateBody =
         if (issues.code === "invalid_key") {
           return "Please check your input data and try again";
         }
-
         if (issues.code === "invalid_type") {
           return "Please check your input data and try again";
         }

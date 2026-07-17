@@ -4,7 +4,11 @@ import {
   ArticlePostModel,
   ArticleReelModel,
 } from "../model/article.model.js";
-import type { IArticle } from "../types/article.types.js";
+import type {
+  IArticle,
+  IArticlePost,
+  IArticleReel,
+} from "../types/article.types.js";
 
 type CounterField =
   | "likesCount"
@@ -15,14 +19,36 @@ type CounterField =
   | "sharesCount";
 
 export class ArticleRepository {
-  async create(
-    articleData: Omit<IArticle, "_id" | "createdAt" | "updatedAt">,
-    type: "POST" | "REEL",
+  async createPost(
+    articleData: Pick<
+      IArticlePost,
+      | "title"
+      | "contentJson"
+      | "thumbnail"
+      | "excerpt"
+      | "category"
+      | "author"
+      | "slug"
+      | "readingTime"
+      | "contentHtml"
+    >,
   ) {
-    const article =
-      type === "POST"
-        ? new ArticlePostModel(articleData)
-        : new ArticleReelModel(articleData);
+    const article = new ArticlePostModel(articleData);
+    return article.save();
+  }
+  async createReel(
+    articleData: Pick<
+      IArticleReel,
+      | "title"
+      | "author"
+      | "excerpt"
+      | "category"
+      | "duration"
+      | "videoUrl"
+      | "slug"
+    >,
+  ) {
+    const article = new ArticleReelModel(articleData);
     return article.save();
   }
 
@@ -44,6 +70,13 @@ export class ArticleRepository {
   async findBySlug(slug: string, includeUnpublished = false) {
     const query = includeUnpublished ? { slug } : { slug, isPublished: true };
     return ArticleModel.findOne(query);
+  }
+
+  async getAllSlugs(): Promise<string[]> {
+    const docs = await ArticleModel.find({}, { slug: 1, _id: 0 }).lean().exec();
+    return (docs as Array<{ slug?: string }>)
+      .map((d) => d.slug!)
+      .filter(Boolean);
   }
 
   async findAll(page: number, limit: number, categoryId?: Types.ObjectId) {

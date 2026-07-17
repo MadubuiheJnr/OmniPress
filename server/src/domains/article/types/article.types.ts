@@ -1,16 +1,17 @@
+import type { JSONContent } from "@tiptap/core";
 import type { Document, Types } from "mongoose";
 
-export interface TipTapNode {
-  type: string;
-  content?: TipTapNode[];
-  text?: string;
-  marks?: { type: string; attrs?: Record<string, unknown> }[];
-  attrs?: Record<string, unknown>;
-}
+// export interface TipTapNode {
+//   type: string;
+//   content?: TipTapNode[];
+//   text?: string;
+//   marks?: { type: string; attrs?: Record<string, unknown> }[];
+//   attrs?: Record<string, unknown>;
+// }
 
 export interface TipTapDocument {
   type: "doc";
-  content: TipTapNode[];
+  content: JSONContent[];
 }
 
 export interface IBaseArticle {
@@ -51,3 +52,13 @@ export interface IArticleReel extends IBaseArticle {
 export type IArticle = IArticleReel | IArticlePost;
 
 export interface IArticleDocument extends Omit<IArticle, "_id">, Document {}
+
+// export type CreateArticleInput =
+//   | (Pick<
+//       IArticlePost,
+//       "title" | "excerpt" | "category" | "author" | "contentJson" | "thumbnail"
+//     > & { contentType: "POST" })
+//   | (Pick<
+//       IArticleReel,
+//       "title" | "excerpt" | "category" | "author" | "videoUrl" | "duration"
+//     > & { contentType: "REEL" });

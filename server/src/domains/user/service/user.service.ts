@@ -1,6 +1,7 @@
 import type { ClientSession, Types } from "mongoose";
 import type { IUser } from "../types/user.types.js";
 import type { UserRepository as IUserRepository } from "../repository/user.repository.js";
+import { NotFoundError } from "shared/errors/http.error.js";
 
 export class UserService {
   constructor(private readonly userRepository: IUserRepository) {}
@@ -34,7 +35,10 @@ export class UserService {
     const user = await this.userRepository.findByUsername(username);
     return user ? user._id : null;
   }
-  async getUserProfileById(id: Types.ObjectId): Promise<IUser | null> {
-    return this.userRepository.findById(id);
+  async getUserProfileById(id: Types.ObjectId): Promise<IUser> {
+    const user = await this.userRepository.findById(id);
+
+    if (!user) throw new NotFoundError("User not found");
+    return user;
   }
 }

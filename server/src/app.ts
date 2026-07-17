@@ -7,7 +7,8 @@ import { errorMiddleware } from "./middlewares/error.middleware.js";
 import cookieParser from "cookie-parser";
 
 const app = express();
-const { authRouter, uploadRouter } = bootstrapContainer();
+const { authRouter, uploadRouter, swaggerDocsRouter, articleRouter } =
+  bootstrapContainer();
 
 app.use(helmet());
 app.use(cookieParser());
@@ -24,12 +25,24 @@ app.use(
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 
+/**
+ * @openapi
+ * /:
+ *   get:
+ *     description: Welcome to OmniPress Docs!
+ *     responses:
+ *       200:
+ *         description: Returns a mysterious string.
+ */
+
 app.get("/", (_req: Request, res: Response) => {
   res.json({ status: "ok", message: "OmniPress API is running" });
 });
 
 app.use("/v1/auth", authRouter);
 app.use("/v1/upload", uploadRouter);
+app.use("/v1/article", articleRouter);
+app.use("/v1/docs", swaggerDocsRouter);
 app.use(errorMiddleware);
 
 export { app };

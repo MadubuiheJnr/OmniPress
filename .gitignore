@@ -4,3 +4,4 @@ node_modules
 .server/old-src
 demo.js
 ai.debug.rules.md
+ex.json
