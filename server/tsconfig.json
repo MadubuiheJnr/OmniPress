@@ -8,7 +8,6 @@
     "moduleResolution": "NodeNext",
     "target": "ESNext",
 
-    "types": ["node"],
 
     "sourceMap": true,
     "declaration": true,
