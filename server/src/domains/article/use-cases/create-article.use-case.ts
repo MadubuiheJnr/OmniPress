@@ -4,6 +4,7 @@ import type { ArticleService as IArticleService } from "../service/article.servi
 import type { UserService } from "domains/user/service/user.service.js";
 import { BadRequestError, NotFoundError } from "shared/errors/http.error.js";
 import type { ArticleCategoryService as IArticleCategoryService } from "../service/article-category.service.js";
+import type { IArticlePost, IArticleReel } from "../types/article.types.js";
 
 export class CreateArticleUseCase {
   constructor(
@@ -14,7 +15,7 @@ export class CreateArticleUseCase {
 
   async orchestrate(
     data: CreateArticleDto,
-    userId: Types.ObjectId | string,
+    userId: string,
   ): Promise<Types.ObjectId> {
     const { category, ...rest } = data;
     if (!Types.ObjectId.isValid(userId))
@@ -30,16 +31,51 @@ export class CreateArticleUseCase {
         "Please select a valid category and try again",
       );
 
-    let contentJson;
-    if (data.content) {
-      contentJson = data.content;
+    if (data.contentType === "POST") {
+      return await this.articleService.create({
+        ...rest,
+        author: objectId,
+        category: articleCategory._id,
+        contentJson: data.content,
+      } as Omit<
+        IArticlePost,
+        | "_id"
+        | "slug"
+        | "createdAt"
+        | "updatedAt"
+        | "likesCount"
+        | "dislikesCount"
+        | "commentsCount"
+        | "viewsCount"
+        | "bookmarksCount"
+        | "sharesCount"
+        | "isPublished"
+        | "isFeatured"
+        | "isArchived"
+        | "contentHtml"
+        | "readingTime"
+      >);
     }
 
     return await this.articleService.create({
       ...rest,
       author: objectId,
-      contentJson,
       category: articleCategory._id,
-    });
+    } as Omit<
+      IArticleReel,
+      | "_id"
+      | "slug"
+      | "createdAt"
+      | "updatedAt"
+      | "likesCount"
+      | "dislikesCount"
+      | "commentsCount"
+      | "viewsCount"
+      | "bookmarksCount"
+      | "sharesCount"
+      | "isPublished"
+      | "isFeatured"
+      | "isArchived"
+    >);
   }
 }

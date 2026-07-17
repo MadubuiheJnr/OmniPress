@@ -6,14 +6,10 @@ import type {
   IArticleReel,
 } from "../types/article.types.js";
 import { ARTICLE_UTILS } from "../article.utils.js";
-import type { ArticleCategoryRepository as IArticleCategoryRepository } from "../repository/article-category.repository.js";
 import type { Types } from "mongoose";
 
 export class ArticleService {
-  constructor(
-    private readonly articleRepository: IArticleRepository,
-    private readonly articleCategoryRepository: IArticleCategoryRepository,
-  ) {}
+  constructor(private readonly articleRepository: IArticleRepository) {}
 
   async create(
     data: Omit<
