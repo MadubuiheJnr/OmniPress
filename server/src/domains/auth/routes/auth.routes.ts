@@ -1,4 +1,9 @@
-import { Router } from "express";
+import {
+  Router,
+  type NextFunction,
+  type Request,
+  type Response,
+} from "express";
 import type { AuthController as IAuthController } from "../controller/auth.controller.js";
 import {
   validateBody,
@@ -32,8 +37,11 @@ export function createAuthRouter(
    *       201:
    *         description: User registered successfully
    */
-  router.post("/register", validateBody(registerDtoSchema), (req, res, next) =>
-    authController.register(req, res, next),
+  router.post(
+    "/register",
+    validateBody(registerDtoSchema),
+    (req: Request, res: Response, next: NextFunction) =>
+      authController.register(req, res, next),
   );
 
   /**
@@ -46,8 +54,11 @@ export function createAuthRouter(
    *       200:
    *         description: User logged in successfully
    */
-  router.post("/login", validateBody(loginDtoSchema), (req, res, next) =>
-    authController.login(req, res, next),
+  router.post(
+    "/login",
+    validateBody(loginDtoSchema),
+    (req: Request, res: Response, next: NextFunction) =>
+      authController.login(req, res, next),
   );
 
   /**
@@ -63,7 +74,8 @@ export function createAuthRouter(
   router.get(
     "/verify-email",
     validateQuery(verifyEmailDtoSchema),
-    (req, res, next) => authController.verifyEmail(req, res, next),
+    (req: Request, res: Response, next: NextFunction) =>
+      authController.verifyEmail(req, res, next),
   );
 
   /**
@@ -76,7 +88,7 @@ export function createAuthRouter(
    *       200:
    *         description: Token refreshed successfully
    */
-  router.post("/refresh", (req, res, next) =>
+  router.post("/refresh", (req: Request, res: Response, next: NextFunction) =>
     authController.refresh(req, res, next),
   );
 
