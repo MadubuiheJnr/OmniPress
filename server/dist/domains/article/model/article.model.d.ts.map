@@ -1,0 +1,1 @@
+{"version":3,"file":"article.model.d.ts","sourceRoot":"","sources":["../../../../src/domains/article/model/article.model.ts"],"names":[],"mappings":"AACA,OAAO,KAAK,EACV,gBAAgB,EAChB,YAAY,EACZ,YAAY,EACb,MAAM,2BAA2B,CAAC;AAyCnC,eAAO,MAAM,YAAY;;;;OAAoD,CAAC;AAC9E,eAAO,MAAM,gBAAgB;;;;OAG5B,CAAC;AACF,eAAO,MAAM,gBAAgB;;;;OAG5B,CAAC"}

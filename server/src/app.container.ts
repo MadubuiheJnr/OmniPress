@@ -52,10 +52,7 @@ export function bootstrapContainer(): AppContainer {
   const userService = new UserService(userRepository);
   const notificationService = new NotificationService(mailerTransporter);
   const uploadService = new UploadService(uploadClient);
-  const articleService = new ArticleService(
-    articleRepository,
-    articleCategoryRepository,
-  );
+  const articleService = new ArticleService(articleRepository);
   const articleCategoryService = new ArticleCategoryService(
     articleCategoryRepository,
   );

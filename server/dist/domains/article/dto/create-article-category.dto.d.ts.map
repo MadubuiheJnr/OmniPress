@@ -1,0 +1,1 @@
+{"version":3,"file":"create-article-category.dto.d.ts","sourceRoot":"","sources":["../../../../src/domains/article/dto/create-article-category.dto.ts"],"names":[],"mappings":"AAAA,OAAO,CAAC,MAAM,KAAK,CAAC;AAEpB,eAAO,MAAM,2BAA2B;;;;mBAOtC,CAAC;AAEH,MAAM,MAAM,wBAAwB,GAAG,CAAC,CAAC,KAAK,CAC5C,OAAO,2BAA2B,CACnC,CAAC"}
