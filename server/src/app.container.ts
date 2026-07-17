@@ -1,9 +1,11 @@
 import { mailerTransporter } from "config/mailer.js";
 import { swaggerDocs } from "docs/api/swagger-docs.js";
 import { createSwaggerDocsRouter } from "docs/api/swagger-docs.routes.js";
+import { ArticleCategoryController } from "domains/article/controllers/article-category.controller.js";
 import { ArticleController } from "domains/article/controllers/article.controller.js";
 import { ArticleCategoryRepository } from "domains/article/repository/article-category.repository.js";
 import { ArticleRepository } from "domains/article/repository/article.repository.js";
+import { CreateArticleCategoryRouter } from "domains/article/routes/article-category.routes.js";
 import { createArticleRouter } from "domains/article/routes/article.routes.js";
 import { ArticleCategoryService } from "domains/article/service/article-category.service.js";
 import { ArticleService } from "domains/article/service/article.service.js";
@@ -33,6 +35,7 @@ export interface AppContainer {
   uploadRouter: Router;
   swaggerDocsRouter: Router;
   articleRouter: Router;
+  articleCategoryRouter: Router;
   // add other routes here as your app grows
 }
 
@@ -44,7 +47,7 @@ export function bootstrapContainer(): AppContainer {
   const articleCategoryRepository = new ArticleCategoryRepository();
 
   // 2. Services
-  const tokenService = new TokenService(authRepository, jwt);
+  const tokenService = new TokenService(jwt);
   const authService = new AuthService(authRepository, tokenService);
   const userService = new UserService(userRepository);
   const notificationService = new NotificationService(mailerTransporter);
@@ -76,6 +79,9 @@ export function bootstrapContainer(): AppContainer {
   );
   const uploadController = new UploadController(uploadService);
   const articleController = new ArticleController(createArticleUseCase);
+  const articleCategoryController = new ArticleCategoryController(
+    articleCategoryService,
+  );
 
   // 5. Middleware
   const authMiddleware = new AuthMiddleware(tokenService);
@@ -85,10 +91,20 @@ export function bootstrapContainer(): AppContainer {
   const uploadRouter = createUploadRouter(uploadController, authMiddleware);
   const swaggerDocsRouter = createSwaggerDocsRouter(swaggerDocs);
   const articleRouter = createArticleRouter(articleController, authMiddleware);
+  const articleCategoryRouter = CreateArticleCategoryRouter(
+    articleCategoryController,
+    authMiddleware,
+  );
 
   // 7. Subscribers
 
   authRegisteredSubscriber(notificationService);
 
-  return { authRouter, uploadRouter, swaggerDocsRouter, articleRouter };
+  return {
+    authRouter,
+    uploadRouter,
+    swaggerDocsRouter,
+    articleRouter,
+    articleCategoryRouter,
+  };
 }

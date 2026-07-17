@@ -26,6 +26,6 @@ const ArticleCategorySchema = new Schema<IArticleCategoryDocument>(
 );
 
 export const ArticleCategoryModel = model<IArticleCategoryDocument>(
-  "Category",
+  "ArticleCategory",
   ArticleCategorySchema,
 );

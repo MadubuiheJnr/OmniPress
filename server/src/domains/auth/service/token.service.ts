@@ -1,15 +1,11 @@
 import { env } from "config/env.js";
-import type { AuthRepository as IAuthRepository } from "../repository/auth.repository.js";
 import type jwt from "jsonwebtoken";
 import type { IAccessTokenPayload } from "../types/auth.types.js";
 import crypto from "node:crypto";
 import { UnauthorizedError } from "shared/errors/http.error.js";
 
 export class TokenService {
-  constructor(
-    private readonly authRepository: IAuthRepository,
-    private readonly tokenProvider: typeof jwt,
-  ) {}
+  constructor(private readonly tokenProvider: typeof jwt) {}
 
   private createRefreshToken() {
     return crypto.randomBytes(64).toString("hex");

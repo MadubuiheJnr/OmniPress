@@ -30,9 +30,15 @@ export class CreateArticleUseCase {
         "Please select a valid category and try again",
       );
 
+    let contentJson;
+    if (data.content) {
+      contentJson = data.content;
+    }
+
     return await this.articleService.create({
       ...rest,
       author: objectId,
+      contentJson,
       category: articleCategory._id,
     });
   }
