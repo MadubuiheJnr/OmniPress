@@ -2,4 +2,4 @@
 old-src
 server.js
 node_modules
-dist
+dist/

@@ -5,3 +5,4 @@ node_modules
 demo.js
 ai.debug.rules.md
 ex.json
+server/dist/
