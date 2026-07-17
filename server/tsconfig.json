@@ -15,8 +15,6 @@
     "moduleResolution": "NodeNext",
     "target": "ESNext",
 
-    "types": ["node", "express"],
-
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
