@@ -97,4 +97,6 @@ export class ArticleService {
 
     return newArticleReel._id;
   }
+
+  async getAllArticle() {}
 }
