@@ -17,7 +17,7 @@ interface AppSidebarProps {
   user: AuthUser | null;
 }
 const AppSidebar = ({ isAuthenticated, user }: AppSidebarProps) => {
-  const { open, state } = useSidebar();
+  const { open, state, setOpen, isMobile } = useSidebar();
 
   return (
     <Sidebar collapsible="icon" className="px-0 z-50">
@@ -25,7 +25,7 @@ const AppSidebar = ({ isAuthenticated, user }: AppSidebarProps) => {
         <AppSidebarHeader open={open} />
       </SidebarHeader>
       <SidebarContent>
-        <AppSidebarCTA />
+        <AppSidebarCTA isMobile={isMobile} setOpen={setOpen} state={state} />
         <AppSidebarMainItem />
       </SidebarContent>
       <Separator />

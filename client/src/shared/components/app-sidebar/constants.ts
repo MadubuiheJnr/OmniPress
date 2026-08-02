@@ -11,22 +11,50 @@ import {
   Search,
   Plus,
   MessageCircle,
+  Video,
+  Image,
+  type LucideIcon,
 } from "lucide-react";
 
-export const sidebarCTAs = [
+export interface SidebarCtas {
+  id: string;
+  path?: string;
+  label: string;
+  icon: LucideIcon;
+  variant: string;
+  children?: SidebarCtas[];
+}
+export const sidebarCTAs: SidebarCtas[] = [
   {
+    id: "1",
     label: "New article",
-    path: "/articles/new",
     icon: Plus,
     variant: "primary",
+    children: [
+      {
+        id: "1",
+        label: "Post",
+        path: "/articles/new/post",
+        icon: Image,
+        variant: "primary",
+      },
+      {
+        id: "2",
+        label: "Reel",
+        path: "/articles/new/reel",
+        icon: Video,
+        variant: "primary",
+      },
+    ],
   },
   {
+    id: "2",
     label: "Search",
     path: "/search",
     icon: Search,
     variant: "ghost",
   },
-] as const;
+];
 
 // ─── Main navigation (always visible in sidebar body) ───────────────────────
 
