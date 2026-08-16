@@ -1,14 +1,14 @@
-import { HttpCode, UnauthorizedError } from "shared/errors/http.error.js";
+import { HttpCode, UnauthorizedError } from "../../../shared/errors/http.error.js";
 import type { ILoginSession } from "../types/auth.types.js";
 import type { LoginUseCase as ILoginUseCase } from "../use-cases/login.use-case.js";
 import type { RegisterUseCase as IRegisterUseCase } from "../use-cases/register.use-case.js";
 import type { Request, Response } from "express";
-import { asyncHandler } from "shared/utils/async-handler.util.js";
-import { buildSuccess } from "shared/utils/response.util.js";
+import { asyncHandler } from "../../../shared/utils/async-handler.util.js";
+import { buildSuccess } from "../../../shared/utils/response.util.js";
 import { UAParser } from "ua-parser-js";
 import type { AuthService as IAuthService } from "../service/auth.service.js";
 import type { VerifyEmailDto } from "../dto/verify-email.dto.js";
-import { env } from "config/env.js";
+import { env } from "../../../config/env.js";
 import type { RefreshTokenUseCase as IRefreshTokenUseCase } from "../use-cases/refresh-token.use-case.js";
 
 export class AuthController {

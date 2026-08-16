@@ -1,6 +1,6 @@
-import type { UserService as IUserService } from "domains/user/service/user.service.js";
+import type { UserService as IUserService } from "../../user/service/user.service.js";
 import type { AuthService as IAuthService } from "../service/auth.service.js";
-import { NotFoundError } from "shared/errors/http.error.js";
+import { NotFoundError } from "../../../shared/errors/http.error.js";
 import type { IAuthResponse } from "../types/auth.types.js";
 
 export class RefreshTokenUseCase {

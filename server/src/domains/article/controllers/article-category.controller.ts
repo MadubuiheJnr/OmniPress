@@ -1,7 +1,7 @@
-import { HttpCode, UnauthorizedError } from "shared/errors/http.error.js";
+import { HttpCode, UnauthorizedError } from "../../../shared/errors/http.error.js";
 import type { ArticleCategoryService as IArticleCategoryService } from "../service/article-category.service.js";
-import { asyncHandler } from "shared/utils/async-handler.util.js";
-import { buildSuccess } from "shared/utils/response.util.js";
+import { asyncHandler } from "../../../shared/utils/async-handler.util.js";
+import { buildSuccess } from "../../../shared/utils/response.util.js";
 import type { Request, Response } from "express";
 
 export class ArticleCategoryController {

@@ -1,6 +1,6 @@
-import { env } from "config/env.js";
+import { env } from "../../../config/env.js";
 import type { Transporter } from "nodemailer";
-import { InternalServerError } from "shared/errors/http.error.js";
+import { InternalServerError } from "../../../shared/errors/http.error.js";
 
 export interface IMailOptions {
   to: string;

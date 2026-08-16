@@ -1,6 +1,6 @@
-import type { TokenService as ITokenService } from "domains/auth/service/token.service.js";
+import type { TokenService as ITokenService } from "../domains/auth/service/token.service.js";
 import type { Request, Response, NextFunction } from "express";
-import { UnauthorizedError } from "shared/errors/http.error.js";
+import { UnauthorizedError } from "../shared/errors/http.error.js";
 
 export class AuthMiddleware {
   constructor(private readonly tokenService: ITokenService) {}

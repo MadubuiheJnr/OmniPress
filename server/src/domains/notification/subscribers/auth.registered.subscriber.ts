@@ -1,6 +1,6 @@
-import eventBus from "shared/event/event-bus.js";
+import eventBus from "../../../shared/event/event-bus.js";
 import { verificationTemplate } from "../templates/verification.template.js";
-import { env } from "config/env.js";
+import { env } from "../../../config/env.js";
 import type { NotificationService as INotificationService } from "../services/notification.service.js";
 
 export function authRegisteredSubscriber(

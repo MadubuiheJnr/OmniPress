@@ -1,6 +1,6 @@
-import { asyncHandler } from "shared/utils/async-handler.util.js";
+import { asyncHandler } from "../../shared/utils/async-handler.util.js";
 import type { UploadService as IUploadService } from "./upload.service.js";
-import { buildSuccess } from "shared/utils/response.util.js";
+import { buildSuccess } from "../../shared/utils/response.util.js";
 
 export class UploadController {
   constructor(private readonly uploadService: IUploadService) {}

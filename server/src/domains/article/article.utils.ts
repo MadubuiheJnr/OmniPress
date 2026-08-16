@@ -2,7 +2,7 @@ import { randomBytes } from "node:crypto";
 import { generateHTML } from "@tiptap/html";
 import sanitizeHtml from "sanitize-html";
 import type { JSONContent } from "@tiptap/core";
-import { InternalServerError } from "shared/errors/http.error.js";
+import { InternalServerError } from "../../shared/errors/http.error.js";
 import StarterKit from "@tiptap/starter-kit";
 
 export const ARTICLE_UTILS = {

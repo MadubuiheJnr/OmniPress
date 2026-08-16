@@ -1,7 +1,7 @@
 import type { ClientSession, Types } from "mongoose";
 import type { IUser } from "../types/user.types.js";
 import type { UserRepository as IUserRepository } from "../repository/user.repository.js";
-import { NotFoundError } from "shared/errors/http.error.js";
+import { NotFoundError } from "../../../shared/errors/http.error.js";
 
 export class UserService {
   constructor(private readonly userRepository: IUserRepository) {}

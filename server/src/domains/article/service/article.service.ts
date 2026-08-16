@@ -1,4 +1,4 @@
-import { BadRequestError } from "shared/errors/http.error.js";
+import { BadRequestError } from "../../../shared/errors/http.error.js";
 import type { ArticleRepository as IArticleRepository } from "../repository/article.repository.js";
 import type {
   IArticle,

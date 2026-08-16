@@ -8,11 +8,11 @@ import type { AuthController as IAuthController } from "../controller/auth.contr
 import {
   validateBody,
   validateQuery,
-} from "middlewares/validate.middleware.js";
+} from "../../../middlewares/validate.middleware.js";
 import { registerDtoSchema } from "../dto/register.dto.js";
 import { loginDtoSchema } from "../dto/login.dto.js";
 import { verifyEmailDtoSchema } from "../dto/verify-email.dto.js";
-import type { AuthMiddleware as IAuthMiddleware } from "middlewares/auth.middleware.js";
+import type { AuthMiddleware as IAuthMiddleware } from "../../../middlewares/auth.middleware.js";
 
 /**
  * @openapi

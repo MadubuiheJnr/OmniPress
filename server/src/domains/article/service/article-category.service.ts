@@ -1,4 +1,7 @@
-import { ConflictError, NotFoundError } from "shared/errors/http.error.js";
+import {
+  ConflictError,
+  NotFoundError,
+} from "../../../shared/errors/http.error.js";
 import type { ArticleCategoryRepository as IArticleCategoryRepository } from "../repository/article-category.repository.js";
 import type { IArticleCategory } from "../types/category.types.js";
 

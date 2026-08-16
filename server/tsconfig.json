@@ -2,14 +2,6 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "paths": {
-      "domains/*": ["./src/domains/*"],
-      "shared/*": ["./src/shared/*"],
-      "config/*": ["./src/config/*"],
-      "middlewares/*": ["./src/middlewares/*"],
-      "infrastructure/*": ["./src/infrastructure/*"],
-      "docs/*": ["./src/docs/*"]
-    },
 
     "module": "NodeNext",
     "moduleResolution": "NodeNext",

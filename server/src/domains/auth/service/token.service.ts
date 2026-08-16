@@ -1,8 +1,8 @@
-import { env } from "config/env.js";
+import { env } from "../../../config/env.js";
 import type jwt from "jsonwebtoken";
 import type { IAccessTokenPayload } from "../types/auth.types.js";
 import crypto from "node:crypto";
-import { UnauthorizedError } from "shared/errors/http.error.js";
+import { UnauthorizedError } from "../../../shared/errors/http.error.js";
 
 export class TokenService {
   constructor(private readonly tokenProvider: typeof jwt) {}

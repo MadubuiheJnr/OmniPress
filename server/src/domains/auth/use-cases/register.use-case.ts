@@ -1,13 +1,13 @@
-import type { IUserService } from "domains/user/types/user.types.js";
+import type { IUserService } from "../../user/types/user.types.js";
 import type { AuthService as IAuthService } from "../service/auth.service.js";
 import type { IAuthUser } from "../types/auth.types.js";
 import type { RegisterDto } from "../dto/register.dto.js";
 import {
   ConflictError,
   InternalServerError,
-} from "shared/errors/http.error.js";
-import eventBus from "shared/event/event-bus.js";
-import { AppError } from "shared/errors/app.error.js";
+} from "../../../shared/errors/http.error.js";
+import eventBus from "../../../shared/event/event-bus.js";
+import { AppError } from "../../../shared/errors/app.error.js";
 import mongoose from "mongoose";
 
 export class RegisterUseCase {

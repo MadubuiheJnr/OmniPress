@@ -1,8 +1,11 @@
 import { Types } from "mongoose";
 import type { CreateArticleDto } from "../dto/create-article.dto.js";
 import type { ArticleService as IArticleService } from "../service/article.service.js";
-import type { UserService } from "domains/user/service/user.service.js";
-import { BadRequestError, NotFoundError } from "shared/errors/http.error.js";
+import type { UserService } from "../../user/service/user.service.js";
+import {
+  BadRequestError,
+  NotFoundError,
+} from "../../../shared/errors/http.error.js";
 import type { ArticleCategoryService as IArticleCategoryService } from "../service/article-category.service.js";
 import type { IArticlePost, IArticleReel } from "../types/article.types.js";
 

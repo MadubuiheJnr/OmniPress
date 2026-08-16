@@ -1,11 +1,14 @@
-import { hashPassword, comparePassword } from "shared/utils/hash.util.js";
+import {
+  hashPassword,
+  comparePassword,
+} from "../../../shared/utils/hash.util.js";
 import crypto from "node:crypto";
 import { v7 as uuidv7 } from "uuid";
 import type { ClientSession, Types } from "mongoose";
 import {
   BadRequestError,
   UnauthorizedError,
-} from "shared/errors/http.error.js";
+} from "../../../shared/errors/http.error.js";
 import type { IAuth, ILoginSession } from "../types/auth.types.js";
 import type { AuthRepository as IAuthRepository } from "../repository/auth.repository.js";
 import type { VerifyEmailDto } from "../dto/verify-email.dto.js";
