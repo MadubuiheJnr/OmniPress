@@ -1,2 +1,8 @@
 .env
 node_modules
+client\dist
+server\dist
+client\old-src
+server\old-src
+ai.debug.rules.md
+ex.json
